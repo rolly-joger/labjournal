@@ -1,7 +1,7 @@
 ---
 title: "Lab journal"
-author: "by: Rob Franken"
-
+author: "by: Your Name"
+bibliography: references.bib
 
  
 ---
@@ -39,14 +39,19 @@ klippy::klippy(position = c('top', 'right'))
 :::::::::::::: {.columns}
 ::: {.column width="50%"}
 
-### BIGSSS-CSS: Segregation-Polarisation
-Last compiled on `r format(Sys.time(), '%B, %Y')`
+# My Lab Journal
+Last compiled on `r format(Sys.time(), '%B, %Y')`  
 
+*Describe lab journal here.*
 <br>
 
 ----
-  
-Participants of the BIGSSS Summer School can fork this repository. Using this, they can journal their work and assignments.
+
+##   
+
+Everyone can fork this repository. Use this example to journal your lab work and assignments. 
+
+We, Jochem Tolsma and Bas Hofstra, use this repository for our Social Network Analysis For Social Scientists course [@SNASS]. 
 
 
 :::
@@ -55,7 +60,7 @@ Participants of the BIGSSS Summer School can fork this repository. Using this, t
 
 
 
-![](images/image.jpg)
+![](images/cover.jpg)
 
 
 :::
@@ -64,7 +69,7 @@ Participants of the BIGSSS Summer School can fork this repository. Using this, t
 
 ## How to use
 
-1. Fork the repository for this website and follow instructions on `README` to get started [here](https://github.com/robfranken/bigssslabjournal).  
+1. Fork the repository for this website and follow instructions on `README` to get started [here](https://github.com/JochemTolsma/labjournal).  
 
 2. Journal your work, by editing the .Rmd-files
 
@@ -80,7 +85,7 @@ Use the top menu to navigate through the journal.
 
 ----
 
-
+# References
 
 
 

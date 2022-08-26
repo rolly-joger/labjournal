@@ -1,6 +1,6 @@
-name: "Example repo"
+name: "Example Lab Journal"
 author: 
-  - 'Rob Franken'
+  - 'Your Name'
 output_dir: "docs"
 exclude: 
   - "data"
@@ -12,7 +12,7 @@ navbar:
       href: index.html
     - text: "My journal"
       menu:
-      - text: "Day 1"
+      - text: "Page 1"
         href: lab1.html
         
         # here, other .Rmds can be added
@@ -20,14 +20,14 @@ navbar:
 
   right:
   - icon: fab fa-github
-    href: https://github.com/robfranken/bigssslabjournal
+    href: https://github.com/JochemTolsma/labjournal
 output:
   html_document:
     theme: flatly
     highlight: default
-    toc:  false
-    toc_float: false
-    number_sections: false
-    #code_folding: show
-    #code_download: no
+    toc:  true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: yes
     css: tweaks.css

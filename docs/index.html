@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="by: Rob Franken" />
+<meta name="author" content="by: Your Name" />
 
 
 <title>Lab journal</title>
@@ -30,7 +30,12 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
@@ -63,7 +68,34 @@ if (window.hljs) {
 
 
 
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="tweaks.css" type="text/css" />
 
@@ -227,7 +259,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -237,6 +335,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -267,14 +375,14 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="lab1.html">Day 1</a>
+      <a href="lab1.html">Page 1</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/robfranken/bigssslabjournal">
+  <a href="https://github.com/JochemTolsma/labjournal">
     <span class="fab fa-github"></span>
      
   </a>
@@ -286,10 +394,20 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Lab journal</h1>
-<h4 class="author">by: Rob Franken</h4>
+<h4 class="author">by: Your Name</h4>
 
 </div>
 
@@ -301,24 +419,30 @@ $(document).ready(function () {
 <hr />
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="bigsss-css-segregation-polarisation" class="section level3">
-<h3>BIGSSS-CSS: Segregation-Polarisation</h3>
+<div id="my-lab-journal" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> My Lab Journal</h1>
 <p>Last compiled on augustus, 2022</p>
-<p><br></p>
+<p><em>Describe lab journal here.</em> <br></p>
 <hr />
-<p>Participants of the BIGSSS Summer School can fork this repository.
-Using this, they can journal their work and assignments.</p>
+<div id="section" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> </h2>
+<p>Everyone can fork this repository. Use this example to journal your
+lab work and assignments.</p>
+<p>We, Jochem Tolsma and Bas Hofstra, use this repository for our Social
+Network Analysis For Social Scientists course <span
+class="citation">(Tolsma and Hofstra 2022)</span>.</p>
+</div>
 </div>
 </div><div class="column" style="width:50%;">
-<p><img src="images/image.jpg" /></p>
+<p><img src="images/cover.jpg" /></p>
 </div>
 </div>
-<div id="how-to-use" class="section level2">
-<h2>How to use</h2>
+<div id="how-to-use" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> How to use</h2>
 <ol style="list-style-type: decimal">
 <li><p>Fork the repository for this website and follow instructions on
 <code>README</code> to get started <a
-href="https://github.com/robfranken/bigssslabjournal">here</a>.</p></li>
+href="https://github.com/JochemTolsma/labjournal">here</a>.</p></li>
 <li><p>Journal your work, by editing the .Rmd-files</p></li>
 <li><p>…</p></li>
 <li><p>Change everything to make it your own!</p></li>
@@ -327,9 +451,22 @@ href="https://github.com/robfranken/bigssslabjournal">here</a>.</p></li>
 <p>Use the top menu to navigate through the journal.</p>
 <hr />
 </div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-SNASS" class="csl-entry">
+Tolsma, Jochem, and Bas Hofstra. 2022. <em>Social Network Analysis for
+Social Scientists</em>. <a
+href="https://jtolsma.nl/SNASS/">https://jtolsma.nl/SNASS/</a>.
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkxhYiBqb3VybmFsIg0KYXV0aG9yOiAiYnk6IFlvdXIgTmFtZSINCmJpYmxpb2dyYXBoeTogcmVmZXJlbmNlcy5iaWINCg0KIA0KLS0tDQoNCmBgYHtyLCBpbnN0YWxsIHJlbW90ZWx5LCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQojIGluc3RhbGwucGFja2FnZXMoInJlbW90ZXMiKQ0KI3JlbW90ZXM6Omluc3RhbGxfZ2l0aHViKCJybGVzdXIva2xpcHB5IikNCmBgYCANCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCg0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUV9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCg0KDQoNCi0tLS0NCg0KOjo6Ojo6Ojo6Ojo6Ojogey5jb2x1bW5zfQ0KOjo6IHsuY29sdW1uIHdpZHRoPSI1MCUifQ0KDQojIE15IExhYiBKb3VybmFsDQpMYXN0IGNvbXBpbGVkIG9uIGByIGZvcm1hdChTeXMudGltZSgpLCAnJUIsICVZJylgICANCg0KKkRlc2NyaWJlIGxhYiBqb3VybmFsIGhlcmUuKg0KPGJyPg0KDQotLS0tDQoNCiMjICAgDQoNCkV2ZXJ5b25lIGNhbiBmb3JrIHRoaXMgcmVwb3NpdG9yeS4gVXNlIHRoaXMgZXhhbXBsZSB0byBqb3VybmFsIHlvdXIgbGFiIHdvcmsgYW5kIGFzc2lnbm1lbnRzLiANCg0KV2UsIEpvY2hlbSBUb2xzbWEgYW5kIEJhcyBIb2ZzdHJhLCB1c2UgdGhpcyByZXBvc2l0b3J5IGZvciBvdXIgU29jaWFsIE5ldHdvcmsgQW5hbHlzaXMgRm9yIFNvY2lhbCBTY2llbnRpc3RzIGNvdXJzZSBbQFNOQVNTXS4gDQoNCg0KOjo6DQo6Ojogey5jb2x1bW4gd2lkdGg9IjUwJSJ9DQoNCg0KDQoNCiFbXShpbWFnZXMvY292ZXIuanBnKQ0KDQoNCjo6Og0KOjo6Ojo6Ojo6Ojo6OjoNCg0KDQojIyBIb3cgdG8gdXNlDQoNCjEuIEZvcmsgdGhlIHJlcG9zaXRvcnkgZm9yIHRoaXMgd2Vic2l0ZSBhbmQgZm9sbG93IGluc3RydWN0aW9ucyBvbiBgUkVBRE1FYCB0byBnZXQgc3RhcnRlZCBbaGVyZV0oaHR0cHM6Ly9naXRodWIuY29tL0pvY2hlbVRvbHNtYS9sYWJqb3VybmFsKS4gIA0KDQoyLiBKb3VybmFsIHlvdXIgd29yaywgYnkgZWRpdGluZyB0aGUgLlJtZC1maWxlcw0KDQozLiAuLi4NCg0KNC4gQ2hhbmdlIGV2ZXJ5dGhpbmcgdG8gbWFrZSBpdCB5b3VyIG93biENCg0KDQo8YnI+DQoNClVzZSB0aGUgdG9wIG1lbnUgdG8gbmF2aWdhdGUgdGhyb3VnaCB0aGUgam91cm5hbC4NCg0KDQotLS0tDQoNCiMgUmVmZXJlbmNlcw0KDQoNCg0KDQo=</div>
 
 
-
+</div>
+</div>
 
 </div>
 
@@ -361,7 +498,42 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("index.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
