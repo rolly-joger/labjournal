@@ -1,5 +1,5 @@
 # Lab Journal
-A lab journal template for students following courses using RStudio and Git (https://github.com/JochemTolsma/labjournal). To use this, follow the steps below.
+A lab journal template for students following courses using RStudio and Git (https://jochemtolsma.github.io/labjournal/). To use this, follow the steps below.
 
 
 ## Preparation:
