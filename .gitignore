@@ -1,3 +1,5 @@
+#do not forget to also change your _site.yml file to make sure we exclude same stuff there. 
+
 # History files
 .Rhistory
 .Rapp.history
@@ -36,6 +38,7 @@
 
 # datafiles
 /data/
+/secret/
 
 # Personal folder
 /local/
