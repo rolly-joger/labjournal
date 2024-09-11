@@ -10,11 +10,12 @@ navbar:
   left:
     - icon: fa-home
       href: index.html
-    - text: "My journal"
+    - text: "My Journal"
       menu:
-      - text: "Page 1"
-        href: lab1.html
-        
+      - text: "Week 1"
+        href: Week_1.html
+ 
+
         # here, other .Rmds can be added
 
 

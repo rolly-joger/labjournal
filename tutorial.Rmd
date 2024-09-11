@@ -1,0 +1,197 @@
+
+```{r globalsettings, include=FALSE}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+```
+
+```{r klippy, include=FALSE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+
+```{r installing, include=FALSE}
+#install.packages("installr")
+require(foreign)
+require(tidyverse)
+getwd()
+```
+
+# Get Datafiles
+
+```{r getdata, message=FALSE, warning=FALSE, include=FALSE}
+cv08 <- foreign::read.spss("tutorial_data//Cultural_Changes_2008.sav", use.value.labels = T,
+                           to.data.frame = T)
+cv10 <- foreign::read.spss("tutorial_data//Cultural_Changes_2010.sav", use.value.labels = T,
+                           to.data.frame = T)
+cv08_no_label <- foreign::read.spss("tutorial_data//Cultural_Changes_2008.sav",  use.value.labels = F, to.data.frame = T)
+cv10_no_label <- foreign::read.spss("tutorial_data//Cultural_Changes_2010.sav", use.value.labels = F, to.data.frame = T)
+cv08_haven <- haven::read_spss("tutorial_data/Cultural_Changes_2008.sav")
+cv10_haven <- haven::read_spss("tutorial_data/Cultural_Changes_2010.sav")
+```
+
+## Inspect the Data
+
+```{r headings, echo=F, fig.height=300, fig.width=300, warning=FALSE, results='hide'}
+head(cv08)
+head(cv08_no_label)
+head(cv08_haven)
+```
+
+
+## Inspect the Structure of the Data
+
+```{r structure, echo=TRUE, fig.height=300, fig.width=300, warning=FALSE, results='hide'}
+str(cv08)
+str(cv08_no_label)
+str(cv08_haven)
+```
+
+## Inspect the Structure of Some Variables 
+
+```{r inspect, echo=F, fig.height=300, fig.width=300, warning=FALSE, results='hide'}
+str(cv08$lftop)
+str(cv08_no_label$lftop)
+str(cv08_haven$lftop)
+```
+
+## Inspect the Attributes of Some Variables 
+
+```{r attributes, echo=F, fig.height=300, fig.width=300, warning=FALSE, results='hide'}
+attributes(cv08$lftop)
+attributes(cv08_no_label$lftop)
+attributes(cv08_haven$lftop)
+
+attr(cv08_haven$lftop, "labels")
+summary(cv08$lftop)
+summary(cv08_no_label$lftop)
+summary(cv08_haven$lftop)
+```
+
+## Make a Table 
+
+```{r table, warning=FALSE, results='hide'}
+table(cv08_haven$lftop, useNA = "always")
+```
+
+### Look at More
+
+```{r more, echo=F, fig.height=300, fig.width=300, warning=FALSE, results='hide'}
+names(cv08_haven)
+summary(cv08_haven)
+head(cv08_haven)
+View(cv08_haven)
+```
+
+# Define Missings 
+
+##R Base 
+
+```{r}
+str(cv08_haven$lftop)
+summary(cv08_haven$lftop)
+attr(cv08_haven$lftop, "labels")
+table(cv08_haven$lftop, useNA = "always")
+```
+
+```{r}
+#recode lftop 
+
+cv08$lftop_new <- cv08$lftop
+cv08$lftop_new[cv08$lftop_new == "Onbekend"] <- NA
+ 
+#did it work?
+table(cv08$lftop_new, useNA = "always")
+levels(cv08$lftop_new)
+str(cv08$lftop_new)
+```
+
+```{r}
+#something new 
+cv08$agen <- as.numeric(as.character(cv08$lftop_new)) 
+table(cv08$agen, useNA = "always")
+str(cv08$agen)
+```
+
+## Tidy 
+
+```{r}
+cv08_haven <- mutate(cv08_haven, lftop_new = na_if(lftop, 99))
+table(cv08_haven$lftop_new, useNA = "always")
+```
+
+# Recode Variable 
+
+## Base R
+
+### Look at Vars 
+```{r recode, echo=FALSE}
+levels(cv08$var006n)
+table(cv08$var006n, useNA = "always")
+cv08$educn <- as.numeric(cv08$var006n)
+table(cv08$educn, useNA = "always")
+```
+
+### Make Numeric 
+```{r}
+cv08$int055n <- as.numeric(cv08$int055)
+table(cv08$int055n, useNA = "always")
+cv08$int056n <- as.numeric(cv08$int056)
+table(cv08$int056n, useNA = "always")
+cv08$int057n <- as.numeric(cv08$int057)
+table(cv08$int057n, useNA = "always")
+```
+
+### Define Missing and Recode 
+```{r}
+cv08$int055n[cv08$int055n < 5] <- NA
+cv08$int055n <- cv08$int055n - 4
+cv08$int056n[cv08$int056n < 5] <- NA
+cv08$int056n <- cv08$int056n - 4
+cv08$int057n[cv08$int057n < 5] <- NA
+cv08$int057n <- cv08$int057n - 4
+```
+
+### Calculate Means 
+```{r}
+mean(cv08$int055n)  
+mean(cv08$int055n, na.rm = TRUE)
+mean(c(cv08$int055n, cv08$int056n, cv08$int057n), na.rm = T) 
+testmeans <- rowMeans(cbind(cv08$int055n, cv08$int056n, cv08$int057n), na.rm = T)
+head(testmeans)
+```
+
+### Find Missings 
+```{r}
+nmis <- rowSums(is.na(cbind(cv08$int055n, cv08$int056n, cv08$int057n)))
+testmeans <- ifelse(nmis < 2, testmeans, NA)
+cv08$int_mean <- testmeans
+```
+
+## Tidy
+
+### Look at Vars 
+```{r}
+str(cv08_haven$int055)
+attr(cv08_haven$int055, "labels")
+base::summary(cv08_haven$int055)
+base::summary(cv08_haven$int056)
+base::summary(cv08_haven$int057)
+
+table(cv08_haven$int055n, useNA = "always")
+table(cv08_haven$int056, useNA = "always")
+table(cv08_haven$int057, useNA = "always")
+```
+
+
+
+

@@ -1,0 +1,28 @@
+---
+title: "Week 1"
+output: html_document
+date: "2024-09-10"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Building a Research Question 
+
+
+When thinking about the aspects of co-authorship-networks I am interested in, and especially when thinking about how I can synthesise this into a research question, my first intuition points me towards the role of gender in collaboration on, and distribution of, academic papers -- and how this might differ across faculties (by which I mean, between sociology departments, and political science departments). Another aspect that would be interesting here would be to investigate the role of inter-university mobility of academics and the effect this has on the actors they cooperate with. Literature has demonstrated that including actors' own mobility across locations can provide valuable additional insights into collaboration networks (Furukawa, Shirakawa & Okuwada, 2011). Combining this with observations of systematic gender-based difference in collaboration networks between genders (Bravo-Hermsdorff et al., 2019) and across disciplines (Zeng et al., 2016), I propose the following two research questions:
+
+
+**RQ1**: How do patterns of repetition in co-authorship differ between genders in Dutch Sociology and Political Science departments?
+
+**RQ2**: Are these patterns, in part, explained by actor-mobility across universities and/or departments?
+
+## References
+
+
+Bravo-Hermsdorff, G., Felso, V., Ray, E., Gunderson, L. M., Helander, M. E., Maria, J., & Niv, Y. (2019). Gender and collaboration patterns in a temporal scientific authorship network. Applied Network Science, 4, 1-17.
+
+Furukawa, T., Shirakawa, N., & Okuwada, K. (2011). Quantitative analysis of collaborative and mobility networks. Scientometrics, 87(3), 451-466.
+
+Zeng, X. H. T., Duch, J., Sales-Pardo, M., Moreira, J. A., Radicchi, F., Ribeiro, H. V., Woodruff, T. K., & Amaral, L. A. N. (2016). Differences in collaboration patterns across discipline, career stage, and gender. PLoS biology, 14(11), e1002573.

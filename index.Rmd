@@ -1,17 +1,17 @@
 ---
-title: "Lab journal"
-author: "by: Your Name"
+title: "My First Labjournal!"
+author: "by: Hannah Groennou"
 bibliography: references.bib
 
  
 ---
 
 
-
-
 ```{r, install remotely, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 # install.packages("remotes")
 #remotes::install_github("rlesur/klippy")
+library(klippy)
+library(formatR)
 ``` 
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
@@ -21,7 +21,6 @@ knitr::opts_chunk$set(echo = TRUE)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
 options(width = 100)
 rgl::setupKnitr()
-
 
 
 colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
@@ -53,17 +52,17 @@ But please note, we are not here to make a beautiful website, our intention is j
 # My Lab Journal
 Last compiled on `r format(Sys.time(), '%B, %Y')`  
 
-*Describe lab journal here.*
+Hello World!
 
 <br>
 
 ----
 
-## Open Science  
+## Welcome Here Babies!
 
-Everyone can fork this repository. Use this example to journal your lab work and assignments. 
+The Universe is Yours
 
-We, Jochem Tolsma and Bas Hofstra, use this repository for our Social Network Analysis For Social Scientists course [@SNASS]. <!--- this is a reference, stored in references.bib. It will be automatically added at the bottom of the page --->
+<!--- this is a reference, stored in references.bib. It will be automatically added at the bottom of the page --->
 
 
 :::
@@ -78,28 +77,16 @@ We, Jochem Tolsma and Bas Hofstra, use this repository for our Social Network An
 
 :::
 ::::
+---
 
+## How to Use?
 
-## How to use
-
-1. Fork the repository for this website and follow instructions on `README` to get started [here](https://github.com/JochemTolsma/labjournal).  
-
-2. Journal your work, by editing the .Rmd-files
-
-3. ...
-
-4. Change everything to make it your own!
-
-
-<br>
-
-Use the top menu to navigate through the journal.
-
-
-----
-
-# References
+Create your own world, seize power!
 
 
 
 
+
+
+
+mvg H. Groennou
