@@ -1,7 +1,14 @@
 ---
 title: "Week 1"
-output: html_document
-date: "2024-09-10"
+author: "Hannah Groennou"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: paper
+    css: "style.css"
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
 
 ```{r setup, include=FALSE}
