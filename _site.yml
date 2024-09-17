@@ -1,6 +1,6 @@
-name: "Example Lab Journal"
-author: 
-  - 'Your Name'
+name: "Hey"
+author:
+  - 'Hannah'
 output_dir: "docs"
 exclude: 
   - "data"
@@ -16,6 +16,10 @@ navbar:
         href: Week1.html
       - text: "Week 2"
         href: Week2.html
+    - text: "First Drafts"
+      menu
+      - text: "First Introduction"
+      - href: JournalWeek2.html
  
 
         # here, other .Rmds can be added
@@ -26,7 +30,7 @@ navbar:
     href: https://github.com/JochemTolsma/labjournal
 output:
   html_document:
-    theme: flatly
+    theme: paper
     highlight: default
     toc:  true
     toc_float: true

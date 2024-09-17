@@ -1,0 +1,34 @@
+---
+title: "JournalWeek2"
+date: "`r Sys.Date()`"
+author: "Hannah"
+output: 
+  html_document:
+    theme: paper
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Week 2: An Introduction**
+
+
+Recent work in social network analysis has continued to demonstrate the persistent patterns of gender seggregetion in multiple parts of society. One of the most relevant fields in which these discrepancies in representation continues to play a role, is  that of scientific collaboration networks. Science, a field that is said to be characterised by progressive individuals and systems ([SOURCE](http://google.nl)), has demonstrated a general decrease in skwed gender ratio's ([source](https://link.springer.com/article/10.1007/s41109-019-0214-4)), but still suffers from persistent discrepancies in patterns of representation for --- amongst other --- women. 
+\
+\
+  This discrepancy is further problematised by the fact that it does not mereley concern the descriptive characteristics of the actors in the network, but also those of their ties and networks. Women and men (and, I would assume, non-binary people, but there is little mention of them in most texts on the subject at hand) display several differences in their patterns of collaboration. Women, as Bravo-Hemsdorff et al. demonstrate, ["are disproportionally underrepresented among authors with many publications"](https://link.springer.com/article/10.1007/s41109-019-0214-4#Sec15). This can be partially explained by their propensity for [shorter careers](http://snap.stanford.edu/class/cs224w-2019/project/26395065.pdf), which gives them less chance to publish as much as men, but not fully. Because even women who are equally as successful, conceptualised as number of publications, their networks still display different characteristics than those of equally successful men --- their predictors for success, for example, are different. For women, number of successful collaborators in their ego-networks are more strongly associated with success than men ([Pink & Sarukkai](http://snap.stanford.edu/class/cs224w-2019/project/26395065.pdf)). In other words, men seem to be able to easier achieve success 'on their own', than women. 
+\
+\
+In this paper I will further assess this phenomenon, by assessing its existence, role, and influence in another important question in collaboration networks: the persistence of ties ([source](https://journals.sagepub.com/doi/full/10.1177/0001839212474272)). More specifically, the persistence of ties for actors who move faculties --- and universities --- compared to those who do not. It has been noted ((**has it**)) that physical distance between researchers affects their proclivity to collaboration. Therefore, one would predict a researcher who switches universities, to cease to work together (as often) with their previous colleagues. However, if we combine this with the previously mentioned insights on the different associations between succes and collaboration with successful alters for men and women --- and with knowing that promoters at universities are often quite successfully (are they? *they got a grant* Hannah --- yes they are successful), I pose the following research question: 
+
+**RQ1**: Are there gender-based differences in collaboration networks between actors who have moved to a different university after receiving their PhD and those who have not? \
+**RQ2**: Does the effect of the success of a promoter on the success of their promotee differ across genders?
+
+# References 
+Bravo-Hermsdorff, G., Felso, V., Ray, E., Gunderson, L. M., Helander, M. E., Maria, J., & Niv, Y. (2019). Gender and collaboration patterns in a temporal scientific authorship network. Applied Network Science, 4, 1-17.\
+Dahlander, L., & McFarland, D. A. (2013). Ties that last: Tie formation and persistence in research collaborations over time. Administrative science quarterly, 58(1), 69-110.\
+Pink, S., & Sarukkai, M. (2018). Gender Asymmetries in Academic Collaboration Networks.\
