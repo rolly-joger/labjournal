@@ -18,9 +18,8 @@ navbar:
         href: Week2.html
     - text: "First Drafts"
       menu:
-      - text: "First Introduction"
-      - href: JournalWeek2.html
- 
+      - text: "Introduction First Draft"
+        href: JournalWeekTwo.html
 
         # here, other .Rmds can be added
 
