@@ -1,0 +1,74 @@
+---
+title: "Introduction -- Revisited"
+output: html_document
+date: "2024-09-24"
+---
+
+# What Do We Want -- a RSQ!
+And when to we want it? **NOW** 
+\
+
+## What Did We Do
+
+1. **T1**: _The First Attempt_\
+   - **RQ1**: How do patterns of repetition in co-authorship differ between genders in Dutch Sociology and Political Science departments?\
+   - **RQ2**: Are these patterns, in part, explained by actor-mobility across universities and/or departments?\
+
+2. **T2**: _The Second Attempt_\
+    - **RQ1**: Are there gender-based differences in collaboration networks between actors who have moved to a different university after receiving their PhD and those who have not?\
+   - **RQ2**: Does the effect of the success of a promoter on the success of their promotee differ across genders?\
+\
+
+## What Will We Become 
+
+Two things become clear when looking at the formulation of these previous iterations of the research question.
+
+- I am interested in the role of gender homophily/heterophily in ego/collaboration networks (still have to fully master the lingo)\
+- I want to know what contributes to success, and why there seem to be inequal distributions in this field\
+
+Two _**other**_ things also become clear: 
+
+- If I continue down this road, I'll be engaging in some very unsexy plagiarism (I see you *****), and that simply will not stand.
+  - (... a more specific way of putting it is that this road I am on seems to lead towards some research on the Mathilda effect, which has already been co-oped by someone else, so I won't do the same). 
+- I am ... engaging in typical behaviour: making something that's honestly quite simple unnecessarily difficult. As demonstrated by me starting out with a relatively simple field of interest (inequality on the basis of gender and how this contributes to collaboration), and then subsequently adding another  15273 layers of complexity -- all in order to attain the effusive goals of 'originality' and 'creativity'. 
+
+So, that is something we would like to avoid, and to do this, let's first make a summary of the main aspects of interest -- with the knowledge of social networks we have now: 
+
+- Gender homophily/heterophily;  
+- Ethnic homophily/heterophily;
+- Diversity of department; 
+- Success/position/collaboration;
+  - h-index; 
+  - average citation score; 
+  - position in collaboration (first/last/other).
+  
+I have extended my interest in inequality from 'merely' gender, to also include ethnicity -- since research has noted that women seem to be catching up (to some degree at least) with men when it comes to success, and factors contributing to it. Extending my conceptualisation of marginalisation to another group -- non-whiteness -- allows me to not only further probe this link, but also investigate how intersectionality can be conceptualised in collaboration networks.\
+\
+I am furthermore -- thanks to some particular wrinkles in my character -- endlessly interested in the roles of structures, and the interaction between micro- and macro-effects. When brainstorming about ways I could integrate that interest in this research, I came up with the idea of researching both the department-level of a university, and the staff in said department. In this way, I might be able to add some demographic characteristics (gender proportion, ethnicity proportion, both for the whole department, but also according to 'position') but also other structural factors such as prestige of departments or universities. I do not yet know how this would work *exactly*, but looking into it might prove fruitful. 
+Even though I furthermore still believe that factors such as inter-departmental migration and 'importance of early network' could be interesting to research, I am putting them aside for now, saving them for later when I am in need/desperate. 
+
+---
+
+## Variables? Of Course She Does!
+So, how does one measure this? Well, I don't know for certain, but I can make some educated guesses at several of the key variables. 
+
+__Individual-Level__
+
+| Variable | Measurement |
+|-----------|-----------|
+| Gender | Gender from name |
+| Ethnicity | Ethnicity from name* (I do feel as if I am engaging in some illegal/unethical behaviour here, essentially 'looking at people to determine whether they are white'. I do , however, also not have a way of solving this, and am afraid the only real solution would -- again -- be to adjust my research question.)|
+| Position | Position from webscraping |
+| Subject of Interest | OpenAlex |
+| Position in paper | **1, last, other** -- included in data |
+
+__Department Level__
+
+| Variable | Measurement |
+|-----------|-----------|
+| Gender | Proportion from counting  |
+| Ethnicity | Proportion from counting |
+| International Rank | A Website (or something, let me look at this)|
+| Female professors | Either scraping or counting |
+
+* After I have acquired all variables, I will compare my own counts of 'how many non-white people are in this department' to the number of non-white people the webscraping yields. The benefit of having a 'small' dataset like this is that if there are any discrepancies -- and I believe there to be, there might be a correlation between ethnicity and name, but it's also quite far from 1 -- I can correct them. Since there's 'only' a thousand people, and I do not believe that more than half of them are non-white. 

@@ -1,0 +1,208 @@
+---
+title: "Week 3: Webscraping"
+output: html_document
+date: "2024-09-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#install.packages("DataCombine")
+library(DataCombine)
+library(tidyverse)
+library(data.table)
+library(httr)
+library(xml2)
+library(devtools)
+library(scholar)
+```
+
+# Webscraping For Dummies: The Staff-Info Edition
+
+So, we are going to do some good-good webscraping for dummies!
+
+```{r first part, echo = F}
+#first, we are going to 'scrape' something from the Radboud website - the members of the sociology department
+soc_staff_ru <- read_html("http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/")
+str(soc_staff_ru)
+soc_staff_ru <- soc_staff_ru %>%
+  rvest::html_element("body") %>%
+  xml2::xml_find_all("//td") %>%
+  rvest::html_text()
+#ok maybe everything from the same packages
+soc_staff_ru <- read_html("http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/")
+soc_staff_ru <- soc_staff_ru %>%
+  rvest::html_element("body") %>%
+  rvest::html_elements("td") %>%
+  rvest::html_text()
+
+view(soc_staff_ru)
+```
+
+```{r better, echo = F}
+#now Better
+soc_staff <- read_html("http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/")
+soc_staff <- soc_staff %>%
+  rvest::html_element("body")
+soc_staff <- soc_staff %>%
+  rvest::html_table()
+view(soc_staff)  
+```
+
+Then we go to another department: Leiden's Political Science Department
+```{r staff leiden, echo = F}
+#find the best link to give us all the staff of interest on one webpage 
+pol_staff_leiden_b <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") #page 
+#str(pol_staff_leiden_b)
+#extract the information - shortest way to go 
+pol_staff_leiden_all <- pol_staff_leiden_b %>% #names of staff
+  rvest::html_elements("ul") %>%
+  rvest::html_elements("li") %>%
+  rvest::html_elements("a") %>%
+  rvest::html_elements("div") %>%
+  rvest::html_text()
+#extract the information - longer way to go 
+pol_staff_leiden_b <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") #page 
+pol_staff_leiden_names <- pol_staff_leiden_b %>% #names of staff
+  rvest::html_elements("ul") %>%
+  rvest::html_elements("li") %>%
+  rvest::html_elements("a") %>%
+  rvest::html_elements("div") %>%
+  rvest::html_elements("strong") %>%
+  rvest::html_text()
+#now the positions of the staff
+pol_staff_leiden_b <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") #page 
+pol_staff_leiden_position <- pol_staff_leiden_b %>% #position of staff
+  rvest::html_elements("ul") %>%
+  rvest::html_elements("li") %>%
+  rvest::html_elements("a") %>%
+  rvest::html_elements("div") %>%
+  rvest::html_elements("span") %>%
+  rvest::html_text()
+#see where the missing information is
+view(pol_staff_leiden_position)
+view(pol_staff_leiden_names)
+#create NA value
+newrow <- "NA"
+index <- 76
+#make dataframe
+pol_staff_leiden_position <- as.data.frame(pol_staff_leiden_position)
+#add the NA to the dataframe
+pol_staff_leiden_position <- InsertRow(pol_staff_leiden_position, newrow, index)
+view(pol_staff_leiden_names)
+view(pol_staff_leiden_position)
+view(pol_staff_leiden_all)
+```
+
+# But What If I Want to Know More?
+
+Well, sure we have some fun info about the names and positions of the staff. But how can we use this to *do* something with the information./
+Let me tell you how you can use this! By using the names as starting points for setting up collaboration networks./
+/
+Because we have these names, we can now use **webscraping** to find additional information associated with these names -- such as the papers they have published, and with whom they have been published./
+We do this by going to the OpenAlex API, and extracting our information of choice accordingly.
+
+## Get things started 
+
+```{r try open alex first part, echo = F}
+#install.packages("jsonlite") #making json objects
+#install.packages("openalexR") #OpenAlex for R
+library(openalexR)
+library(jsonlite)
+
+options(openalexR.mailto = "hannah@groennou.nl")  #my own email bb
+url <- "https://api.openalex.org/authors?search=Jochem Tolsma"
+
+jt_json <- fromJSON("https://api.openalex.org/authors?search=Jochem+Tolsma", simplifyVector = FALSE)
+glimpse(jt_json, max.level = 1)
+#jt_json[["results"]][[1]][["display_name"]]
+#df_jt <- jt_json %>%
+#    .$results %>%
+#  .[[1]] %>%
+#    discard(is_empty)
+```
+
+## Find some Jochem info 
+```{r Jochem open alex, echo = F}
+df_jochem <- oa_fetch(entity = "author", search = "Jochem Tolsma")
+view(df_jochem) #we've lost his secondary information --- so if you want to decide on wrapper or direct interaction w/the API
+
+df_jochem_papers <- oa_fetch(entity = "works", author.id = df_jochem$id)
+str(df_jochem_papers)
+view(df_jochem_papers)
+```
+
+## Use the Wrapper 
+
+Because we are (weak), we are using the wrapper (becasue it's easier)
+\
+Get the people first 
+```{r filters, echo = F}
+options(openalexR.mailto = "hannah.groennou@ru.nl") #indicate you're you
+
+ru_id <- institutions <- oa_fetch(entity = "institutions", search = "Radboud University") #get the id of the radboud university 
+ru_id
+
+uva_id <- oa_fetch(entity = "institutions", search = "Universiteit van Amsterdam") #get uva's id 
+uva_id
+
+jochem_tolsma <- oa_fetch(entity = "author", search = "Jochem Tolsma", affiliations.institution.id = "https://openalex.org/I145872427") #get jochem info
+
+tom_vd_meer  <- oa_fetch(entity = "author", search = "Tom van der Meer", affiliations.institution.id = uva_id$id) #Toni is in there, but let's ignore him because we are only using Tom-1  (get tom info)
+tom_vd_meer <- tom_vd_meer[1,] #get the RIGHT tom 
+
+maurice_gesthuizen <- oa_fetch(entity = "author", search = "Maurice Gesthuizen", affiliations.institution.id = "https://openalex.org/I145872427") #maurice
+
+michael_savelkoul <- oa_fetch(entity = "author", search = "Michael Savelkoul", affiliations.institution.id = "https://openalex.org/I145872427") #michael
+```
+
+First make separate objects for all their works 
+\
+```{r all papers, echo = F}
+jochem_tolsma_papers <- oa_fetch(entity = "works", author.id = jochem_tolsma$id) #jochem
+tom_vd_meer_papers <- oa_fetch(entity = "works", author.id = tom_vd_meer$id) #tom
+maurice_gesthuizen_papers <- oa_fetch(entity = "works", author.id = maurice_gesthuizen$id) #maurice
+michael_savelkoul_papers <- oa_fetch(entity = "works", author.id = michael_savelkoul$id) #michael
+```
+
+Then create one big object, in which we collect all four people's work (all of 'em)
+\
+```{r make all works together, echo = F}
+all_works <- rbind(jochem_tolsma_papers, tom_vd_meer_papers)
+all_works <- rbind(all_works, maurice_gesthuizen_papers)
+all_works <- rbind(all_works, michael_savelkoul_papers)
+```
+
+Then we create an adjacency matrix -- first by filtering out the data from only the relevant years (2019 - 2023)
+
+```{r filter out years, echo = F}
+all_works <- all_works %>% #filter out years 
+  filter(
+    publication_year >= 2019) %>%
+  filter(
+    publication_year <= 2023)
+```
+
+Then, we put all the information in a matrix -- to create an adjacency matrix to assess patterns of collaboration
+\
+```{r make matrix, echo = F}
+adjacency_matrix <- matrix(0, nrow = 4, ncol = 4) #first we make an empty matrix 
+  
+dimnames(adjacency_matrix) #then we ask for the names of the rows and columns 
+rownames(adjacency_matrix) <- c(jochem_tolsma$id, tom_vd_meer$id, maurice_gesthuizen$id, 
+                                michael_savelkoul$id) #name the rows after id's 
+colnames(adjacency_matrix) <- c(jochem_tolsma$id, tom_vd_meer$id, maurice_gesthuizen$id, 
+                                michael_savelkoul$id) #name the columns after id's
+adjacency_matrix #now what does the matrix look like?
+
+view(all_works) #so what's the dataset look like again 
+ego <- all_works[1,]$author[[1]]$au_id[1] #select the first author of the first work (ego)
+view(ego)
+alters <-  all_works[1,]$author[[1]]$au_id[-1] #select the non-first author of the first work (alter)
+view(alters)
+
+#they refuse rn. see later why 
+#adjacency_matrix[ego, alters] <- 1 
+#view(adjacency_matrix)
+#adjacency_matrix[ego, alters] <- 1 #once more
+```
+
