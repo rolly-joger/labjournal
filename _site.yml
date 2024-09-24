@@ -23,7 +23,7 @@ navbar:
       - text: "Introduction First Draft"
         href: JournalWeekTwo.html
       - text: "Introduction, Revised"
-        href: Intro.RSQ.html
+        href: IntroRSQ.html
 
         # here, other .Rmds can be added
 
