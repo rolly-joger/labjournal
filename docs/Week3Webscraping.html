@@ -366,6 +366,9 @@ div.tocify {
     <li>
       <a href="JournalWeekTwo.html">Introduction First Draft</a>
     </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -406,75 +409,12 @@ class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Webscraping For
 Dummies: The Staff-Info Edition</h1>
 <p>So, we are going to do some good-good webscraping for dummies!</p>
-<pre class="r"><code>#first, we are going to &#39;scrape&#39; something from the Radboud website - the members of the sociology department
-soc_staff_ru &lt;- read_html(&quot;http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/&quot;)
-str(soc_staff_ru)</code></pre>
 <pre><code>## List of 2
 ##  $ node:&lt;externalptr&gt; 
 ##  $ doc :&lt;externalptr&gt; 
 ##  - attr(*, &quot;class&quot;)= chr [1:2] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
-<pre class="r"><code>soc_staff_ru &lt;- soc_staff_ru %&gt;%
-  rvest::html_element(&quot;body&quot;) %&gt;%
-  xml2::xml_find_all(&quot;//td&quot;) %&gt;%
-  rvest::html_text()
-#ok maybe everything from the same packages
-soc_staff_ru &lt;- read_html(&quot;http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/&quot;)
-soc_staff_ru &lt;- soc_staff_ru %&gt;%
-  rvest::html_element(&quot;body&quot;) %&gt;%
-  rvest::html_elements(&quot;td&quot;) %&gt;%
-  rvest::html_text()
-
-view(soc_staff_ru)</code></pre>
-<pre class="r"><code>#now Better
-soc_staff &lt;- read_html(&quot;http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/&quot;)
-soc_staff &lt;- soc_staff %&gt;%
-  rvest::html_element(&quot;body&quot;)
-soc_staff &lt;- soc_staff %&gt;%
-  rvest::html_table()
-view(soc_staff)  </code></pre>
 <p>Then we go to another department: Leiden’s Political Science
 Department</p>
-<pre class="r"><code>#find the best link to give us all the staff of interest on one webpage 
-pol_staff_leiden_b &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1&quot;) #page 
-#str(pol_staff_leiden_b)
-#extract the information - shortest way to go 
-pol_staff_leiden_all &lt;- pol_staff_leiden_b %&gt;% #names of staff
-  rvest::html_elements(&quot;ul&quot;) %&gt;%
-  rvest::html_elements(&quot;li&quot;) %&gt;%
-  rvest::html_elements(&quot;a&quot;) %&gt;%
-  rvest::html_elements(&quot;div&quot;) %&gt;%
-  rvest::html_text()
-#extract the information - longer way to go 
-pol_staff_leiden_b &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1&quot;) #page 
-pol_staff_leiden_names &lt;- pol_staff_leiden_b %&gt;% #names of staff
-  rvest::html_elements(&quot;ul&quot;) %&gt;%
-  rvest::html_elements(&quot;li&quot;) %&gt;%
-  rvest::html_elements(&quot;a&quot;) %&gt;%
-  rvest::html_elements(&quot;div&quot;) %&gt;%
-  rvest::html_elements(&quot;strong&quot;) %&gt;%
-  rvest::html_text()
-#now the positions of the staff
-pol_staff_leiden_b &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1&quot;) #page 
-pol_staff_leiden_position &lt;- pol_staff_leiden_b %&gt;% #position of staff
-  rvest::html_elements(&quot;ul&quot;) %&gt;%
-  rvest::html_elements(&quot;li&quot;) %&gt;%
-  rvest::html_elements(&quot;a&quot;) %&gt;%
-  rvest::html_elements(&quot;div&quot;) %&gt;%
-  rvest::html_elements(&quot;span&quot;) %&gt;%
-  rvest::html_text()
-#see where the missing information is
-view(pol_staff_leiden_position)
-view(pol_staff_leiden_names)
-#create NA value
-newrow &lt;- &quot;NA&quot;
-index &lt;- 76
-#make dataframe
-pol_staff_leiden_position &lt;- as.data.frame(pol_staff_leiden_position)
-#add the NA to the dataframe
-pol_staff_leiden_position &lt;- InsertRow(pol_staff_leiden_position, newrow, index)
-view(pol_staff_leiden_names)
-view(pol_staff_leiden_position)
-view(pol_staff_leiden_all)</code></pre>
 </div>
 <div id="but-what-if-i-want-to-know-more" class="section level1"
 number="2">
@@ -492,53 +432,25 @@ accordingly.</p>
 <div id="get-things-started" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Get things
 started</h2>
-<pre class="r"><code>#install.packages(&quot;jsonlite&quot;) #making json objects
-#install.packages(&quot;openalexR&quot;) #OpenAlex for R
-library(openalexR)</code></pre>
 <pre><code>## Thank you for using openalexR!
 ## To acknowledge our work, please cite the package by calling `citation(&quot;openalexR&quot;)`.
 ## To suppress this message, add `openalexR.message = suppressed` to your .Renviron file.</code></pre>
-<pre class="r"><code>library(jsonlite)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;jsonlite&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:shiny&#39;:
+## 
+##     validate</code></pre>
 <pre><code>## The following object is masked from &#39;package:purrr&#39;:
 ## 
 ##     flatten</code></pre>
-<pre class="r"><code>options(openalexR.mailto = &quot;hannah@groennou.nl&quot;)  #my own email bb
-url &lt;- &quot;https://api.openalex.org/authors?search=Jochem Tolsma&quot;
-
-jt_json &lt;- fromJSON(&quot;https://api.openalex.org/authors?search=Jochem+Tolsma&quot;, simplifyVector = FALSE)
-glimpse(jt_json, max.level = 1)</code></pre>
 <pre><code>## List of 3
 ##  $ meta    :List of 5
 ##  $ results :List of 1
 ##  $ group_by: list()</code></pre>
-<pre class="r"><code>#jt_json[[&quot;results&quot;]][[1]][[&quot;display_name&quot;]]
-#df_jt &lt;- jt_json %&gt;%
-#    .$results %&gt;%
-#  .[[1]] %&gt;%
-#    discard(is_empty)</code></pre>
 </div>
 <div id="find-some-jochem-info" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Find some Jochem
 info</h2>
-<pre class="r"><code>df_jochem &lt;- oa_fetch(entity = &quot;author&quot;, search = &quot;Jochem Tolsma&quot;)
-df_jochem</code></pre>
-<pre><code>## # A tibble: 1 × 18
-##   id             display_name display_name_alterna…¹ relevance_score ids   orcid
-##   &lt;chr&gt;          &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;
-## 1 https://opena… Jochem Tols… &lt;chr [3]&gt;                        8818. &lt;chr&gt; http…
-## # ℹ abbreviated name: ¹​display_name_alternatives
-## # ℹ 12 more variables: works_count &lt;int&gt;, cited_by_count &lt;int&gt;,
-## #   counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;,
-## #   affiliation_id &lt;chr&gt;, affiliation_ror &lt;chr&gt;,
-## #   affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
-## #   affiliation_lineage &lt;chr&gt;, affiliations_other &lt;list&gt;, topics &lt;list&gt;,
-## #   works_api_url &lt;chr&gt;</code></pre>
-<pre class="r"><code>view(df_jochem) #we&#39;ve lost his secondary information --- so if you want to decide on wrapper or direct interaction w/the API
-
-df_jochem_papers &lt;- oa_fetch(entity = &quot;works&quot;, author.id = df_jochem$id)
-str(df_jochem_papers)</code></pre>
 <pre><code>## tibble [90 × 38] (S3: tbl_df/tbl/data.frame)
 ##  $ id                         : chr [1:90] &quot;https://openalex.org/W2067927337&quot; &quot;https://openalex.org/W2155408835&quot; &quot;https://openalex.org/W2119244457&quot; &quot;https://openalex.org/W2159862424&quot; ...
 ##  $ title                      : chr [1:90] &quot;Ethnic Diversity and Its Effects on Social Cohesion&quot; &quot;Anti-Muslim Attitudes in The Netherlands: Tests of Contradictory Hypotheses Derived from Ethnic Competition The&quot;| __truncated__ &quot;The impact of neighbourhood and municipality characteristics on social cohesion in the Netherlands&quot; &quot;Who is bullying whom in ethnically diverse primary schools? Exploring links between bullying, ethnicity, and et&quot;| __truncated__ ...
@@ -1103,19 +1015,6 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ institution_country_code: logi [1:5] NA NA NA NA NA
 ##   .. ..$ institution_type        : logi [1:5] NA NA NA NA NA
 ##   .. ..$ institution_lineage     : logi [1:5] NA NA NA NA NA
-##   ..$ :&#39;data.frame&#39;: 3 obs. of  12 variables:
-##   .. ..$ au_id                   : chr [1:3] &quot;https://openalex.org/A5086242160&quot; &quot;https://openalex.org/A5035350135&quot; &quot;https://openalex.org/A5087380803&quot;
-##   .. ..$ au_display_name         : chr [1:3] &quot;Natascha Notten&quot; &quot;Gerbert Kraaykamp&quot; &quot;Jochem Tolsma&quot;
-##   .. ..$ au_orcid                : chr [1:3] NA &quot;https://orcid.org/0000-0001-5692-1907&quot; &quot;https://orcid.org/0000-0002-4411-6932&quot;
-##   .. ..$ author_position         : chr [1:3] &quot;first&quot; &quot;middle&quot; &quot;last&quot;
-##   .. ..$ is_corresponding        : logi [1:3] FALSE FALSE FALSE
-##   .. ..$ au_affiliation_raw      : chr [1:3] NA NA NA
-##   .. ..$ institution_id          : logi [1:3] NA NA NA
-##   .. ..$ institution_display_name: logi [1:3] NA NA NA
-##   .. ..$ institution_ror         : logi [1:3] NA NA NA
-##   .. ..$ institution_country_code: logi [1:3] NA NA NA
-##   .. ..$ institution_type        : logi [1:3] NA NA NA
-##   .. ..$ institution_lineage     : logi [1:3] NA NA NA
 ##   ..$ :&#39;data.frame&#39;: 4 obs. of  12 variables:
 ##   .. ..$ au_id                   : chr [1:4] &quot;https://openalex.org/A5001803910&quot; &quot;https://openalex.org/A5046746723&quot; &quot;https://openalex.org/A5035502020&quot; &quot;https://openalex.org/A5087380803&quot;
 ##   .. ..$ au_display_name         : chr [1:4] &quot;Thijmen Jeroense&quot; &quot;Bas Hofstra&quot; &quot;Niels Spierings&quot; &quot;Jochem Tolsma&quot;
@@ -1142,6 +1041,19 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ institution_country_code: logi [1:4] NA NA NA NA
 ##   .. ..$ institution_type        : logi [1:4] NA NA NA NA
 ##   .. ..$ institution_lineage     : logi [1:4] NA NA NA NA
+##   ..$ :&#39;data.frame&#39;: 3 obs. of  12 variables:
+##   .. ..$ au_id                   : chr [1:3] &quot;https://openalex.org/A5086242160&quot; &quot;https://openalex.org/A5035350135&quot; &quot;https://openalex.org/A5087380803&quot;
+##   .. ..$ au_display_name         : chr [1:3] &quot;Natascha Notten&quot; &quot;Gerbert Kraaykamp&quot; &quot;Jochem Tolsma&quot;
+##   .. ..$ au_orcid                : chr [1:3] NA &quot;https://orcid.org/0000-0001-5692-1907&quot; &quot;https://orcid.org/0000-0002-4411-6932&quot;
+##   .. ..$ author_position         : chr [1:3] &quot;first&quot; &quot;middle&quot; &quot;last&quot;
+##   .. ..$ is_corresponding        : logi [1:3] FALSE FALSE FALSE
+##   .. ..$ au_affiliation_raw      : chr [1:3] NA NA NA
+##   .. ..$ institution_id          : logi [1:3] NA NA NA
+##   .. ..$ institution_display_name: logi [1:3] NA NA NA
+##   .. ..$ institution_ror         : logi [1:3] NA NA NA
+##   .. ..$ institution_country_code: logi [1:3] NA NA NA
+##   .. ..$ institution_type        : logi [1:3] NA NA NA
+##   .. ..$ institution_lineage     : logi [1:3] NA NA NA
 ##   ..$ :&#39;data.frame&#39;: 2 obs. of  12 variables:
 ##   .. ..$ au_id                   : chr [1:2] &quot;https://openalex.org/A5087380803&quot; &quot;https://openalex.org/A5017017044&quot;
 ##   .. ..$ au_display_name         : chr [1:2] &quot;Jochem Tolsma&quot; &quot;M.H.J. Wolbers&quot;
@@ -1961,11 +1873,11 @@ str(df_jochem_papers)</code></pre>
 ##   ..$ :&#39;data.frame&#39;: 4 obs. of  2 variables:
 ##   .. ..$ year          : int [1:4] 2019 2018 2014 2012
 ##   .. ..$ cited_by_count: int [1:4] 1 1 1 3
+##   ..$ : logi NA
+##   ..$ : logi NA
 ##   ..$ :&#39;data.frame&#39;: 7 obs. of  2 variables:
 ##   .. ..$ year          : int [1:7] 2024 2020 2019 2018 2016 2015 2014
 ##   .. ..$ cited_by_count: int [1:7] 1 3 1 1 1 1 1
-##   ..$ : logi NA
-##   ..$ : logi NA
 ##   ..$ :&#39;data.frame&#39;: 6 obs. of  2 variables:
 ##   .. ..$ year          : int [1:6] 2023 2016 2015 2014 2013 2012
 ##   .. ..$ cited_by_count: int [1:6] 1 1 2 2 1 1
@@ -2139,12 +2051,12 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;openalex&quot; &quot;doi&quot; &quot;mag&quot;
 ##   ..$ : Named chr [1:2] &quot;https://openalex.org/W2508606694&quot; &quot;2508606694&quot;
 ##   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;openalex&quot; &quot;mag&quot;
-##   ..$ : Named chr [1:3] &quot;https://openalex.org/W1787226982&quot; &quot;https://doi.org/10.1080/17482798.2012.712917&quot; &quot;1787226982&quot;
-##   .. ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;openalex&quot; &quot;doi&quot; &quot;mag&quot;
 ##   ..$ : Named chr [1:2] &quot;https://openalex.org/W4392662589&quot; &quot;https://doi.org/10.1111/imig.13252&quot;
 ##   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;openalex&quot; &quot;doi&quot;
 ##   ..$ : Named chr [1:2] &quot;https://openalex.org/W4392718565&quot; &quot;https://doi.org/10.1111/imig.13252/v3/response1&quot;
 ##   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;openalex&quot; &quot;doi&quot;
+##   ..$ : Named chr [1:3] &quot;https://openalex.org/W1787226982&quot; &quot;https://doi.org/10.1080/17482798.2012.712917&quot; &quot;1787226982&quot;
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;openalex&quot; &quot;doi&quot; &quot;mag&quot;
 ##   ..$ : Named chr [1:3] &quot;https://openalex.org/W2115709956&quot; &quot;https://doi.org/10.21825/sociologos.86759&quot; &quot;2115709956&quot;
 ##   .. ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;openalex&quot; &quot;doi&quot; &quot;mag&quot;
 ##   ..$ : Named chr [1:3] &quot;https://openalex.org/W1787226982&quot; &quot;https://doi.org/10.1080/17482798.2012.712917&quot; &quot;1787226982&quot;
@@ -2279,9 +2191,9 @@ str(df_jochem_papers)</code></pre>
 ##   ..$ : chr [1:95] &quot;https://openalex.org/W1439010663&quot; &quot;https://openalex.org/W1483776474&quot; &quot;https://openalex.org/W1518673584&quot; &quot;https://openalex.org/W1520363489&quot; ...
 ##   ..$ : chr [1:54] &quot;https://openalex.org/W1494014896&quot; &quot;https://openalex.org/W1505499153&quot; &quot;https://openalex.org/W1567462968&quot; &quot;https://openalex.org/W1595412341&quot; ...
 ##   ..$ : chr [1:193] &quot;https://openalex.org/W10433091&quot; &quot;https://openalex.org/W132302294&quot; &quot;https://openalex.org/W1480561532&quot; &quot;https://openalex.org/W1492636011&quot; ...
-##   ..$ : chr [1:55] &quot;https://openalex.org/W1531363480&quot; &quot;https://openalex.org/W1571998446&quot; &quot;https://openalex.org/W1853435909&quot; &quot;https://openalex.org/W1940453990&quot; ...
 ##   ..$ : chr [1:37] &quot;https://openalex.org/W1577001291&quot; &quot;https://openalex.org/W1733670649&quot; &quot;https://openalex.org/W1977186326&quot; &quot;https://openalex.org/W2011794900&quot; ...
 ##   ..$ : logi NA
+##   ..$ : chr [1:55] &quot;https://openalex.org/W1531363480&quot; &quot;https://openalex.org/W1571998446&quot; &quot;https://openalex.org/W1853435909&quot; &quot;https://openalex.org/W1940453990&quot; ...
 ##   ..$ : chr [1:18] &quot;https://openalex.org/W1494751824&quot; &quot;https://openalex.org/W1508183930&quot; &quot;https://openalex.org/W1543485975&quot; &quot;https://openalex.org/W1550238797&quot; ...
 ##   ..$ : chr [1:55] &quot;https://openalex.org/W1531363480&quot; &quot;https://openalex.org/W1571998446&quot; &quot;https://openalex.org/W1853435909&quot; &quot;https://openalex.org/W1940453990&quot; ...
 ##   ..$ : chr [1:44] &quot;https://openalex.org/W1549371580&quot; &quot;https://openalex.org/W1963652874&quot; &quot;https://openalex.org/W2000665931&quot; &quot;https://openalex.org/W2013467895&quot; ...
@@ -2370,9 +2282,9 @@ str(df_jochem_papers)</code></pre>
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W4396701345&quot; &quot;https://openalex.org/W4396696052&quot; &quot;https://openalex.org/W4395014643&quot; &quot;https://openalex.org/W4391375266&quot; ...
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W4385338594&quot; &quot;https://openalex.org/W4200127153&quot; &quot;https://openalex.org/W3185373886&quot; &quot;https://openalex.org/W3119171992&quot; ...
 ##   ..$ : chr [1:20] &quot;https://openalex.org/W88579001&quot; &quot;https://openalex.org/W879340561&quot; &quot;https://openalex.org/W594476639&quot; &quot;https://openalex.org/W590241694&quot; ...
-##   ..$ : chr [1:10] &quot;https://openalex.org/W4387497383&quot; &quot;https://openalex.org/W3183948672&quot; &quot;https://openalex.org/W3173606202&quot; &quot;https://openalex.org/W3110381201&quot; ...
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W2572678357&quot; &quot;https://openalex.org/W2381483116&quot; &quot;https://openalex.org/W2371593620&quot; &quot;https://openalex.org/W2353233101&quot; ...
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W2572678357&quot; &quot;https://openalex.org/W2381483116&quot; &quot;https://openalex.org/W2371593620&quot; &quot;https://openalex.org/W2156037511&quot; ...
+##   ..$ : chr [1:10] &quot;https://openalex.org/W4387497383&quot; &quot;https://openalex.org/W3183948672&quot; &quot;https://openalex.org/W3173606202&quot; &quot;https://openalex.org/W3110381201&quot; ...
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W4211104485&quot; &quot;https://openalex.org/W2806803381&quot; &quot;https://openalex.org/W2791615413&quot; &quot;https://openalex.org/W2365926120&quot; ...
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W4387497383&quot; &quot;https://openalex.org/W3183948672&quot; &quot;https://openalex.org/W3173606202&quot; &quot;https://openalex.org/W3110381201&quot; ...
 ##   ..$ : chr [1:10] &quot;https://openalex.org/W4283032794&quot; &quot;https://openalex.org/W4254345851&quot; &quot;https://openalex.org/W4254297975&quot; &quot;https://openalex.org/W4248847221&quot; ...
@@ -2678,12 +2590,6 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ display_name: chr [1:6] &quot;Ethnic group&quot; &quot;Hostility&quot; &quot;Psychology&quot; &quot;Social psychology&quot; ...
 ##   .. ..$ level       : int [1:6] 2 2 0 1 0 1
 ##   .. ..$ score       : num [1:6] 0.881 0.723 0.444 0.394 0.22 ...
-##   ..$ :&#39;data.frame&#39;: 16 obs. of  5 variables:
-##   .. ..$ id          : chr [1:16] &quot;https://openalex.org/C179420905&quot; &quot;https://openalex.org/C25032326&quot; &quot;https://openalex.org/C15744967&quot; &quot;https://openalex.org/C138496976&quot; ...
-##   .. ..$ wikidata    : chr [1:16] &quot;https://www.wikidata.org/wiki/Q223871&quot; &quot;https://www.wikidata.org/wiki/Q185467&quot; &quot;https://www.wikidata.org/wiki/Q9418&quot; &quot;https://www.wikidata.org/wiki/Q175002&quot; ...
-##   .. ..$ display_name: chr [1:16] &quot;Mediation&quot; &quot;Socialization&quot; &quot;Psychology&quot; &quot;Developmental psychology&quot; ...
-##   .. ..$ level       : int [1:16] 2 2 0 1 2 2 2 1 0 0 ...
-##   .. ..$ score       : num [1:16] 0.777 0.688 0.64 0.604 0.57 ...
 ##   ..$ :&#39;data.frame&#39;: 14 obs. of  5 variables:
 ##   .. ..$ id          : chr [1:14] &quot;https://openalex.org/C137403100&quot; &quot;https://openalex.org/C3019876095&quot; &quot;https://openalex.org/C142259097&quot; &quot;https://openalex.org/C4249254&quot; ...
 ##   .. ..$ wikidata    : chr [1:14] &quot;https://www.wikidata.org/wiki/Q41710&quot; &quot;https://www.wikidata.org/wiki/Q15320003&quot; &quot;https://www.wikidata.org/wiki/Q5891314&quot; &quot;https://www.wikidata.org/wiki/Q3044431&quot; ...
@@ -2696,6 +2602,12 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ display_name: chr [1:12] &quot;Homogeneity (statistics)&quot; &quot;Ethnic group&quot; &quot;Geography&quot; &quot;Migrant workers&quot; ...
 ##   .. ..$ level       : int [1:12] 2 2 0 2 1 1 0 1 0 1 ...
 ##   .. ..$ score       : num [1:12] 0.731 0.719 0.437 0.437 0.394 ...
+##   ..$ :&#39;data.frame&#39;: 16 obs. of  5 variables:
+##   .. ..$ id          : chr [1:16] &quot;https://openalex.org/C179420905&quot; &quot;https://openalex.org/C25032326&quot; &quot;https://openalex.org/C15744967&quot; &quot;https://openalex.org/C138496976&quot; ...
+##   .. ..$ wikidata    : chr [1:16] &quot;https://www.wikidata.org/wiki/Q223871&quot; &quot;https://www.wikidata.org/wiki/Q185467&quot; &quot;https://www.wikidata.org/wiki/Q9418&quot; &quot;https://www.wikidata.org/wiki/Q175002&quot; ...
+##   .. ..$ display_name: chr [1:16] &quot;Mediation&quot; &quot;Socialization&quot; &quot;Psychology&quot; &quot;Developmental psychology&quot; ...
+##   .. ..$ level       : int [1:16] 2 2 0 1 2 2 2 1 0 0 ...
+##   .. ..$ score       : num [1:16] 0.777 0.688 0.64 0.604 0.57 ...
 ##   ..$ :&#39;data.frame&#39;: 21 obs. of  5 variables:
 ##   .. ..$ id          : chr [1:21] &quot;https://openalex.org/C2777810591&quot; &quot;https://openalex.org/C37129596&quot; &quot;https://openalex.org/C142806620&quot; &quot;https://openalex.org/C144024400&quot; ...
 ##   .. ..$ wikidata    : chr [1:21] &quot;https://www.wikidata.org/wiki/Q16861606&quot; &quot;https://www.wikidata.org/wiki/Q194417&quot; &quot;https://www.wikidata.org/wiki/Q189970&quot; &quot;https://www.wikidata.org/wiki/Q21201&quot; ...
@@ -3221,12 +3133,6 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ display_name: chr [1:12] &quot;Politics and Social Implications of Immigration&quot; &quot;Sociology and Political Science&quot; &quot;Social Sciences&quot; &quot;Social Sciences&quot; ...
 ##   ..$ : tibble [12 × 5] (S3: tbl_df/tbl/data.frame)
 ##   .. ..$ i           : int [1:12] 1 1 1 1 2 2 2 2 3 3 ...
-##   .. ..$ score       : num [1:12] 0.999 0.999 0.999 0.999 0.987 ...
-##   .. ..$ name        : chr [1:12] &quot;topic&quot; &quot;subfield&quot; &quot;field&quot; &quot;domain&quot; ...
-##   .. ..$ id          : chr [1:12] &quot;https://openalex.org/T12060&quot; &quot;https://openalex.org/subfields/3304&quot; &quot;https://openalex.org/fields/33&quot; &quot;https://openalex.org/domains/2&quot; ...
-##   .. ..$ display_name: chr [1:12] &quot;Impact of Media on Children&#39;s Development&quot; &quot;Education&quot; &quot;Social Sciences&quot; &quot;Social Sciences&quot; ...
-##   ..$ : tibble [12 × 5] (S3: tbl_df/tbl/data.frame)
-##   .. ..$ i           : int [1:12] 1 1 1 1 2 2 2 2 3 3 ...
 ##   .. ..$ score       : num [1:12] 0.997 0.997 0.997 0.997 0.993 ...
 ##   .. ..$ name        : chr [1:12] &quot;topic&quot; &quot;subfield&quot; &quot;field&quot; &quot;domain&quot; ...
 ##   .. ..$ id          : chr [1:12] &quot;https://openalex.org/T11239&quot; &quot;https://openalex.org/subfields/3312&quot; &quot;https://openalex.org/fields/33&quot; &quot;https://openalex.org/domains/2&quot; ...
@@ -3237,6 +3143,12 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ name        : chr [1:12] &quot;topic&quot; &quot;subfield&quot; &quot;field&quot; &quot;domain&quot; ...
 ##   .. ..$ id          : chr [1:12] &quot;https://openalex.org/T11239&quot; &quot;https://openalex.org/subfields/3312&quot; &quot;https://openalex.org/fields/33&quot; &quot;https://openalex.org/domains/2&quot; ...
 ##   .. ..$ display_name: chr [1:12] &quot;Social Capital and Trust in Communities&quot; &quot;Sociology and Political Science&quot; &quot;Social Sciences&quot; &quot;Social Sciences&quot; ...
+##   ..$ : tibble [12 × 5] (S3: tbl_df/tbl/data.frame)
+##   .. ..$ i           : int [1:12] 1 1 1 1 2 2 2 2 3 3 ...
+##   .. ..$ score       : num [1:12] 0.999 0.999 0.999 0.999 0.987 ...
+##   .. ..$ name        : chr [1:12] &quot;topic&quot; &quot;subfield&quot; &quot;field&quot; &quot;domain&quot; ...
+##   .. ..$ id          : chr [1:12] &quot;https://openalex.org/T12060&quot; &quot;https://openalex.org/subfields/3304&quot; &quot;https://openalex.org/fields/33&quot; &quot;https://openalex.org/domains/2&quot; ...
+##   .. ..$ display_name: chr [1:12] &quot;Impact of Media on Children&#39;s Development&quot; &quot;Education&quot; &quot;Social Sciences&quot; &quot;Social Sciences&quot; ...
 ##   ..$ : tibble [12 × 5] (S3: tbl_df/tbl/data.frame)
 ##   .. ..$ i           : int [1:12] 1 1 1 1 2 2 2 2 3 3 ...
 ##   .. ..$ score       : num [1:12] 0.976 0.976 0.976 0.976 0.958 ...
@@ -3477,115 +3389,56 @@ str(df_jochem_papers)</code></pre>
 ##   .. ..$ name        : chr [1:4] &quot;topic&quot; &quot;subfield&quot; &quot;field&quot; &quot;domain&quot;
 ##   .. ..$ id          : chr [1:4] &quot;https://openalex.org/T11076&quot; &quot;https://openalex.org/subfields/3320&quot; &quot;https://openalex.org/fields/33&quot; &quot;https://openalex.org/domains/2&quot;
 ##   .. ..$ display_name: chr [1:4] &quot;Impact of Procedural Justice on Police Legitimacy&quot; &quot;Political Science and International Relations&quot; &quot;Social Sciences&quot; &quot;Social Sciences&quot;</code></pre>
-<pre class="r"><code>view(df_jochem_papers)</code></pre>
 </div>
 <div id="use-the-wrapper" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Use the Wrapper</h2>
 <p>Because we are (weak), we are using the wrapper (becasue it’s
 easier)<br />
 Get the people first</p>
-<pre class="r"><code>options(openalexR.mailto = &quot;hannah.groennou@ru.nl&quot;) #indicate you&#39;re you
-
-ru_id &lt;- institutions &lt;- oa_fetch(entity = &quot;institutions&quot;, search = &quot;Radboud University&quot;) #get the id of the radboud university 
-ru_id</code></pre>
 <pre><code>## # A tibble: 2 × 22
-##   id                   display_name display_name_alterna…¹ display_name_acronyms
-##   &lt;chr&gt;                &lt;chr&gt;        &lt;list&gt;                 &lt;list&gt;               
-## 1 https://openalex.or… Radboud Uni… &lt;chr [3]&gt;              &lt;lgl [1]&gt;            
-## 2 https://openalex.or… Radboud Uni… &lt;chr [2]&gt;              &lt;chr [1]&gt;            
-## # ℹ abbreviated name: ¹​display_name_alternatives
-## # ℹ 18 more variables: display_name_international &lt;list&gt;, ror &lt;chr&gt;,
-## #   ids &lt;list&gt;, country_code &lt;chr&gt;, geo &lt;list&gt;, type &lt;chr&gt;, homepage_url &lt;chr&gt;,
+##   id    display_name display_name_alterna…¹ display_name_acronyms display_name_interna…² ror   ids  
+##   &lt;chr&gt; &lt;chr&gt;        &lt;list&gt;                 &lt;list&gt;                &lt;list&gt;                 &lt;chr&gt; &lt;lis&gt;
+## 1 http… Radboud Uni… &lt;chr [3]&gt;              &lt;lgl [1]&gt;             &lt;chr [44]&gt;             http… &lt;chr&gt;
+## 2 http… Radboud Uni… &lt;chr [2]&gt;              &lt;chr [1]&gt;             &lt;chr [10]&gt;             http… &lt;chr&gt;
+## # ℹ abbreviated names: ¹​display_name_alternatives, ²​display_name_international
+## # ℹ 15 more variables: country_code &lt;chr&gt;, geo &lt;list&gt;, type &lt;chr&gt;, homepage_url &lt;chr&gt;,
 ## #   image_url &lt;chr&gt;, image_thumbnail_url &lt;chr&gt;, associated_institutions &lt;list&gt;,
-## #   relevance_score &lt;dbl&gt;, works_count &lt;int&gt;, cited_by_count &lt;int&gt;,
-## #   counts_by_year &lt;list&gt;, works_api_url &lt;chr&gt;, topics &lt;list&gt;,
-## #   updated_date &lt;chr&gt;, created_date &lt;chr&gt;</code></pre>
-<pre class="r"><code>uva_id &lt;- oa_fetch(entity = &quot;institutions&quot;, search = &quot;Universiteit van Amsterdam&quot;) #get uva&#39;s id 
-uva_id</code></pre>
+## #   relevance_score &lt;dbl&gt;, works_count &lt;int&gt;, cited_by_count &lt;int&gt;, counts_by_year &lt;list&gt;,
+## #   works_api_url &lt;chr&gt;, topics &lt;list&gt;, updated_date &lt;chr&gt;, created_date &lt;chr&gt;</code></pre>
 <pre><code>## # A tibble: 1 × 22
-##   id                   display_name display_name_alterna…¹ display_name_acronyms
-##   &lt;chr&gt;                &lt;chr&gt;        &lt;list&gt;                 &lt;list&gt;               
-## 1 https://openalex.or… University … &lt;chr [1]&gt;              &lt;chr [1]&gt;            
-## # ℹ abbreviated name: ¹​display_name_alternatives
-## # ℹ 18 more variables: display_name_international &lt;list&gt;, ror &lt;chr&gt;,
-## #   ids &lt;list&gt;, country_code &lt;chr&gt;, geo &lt;list&gt;, type &lt;chr&gt;, homepage_url &lt;chr&gt;,
+##   id    display_name display_name_alterna…¹ display_name_acronyms display_name_interna…² ror   ids  
+##   &lt;chr&gt; &lt;chr&gt;        &lt;list&gt;                 &lt;list&gt;                &lt;list&gt;                 &lt;chr&gt; &lt;lis&gt;
+## 1 http… University … &lt;chr [1]&gt;              &lt;chr [1]&gt;             &lt;chr [84]&gt;             http… &lt;chr&gt;
+## # ℹ abbreviated names: ¹​display_name_alternatives, ²​display_name_international
+## # ℹ 15 more variables: country_code &lt;chr&gt;, geo &lt;list&gt;, type &lt;chr&gt;, homepage_url &lt;chr&gt;,
 ## #   image_url &lt;chr&gt;, image_thumbnail_url &lt;chr&gt;, associated_institutions &lt;list&gt;,
-## #   relevance_score &lt;dbl&gt;, works_count &lt;int&gt;, cited_by_count &lt;int&gt;,
-## #   counts_by_year &lt;list&gt;, works_api_url &lt;chr&gt;, topics &lt;list&gt;,
-## #   updated_date &lt;chr&gt;, created_date &lt;chr&gt;</code></pre>
-<pre class="r"><code>jochem_tolsma &lt;- oa_fetch(entity = &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;) #get jochem info
-
-tom_vd_meer  &lt;- oa_fetch(entity = &quot;author&quot;, search = &quot;Tom van der Meer&quot;, affiliations.institution.id = uva_id$id) #Toni is in there, but let&#39;s ignore him because we are only using Tom-1  (get tom info)
-tom_vd_meer &lt;- tom_vd_meer[1,] #get the RIGHT tom 
-
-maurice_gesthuizen &lt;- oa_fetch(entity = &quot;author&quot;, search = &quot;Maurice Gesthuizen&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;) #maurice
-
-michael_savelkoul &lt;- oa_fetch(entity = &quot;author&quot;, search = &quot;Michael Savelkoul&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;) #michael</code></pre>
+## #   relevance_score &lt;dbl&gt;, works_count &lt;int&gt;, cited_by_count &lt;int&gt;, counts_by_year &lt;list&gt;,
+## #   works_api_url &lt;chr&gt;, topics &lt;list&gt;, updated_date &lt;chr&gt;, created_date &lt;chr&gt;</code></pre>
 <p>First make separate objects for all their works<br />
 </p>
-<pre class="r"><code>jochem_tolsma_papers &lt;- oa_fetch(entity = &quot;works&quot;, author.id = jochem_tolsma$id) #jochem
-tom_vd_meer_papers &lt;- oa_fetch(entity = &quot;works&quot;, author.id = tom_vd_meer$id) #tom
-maurice_gesthuizen_papers &lt;- oa_fetch(entity = &quot;works&quot;, author.id = maurice_gesthuizen$id) #maurice
-michael_savelkoul_papers &lt;- oa_fetch(entity = &quot;works&quot;, author.id = michael_savelkoul$id) #michael</code></pre>
 <p>Then create one big object, in which we collect all four people’s
 work (all of ’em)<br />
 </p>
-<pre class="r"><code>all_works &lt;- rbind(jochem_tolsma_papers, tom_vd_meer_papers)
-all_works &lt;- rbind(all_works, maurice_gesthuizen_papers)
-all_works &lt;- rbind(all_works, michael_savelkoul_papers)</code></pre>
 <p>Then we create an adjacency matrix – first by filtering out the data
 from only the relevant years (2019 - 2023)</p>
-<pre class="r"><code>all_works &lt;- all_works %&gt;% #filter out years 
-  filter(
-    publication_year &gt;= 2019) %&gt;%
-  filter(
-    publication_year &lt;= 2023)</code></pre>
 <p>Then, we put all the information in a matrix – to create an adjacency
 matrix to assess patterns of collaboration<br />
 </p>
-<pre class="r"><code>adjacency_matrix &lt;- matrix(0, nrow = 4, ncol = 4) #first we make an empty matrix 
-  
-dimnames(adjacency_matrix) #then we ask for the names of the rows and columns </code></pre>
 <pre><code>## NULL</code></pre>
-<pre class="r"><code>rownames(adjacency_matrix) &lt;- c(jochem_tolsma$id, tom_vd_meer$id, maurice_gesthuizen$id, 
-                                michael_savelkoul$id) #name the rows after id&#39;s 
-colnames(adjacency_matrix) &lt;- c(jochem_tolsma$id, tom_vd_meer$id, maurice_gesthuizen$id, 
-                                michael_savelkoul$id) #name the columns after id&#39;s
-adjacency_matrix #now what does the matrix look like?</code></pre>
-<pre><code>##                                  https://openalex.org/A5087380803
-## https://openalex.org/A5087380803                                0
-## https://openalex.org/A5010780363                                0
-## https://openalex.org/A5007673492                                0
-## https://openalex.org/A5048988743                                0
-##                                  https://openalex.org/A5010780363
-## https://openalex.org/A5087380803                                0
-## https://openalex.org/A5010780363                                0
-## https://openalex.org/A5007673492                                0
-## https://openalex.org/A5048988743                                0
-##                                  https://openalex.org/A5007673492
-## https://openalex.org/A5087380803                                0
-## https://openalex.org/A5010780363                                0
-## https://openalex.org/A5007673492                                0
-## https://openalex.org/A5048988743                                0
-##                                  https://openalex.org/A5048988743
-## https://openalex.org/A5087380803                                0
-## https://openalex.org/A5010780363                                0
-## https://openalex.org/A5007673492                                0
-## https://openalex.org/A5048988743                                0</code></pre>
-<pre class="r"><code>view(all_works) #so what&#39;s the dataset look like again 
-ego &lt;- all_works[1,]$author[[1]]$au_id[1] #select the first author of the first work (ego)
-view(ego)
-alters &lt;-  all_works[1,]$author[[1]]$au_id[-1] #select the non-first author of the first work (alter)
-view(alters)
-
-#they refuse rn. see later why 
-#adjacency_matrix[ego, alters] &lt;- 1 
-#view(adjacency_matrix)
-#adjacency_matrix[ego, alters] &lt;- 1 #once more</code></pre>
+<pre><code>##                                  https://openalex.org/A5087380803 https://openalex.org/A5010780363
+## https://openalex.org/A5087380803                                0                                0
+## https://openalex.org/A5010780363                                0                                0
+## https://openalex.org/A5007673492                                0                                0
+## https://openalex.org/A5048988743                                0                                0
+##                                  https://openalex.org/A5007673492 https://openalex.org/A5048988743
+## https://openalex.org/A5087380803                                0                                0
+## https://openalex.org/A5010780363                                0                                0
+## https://openalex.org/A5007673492                                0                                0
+## https://openalex.org/A5048988743                                0                                0</code></pre>
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiV2VlayAzOiBXZWJzY3JhcGluZyIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTA5LTE4IgotLS0KCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpCiNpbnN0YWxsLnBhY2thZ2VzKCJEYXRhQ29tYmluZSIpCmxpYnJhcnkoRGF0YUNvbWJpbmUpCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGRhdGEudGFibGUpCmxpYnJhcnkoaHR0cikKbGlicmFyeSh4bWwyKQpsaWJyYXJ5KGRldnRvb2xzKQpsaWJyYXJ5KHNjaG9sYXIpCmBgYAoKIyBXZWJzY3JhcGluZyBGb3IgRHVtbWllczogVGhlIFN0YWZmLUluZm8gRWRpdGlvbgoKU28sIHdlIGFyZSBnb2luZyB0byBkbyBzb21lIGdvb2QtZ29vZCB3ZWJzY3JhcGluZyBmb3IgZHVtbWllcyEKCmBgYHtyIGZpcnN0IHBhcnR9CiNmaXJzdCwgd2UgYXJlIGdvaW5nIHRvICdzY3JhcGUnIHNvbWV0aGluZyBmcm9tIHRoZSBSYWRib3VkIHdlYnNpdGUgLSB0aGUgbWVtYmVycyBvZiB0aGUgc29jaW9sb2d5IGRlcGFydG1lbnQKc29jX3N0YWZmX3J1IDwtIHJlYWRfaHRtbCgiaHR0cDovL3dlYi5hcmNoaXZlLm9yZy93ZWIvMjAyMzA1MjgxNTMzMzYvaHR0cHM6Ly93d3cucnUubmwvc29jaW9sb2d5L3Jlc2VhcmNoL3N0YWZmLyIpCnN0cihzb2Nfc3RhZmZfcnUpCnNvY19zdGFmZl9ydSA8LSBzb2Nfc3RhZmZfcnUgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudCgiYm9keSIpICU+JQogIHhtbDI6OnhtbF9maW5kX2FsbCgiLy90ZCIpICU+JQogIHJ2ZXN0OjpodG1sX3RleHQoKQojb2sgbWF5YmUgZXZlcnl0aGluZyBmcm9tIHRoZSBzYW1lIHBhY2thZ2VzCnNvY19zdGFmZl9ydSA8LSByZWFkX2h0bWwoImh0dHA6Ly93ZWIuYXJjaGl2ZS5vcmcvd2ViLzIwMjMwNTI4MTUzMzM2L2h0dHBzOi8vd3d3LnJ1Lm5sL3NvY2lvbG9neS9yZXNlYXJjaC9zdGFmZi8iKQpzb2Nfc3RhZmZfcnUgPC0gc29jX3N0YWZmX3J1ICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnQoImJvZHkiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygidGQiKSAlPiUKICBydmVzdDo6aHRtbF90ZXh0KCkKCnZpZXcoc29jX3N0YWZmX3J1KQpgYGAKCmBgYHtyIGJldHRlcn0KI25vdyBCZXR0ZXIKc29jX3N0YWZmIDwtIHJlYWRfaHRtbCgiaHR0cDovL3dlYi5hcmNoaXZlLm9yZy93ZWIvMjAyMzA1MjgxNTMzMzYvaHR0cHM6Ly93d3cucnUubmwvc29jaW9sb2d5L3Jlc2VhcmNoL3N0YWZmLyIpCnNvY19zdGFmZiA8LSBzb2Nfc3RhZmYgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudCgiYm9keSIpCnNvY19zdGFmZiA8LSBzb2Nfc3RhZmYgJT4lCiAgcnZlc3Q6Omh0bWxfdGFibGUoKQp2aWV3KHNvY19zdGFmZikgIApgYGAKClRoZW4gd2UgZ28gdG8gYW5vdGhlciBkZXBhcnRtZW50OiBMZWlkZW4ncyBQb2xpdGljYWwgU2NpZW5jZSBEZXBhcnRtZW50CmBgYHtyfQojZmluZCB0aGUgYmVzdCBsaW5rIHRvIGdpdmUgdXMgYWxsIHRoZSBzdGFmZiBvZiBpbnRlcmVzdCBvbiBvbmUgd2VicGFnZSAKcG9sX3N0YWZmX2xlaWRlbl9iIDwtIHJlYWRfaHRtbCgiaHR0cHM6Ly93d3cudW5pdmVyc2l0ZWl0bGVpZGVuLm5sL2VuL3NvY2lhbC1iZWhhdmlvdXJhbC1zY2llbmNlcy9wb2xpdGljYWwtc2NpZW5jZS9zdGFmZiN0YWItMSIpICNwYWdlIAojc3RyKHBvbF9zdGFmZl9sZWlkZW5fYikKI2V4dHJhY3QgdGhlIGluZm9ybWF0aW9uIC0gc2hvcnRlc3Qgd2F5IHRvIGdvIApwb2xfc3RhZmZfbGVpZGVuX2FsbCA8LSBwb2xfc3RhZmZfbGVpZGVuX2IgJT4lICNuYW1lcyBvZiBzdGFmZgogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJ1bCIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJsaSIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJhIikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImRpdiIpICU+JQogIHJ2ZXN0OjpodG1sX3RleHQoKQojZXh0cmFjdCB0aGUgaW5mb3JtYXRpb24gLSBsb25nZXIgd2F5IHRvIGdvIApwb2xfc3RhZmZfbGVpZGVuX2IgPC0gcmVhZF9odG1sKCJodHRwczovL3d3dy51bml2ZXJzaXRlaXRsZWlkZW4ubmwvZW4vc29jaWFsLWJlaGF2aW91cmFsLXNjaWVuY2VzL3BvbGl0aWNhbC1zY2llbmNlL3N0YWZmI3RhYi0xIikgI3BhZ2UgCnBvbF9zdGFmZl9sZWlkZW5fbmFtZXMgPC0gcG9sX3N0YWZmX2xlaWRlbl9iICU+JSAjbmFtZXMgb2Ygc3RhZmYKICBydmVzdDo6aHRtbF9lbGVtZW50cygidWwiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygibGkiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygiYSIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJkaXYiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygic3Ryb25nIikgJT4lCiAgcnZlc3Q6Omh0bWxfdGV4dCgpCiNub3cgdGhlIHBvc2l0aW9ucyBvZiB0aGUgc3RhZmYKcG9sX3N0YWZmX2xlaWRlbl9iIDwtIHJlYWRfaHRtbCgiaHR0cHM6Ly93d3cudW5pdmVyc2l0ZWl0bGVpZGVuLm5sL2VuL3NvY2lhbC1iZWhhdmlvdXJhbC1zY2llbmNlcy9wb2xpdGljYWwtc2NpZW5jZS9zdGFmZiN0YWItMSIpICNwYWdlIApwb2xfc3RhZmZfbGVpZGVuX3Bvc2l0aW9uIDwtIHBvbF9zdGFmZl9sZWlkZW5fYiAlPiUgI3Bvc2l0aW9uIG9mIHN0YWZmCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoInVsIikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImxpIikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImEiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygiZGl2IikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoInNwYW4iKSAlPiUKICBydmVzdDo6aHRtbF90ZXh0KCkKI3NlZSB3aGVyZSB0aGUgbWlzc2luZyBpbmZvcm1hdGlvbiBpcwp2aWV3KHBvbF9zdGFmZl9sZWlkZW5fcG9zaXRpb24pCnZpZXcocG9sX3N0YWZmX2xlaWRlbl9uYW1lcykKI2NyZWF0ZSBOQSB2YWx1ZQpuZXdyb3cgPC0gIk5BIgppbmRleCA8LSA3NgojbWFrZSBkYXRhZnJhbWUKcG9sX3N0YWZmX2xlaWRlbl9wb3NpdGlvbiA8LSBhcy5kYXRhLmZyYW1lKHBvbF9zdGFmZl9sZWlkZW5fcG9zaXRpb24pCiNhZGQgdGhlIE5BIHRvIHRoZSBkYXRhZnJhbWUKcG9sX3N0YWZmX2xlaWRlbl9wb3NpdGlvbiA8LSBJbnNlcnRSb3cocG9sX3N0YWZmX2xlaWRlbl9wb3NpdGlvbiwgbmV3cm93LCBpbmRleCkKdmlldyhwb2xfc3RhZmZfbGVpZGVuX25hbWVzKQp2aWV3KHBvbF9zdGFmZl9sZWlkZW5fcG9zaXRpb24pCnZpZXcocG9sX3N0YWZmX2xlaWRlbl9hbGwpCmBgYAoKIyBCdXQgV2hhdCBJZiBJIFdhbnQgdG8gS25vdyBNb3JlPwoKV2VsbCwgc3VyZSB3ZSBoYXZlIHNvbWUgZnVuIGluZm8gYWJvdXQgdGhlIG5hbWVzIGFuZCBwb3NpdGlvbnMgb2YgdGhlIHN0YWZmLiBCdXQgaG93IGNhbiB3ZSB1c2UgdGhpcyB0byAqZG8qIHNvbWV0aGluZyB3aXRoIHRoZSBpbmZvcm1hdGlvbi4vCkxldCBtZSB0ZWxsIHlvdSBob3cgeW91IGNhbiB1c2UgdGhpcyEgQnkgdXNpbmcgdGhlIG5hbWVzIGFzIHN0YXJ0aW5nIHBvaW50cyBmb3Igc2V0dGluZyB1cCBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzLi8KLwpCZWNhdXNlIHdlIGhhdmUgdGhlc2UgbmFtZXMsIHdlIGNhbiBub3cgdXNlICoqd2Vic2NyYXBpbmcqKiB0byBmaW5kIGFkZGl0aW9uYWwgaW5mb3JtYXRpb24gYXNzb2NpYXRlZCB3aXRoIHRoZXNlIG5hbWVzIC0tIHN1Y2ggYXMgdGhlIHBhcGVycyB0aGV5IGhhdmUgcHVibGlzaGVkLCBhbmQgd2l0aCB3aG9tIHRoZXkgaGF2ZSBiZWVuIHB1Ymxpc2hlZC4vCldlIGRvIHRoaXMgYnkgZ29pbmcgdG8gdGhlIE9wZW5BbGV4IEFQSSwgYW5kIGV4dHJhY3Rpbmcgb3VyIGluZm9ybWF0aW9uIG9mIGNob2ljZSBhY2NvcmRpbmdseS4KCiMjIEdldCB0aGluZ3Mgc3RhcnRlZCAKCmBgYHtyIHRyeSBvcGVuIGFsZXggZmlyc3QgcGFydH0KI2luc3RhbGwucGFja2FnZXMoImpzb25saXRlIikgI21ha2luZyBqc29uIG9iamVjdHMKI2luc3RhbGwucGFja2FnZXMoIm9wZW5hbGV4UiIpICNPcGVuQWxleCBmb3IgUgpsaWJyYXJ5KG9wZW5hbGV4UikKbGlicmFyeShqc29ubGl0ZSkKCm9wdGlvbnMob3BlbmFsZXhSLm1haWx0byA9ICJoYW5uYWhAZ3JvZW5ub3UubmwiKSAgI215IG93biBlbWFpbCBiYgp1cmwgPC0gImh0dHBzOi8vYXBpLm9wZW5hbGV4Lm9yZy9hdXRob3JzP3NlYXJjaD1Kb2NoZW0gVG9sc21hIgoKanRfanNvbiA8LSBmcm9tSlNPTigiaHR0cHM6Ly9hcGkub3BlbmFsZXgub3JnL2F1dGhvcnM/c2VhcmNoPUpvY2hlbStUb2xzbWEiLCBzaW1wbGlmeVZlY3RvciA9IEZBTFNFKQpnbGltcHNlKGp0X2pzb24sIG1heC5sZXZlbCA9IDEpCiNqdF9qc29uW1sicmVzdWx0cyJdXVtbMV1dW1siZGlzcGxheV9uYW1lIl1dCiNkZl9qdCA8LSBqdF9qc29uICU+JQojICAgIC4kcmVzdWx0cyAlPiUKIyAgLltbMV1dICU+JQojICAgIGRpc2NhcmQoaXNfZW1wdHkpCmBgYAoKIyMgRmluZCBzb21lIEpvY2hlbSBpbmZvIApgYGB7ciBKb2NoZW0gb3BlbiBhbGV4fQpkZl9qb2NoZW0gPC0gb2FfZmV0Y2goZW50aXR5ID0gImF1dGhvciIsIHNlYXJjaCA9ICJKb2NoZW0gVG9sc21hIikKZGZfam9jaGVtCnZpZXcoZGZfam9jaGVtKSAjd2UndmUgbG9zdCBoaXMgc2Vjb25kYXJ5IGluZm9ybWF0aW9uIC0tLSBzbyBpZiB5b3Ugd2FudCB0byBkZWNpZGUgb24gd3JhcHBlciBvciBkaXJlY3QgaW50ZXJhY3Rpb24gdy90aGUgQVBJCgpkZl9qb2NoZW1fcGFwZXJzIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJ3b3JrcyIsIGF1dGhvci5pZCA9IGRmX2pvY2hlbSRpZCkKc3RyKGRmX2pvY2hlbV9wYXBlcnMpCnZpZXcoZGZfam9jaGVtX3BhcGVycykKYGBgCgojIyBVc2UgdGhlIFdyYXBwZXIgCgpCZWNhdXNlIHdlIGFyZSAod2VhayksIHdlIGFyZSB1c2luZyB0aGUgd3JhcHBlciAoYmVjYXN1ZSBpdCdzIGVhc2llcikKXApHZXQgdGhlIHBlb3BsZSBmaXJzdCAKYGBge3IgZmlsdGVyc30Kb3B0aW9ucyhvcGVuYWxleFIubWFpbHRvID0gImhhbm5haC5ncm9lbm5vdUBydS5ubCIpICNpbmRpY2F0ZSB5b3UncmUgeW91CgpydV9pZCA8LSBpbnN0aXR1dGlvbnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gImluc3RpdHV0aW9ucyIsIHNlYXJjaCA9ICJSYWRib3VkIFVuaXZlcnNpdHkiKSAjZ2V0IHRoZSBpZCBvZiB0aGUgcmFkYm91ZCB1bml2ZXJzaXR5IApydV9pZAoKdXZhX2lkIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJpbnN0aXR1dGlvbnMiLCBzZWFyY2ggPSAiVW5pdmVyc2l0ZWl0IHZhbiBBbXN0ZXJkYW0iKSAjZ2V0IHV2YSdzIGlkIAp1dmFfaWQKCmpvY2hlbV90b2xzbWEgPC0gb2FfZmV0Y2goZW50aXR5ID0gImF1dGhvciIsIHNlYXJjaCA9ICJKb2NoZW0gVG9sc21hIiwgYWZmaWxpYXRpb25zLmluc3RpdHV0aW9uLmlkID0gImh0dHBzOi8vb3BlbmFsZXgub3JnL0kxNDU4NzI0MjciKSAjZ2V0IGpvY2hlbSBpbmZvCgp0b21fdmRfbWVlciAgPC0gb2FfZmV0Y2goZW50aXR5ID0gImF1dGhvciIsIHNlYXJjaCA9ICJUb20gdmFuIGRlciBNZWVyIiwgYWZmaWxpYXRpb25zLmluc3RpdHV0aW9uLmlkID0gdXZhX2lkJGlkKSAjVG9uaSBpcyBpbiB0aGVyZSwgYnV0IGxldCdzIGlnbm9yZSBoaW0gYmVjYXVzZSB3ZSBhcmUgb25seSB1c2luZyBUb20tMSAgKGdldCB0b20gaW5mbykKdG9tX3ZkX21lZXIgPC0gdG9tX3ZkX21lZXJbMSxdICNnZXQgdGhlIFJJR0hUIHRvbSAKCm1hdXJpY2VfZ2VzdGh1aXplbiA8LSBvYV9mZXRjaChlbnRpdHkgPSAiYXV0aG9yIiwgc2VhcmNoID0gIk1hdXJpY2UgR2VzdGh1aXplbiIsIGFmZmlsaWF0aW9ucy5pbnN0aXR1dGlvbi5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9JMTQ1ODcyNDI3IikgI21hdXJpY2UKCm1pY2hhZWxfc2F2ZWxrb3VsIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJhdXRob3IiLCBzZWFyY2ggPSAiTWljaGFlbCBTYXZlbGtvdWwiLCBhZmZpbGlhdGlvbnMuaW5zdGl0dXRpb24uaWQgPSAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvSTE0NTg3MjQyNyIpICNtaWNoYWVsCmBgYAoKRmlyc3QgbWFrZSBzZXBhcmF0ZSBvYmplY3RzIGZvciBhbGwgdGhlaXIgd29ya3MgClwKYGBge3IgYWxsIHBhcGVyc30Kam9jaGVtX3RvbHNtYV9wYXBlcnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gam9jaGVtX3RvbHNtYSRpZCkgI2pvY2hlbQp0b21fdmRfbWVlcl9wYXBlcnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gdG9tX3ZkX21lZXIkaWQpICN0b20KbWF1cmljZV9nZXN0aHVpemVuX3BhcGVycyA8LSBvYV9mZXRjaChlbnRpdHkgPSAid29ya3MiLCBhdXRob3IuaWQgPSBtYXVyaWNlX2dlc3RodWl6ZW4kaWQpICNtYXVyaWNlCm1pY2hhZWxfc2F2ZWxrb3VsX3BhcGVycyA8LSBvYV9mZXRjaChlbnRpdHkgPSAid29ya3MiLCBhdXRob3IuaWQgPSBtaWNoYWVsX3NhdmVsa291bCRpZCkgI21pY2hhZWwKYGBgCgpUaGVuIGNyZWF0ZSBvbmUgYmlnIG9iamVjdCwgaW4gd2hpY2ggd2UgY29sbGVjdCBhbGwgZm91ciBwZW9wbGUncyB3b3JrIChhbGwgb2YgJ2VtKQpcCmBgYHtyIG1ha2UgYWxsIHdvcmtzIHRvZ2V0aGVyfQphbGxfd29ya3MgPC0gcmJpbmQoam9jaGVtX3RvbHNtYV9wYXBlcnMsIHRvbV92ZF9tZWVyX3BhcGVycykKYWxsX3dvcmtzIDwtIHJiaW5kKGFsbF93b3JrcywgbWF1cmljZV9nZXN0aHVpemVuX3BhcGVycykKYWxsX3dvcmtzIDwtIHJiaW5kKGFsbF93b3JrcywgbWljaGFlbF9zYXZlbGtvdWxfcGFwZXJzKQpgYGAKClRoZW4gd2UgY3JlYXRlIGFuIGFkamFjZW5jeSBtYXRyaXggLS0gZmlyc3QgYnkgZmlsdGVyaW5nIG91dCB0aGUgZGF0YSBmcm9tIG9ubHkgdGhlIHJlbGV2YW50IHllYXJzICgyMDE5IC0gMjAyMykKCmBgYHtyIGZpbHRlciBvdXQgeWVhcnN9CmFsbF93b3JrcyA8LSBhbGxfd29ya3MgJT4lICNmaWx0ZXIgb3V0IHllYXJzIAogIGZpbHRlcigKICAgIHB1YmxpY2F0aW9uX3llYXIgPj0gMjAxOSkgJT4lCiAgZmlsdGVyKAogICAgcHVibGljYXRpb25feWVhciA8PSAyMDIzKQpgYGAKClRoZW4sIHdlIHB1dCBhbGwgdGhlIGluZm9ybWF0aW9uIGluIGEgbWF0cml4IC0tIHRvIGNyZWF0ZSBhbiBhZGphY2VuY3kgbWF0cml4IHRvIGFzc2VzcyBwYXR0ZXJucyBvZiBjb2xsYWJvcmF0aW9uClwKYGBge3IgbWFrZSBtYXRyaXh9CmFkamFjZW5jeV9tYXRyaXggPC0gbWF0cml4KDAsIG5yb3cgPSA0LCBuY29sID0gNCkgI2ZpcnN0IHdlIG1ha2UgYW4gZW1wdHkgbWF0cml4IAogIApkaW1uYW1lcyhhZGphY2VuY3lfbWF0cml4KSAjdGhlbiB3ZSBhc2sgZm9yIHRoZSBuYW1lcyBvZiB0aGUgcm93cyBhbmQgY29sdW1ucyAKcm93bmFtZXMoYWRqYWNlbmN5X21hdHJpeCkgPC0gYyhqb2NoZW1fdG9sc21hJGlkLCB0b21fdmRfbWVlciRpZCwgbWF1cmljZV9nZXN0aHVpemVuJGlkLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtaWNoYWVsX3NhdmVsa291bCRpZCkgI25hbWUgdGhlIHJvd3MgYWZ0ZXIgaWQncyAKY29sbmFtZXMoYWRqYWNlbmN5X21hdHJpeCkgPC0gYyhqb2NoZW1fdG9sc21hJGlkLCB0b21fdmRfbWVlciRpZCwgbWF1cmljZV9nZXN0aHVpemVuJGlkLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtaWNoYWVsX3NhdmVsa291bCRpZCkgI25hbWUgdGhlIGNvbHVtbnMgYWZ0ZXIgaWQncwphZGphY2VuY3lfbWF0cml4ICNub3cgd2hhdCBkb2VzIHRoZSBtYXRyaXggbG9vayBsaWtlPwoKdmlldyhhbGxfd29ya3MpICNzbyB3aGF0J3MgdGhlIGRhdGFzZXQgbG9vayBsaWtlIGFnYWluIAplZ28gPC0gYWxsX3dvcmtzWzEsXSRhdXRob3JbWzFdXSRhdV9pZFsxXSAjc2VsZWN0IHRoZSBmaXJzdCBhdXRob3Igb2YgdGhlIGZpcnN0IHdvcmsgKGVnbykKdmlldyhlZ28pCmFsdGVycyA8LSAgYWxsX3dvcmtzWzEsXSRhdXRob3JbWzFdXSRhdV9pZFstMV0gI3NlbGVjdCB0aGUgbm9uLWZpcnN0IGF1dGhvciBvZiB0aGUgZmlyc3Qgd29yayAoYWx0ZXIpCnZpZXcoYWx0ZXJzKQoKI3RoZXkgcmVmdXNlIHJuLiBzZWUgbGF0ZXIgd2h5IAojYWRqYWNlbmN5X21hdHJpeFtlZ28sIGFsdGVyc10gPC0gMSAKI3ZpZXcoYWRqYWNlbmN5X21hdHJpeCkKI2FkamFjZW5jeV9tYXRyaXhbZWdvLCBhbHRlcnNdIDwtIDEgI29uY2UgbW9yZQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiV2VlayAzOiBXZWJzY3JhcGluZyIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTA5LTE4IgotLS0KCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpCiNpbnN0YWxsLnBhY2thZ2VzKCJEYXRhQ29tYmluZSIpCmxpYnJhcnkoRGF0YUNvbWJpbmUpCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGRhdGEudGFibGUpCmxpYnJhcnkoaHR0cikKbGlicmFyeSh4bWwyKQpsaWJyYXJ5KGRldnRvb2xzKQpsaWJyYXJ5KHNjaG9sYXIpCmBgYAoKIyBXZWJzY3JhcGluZyBGb3IgRHVtbWllczogVGhlIFN0YWZmLUluZm8gRWRpdGlvbgoKU28sIHdlIGFyZSBnb2luZyB0byBkbyBzb21lIGdvb2QtZ29vZCB3ZWJzY3JhcGluZyBmb3IgZHVtbWllcyEKCmBgYHtyIGZpcnN0IHBhcnQsIGVjaG8gPSBGfQojZmlyc3QsIHdlIGFyZSBnb2luZyB0byAnc2NyYXBlJyBzb21ldGhpbmcgZnJvbSB0aGUgUmFkYm91ZCB3ZWJzaXRlIC0gdGhlIG1lbWJlcnMgb2YgdGhlIHNvY2lvbG9neSBkZXBhcnRtZW50CnNvY19zdGFmZl9ydSA8LSByZWFkX2h0bWwoImh0dHA6Ly93ZWIuYXJjaGl2ZS5vcmcvd2ViLzIwMjMwNTI4MTUzMzM2L2h0dHBzOi8vd3d3LnJ1Lm5sL3NvY2lvbG9neS9yZXNlYXJjaC9zdGFmZi8iKQpzdHIoc29jX3N0YWZmX3J1KQpzb2Nfc3RhZmZfcnUgPC0gc29jX3N0YWZmX3J1ICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnQoImJvZHkiKSAlPiUKICB4bWwyOjp4bWxfZmluZF9hbGwoIi8vdGQiKSAlPiUKICBydmVzdDo6aHRtbF90ZXh0KCkKI29rIG1heWJlIGV2ZXJ5dGhpbmcgZnJvbSB0aGUgc2FtZSBwYWNrYWdlcwpzb2Nfc3RhZmZfcnUgPC0gcmVhZF9odG1sKCJodHRwOi8vd2ViLmFyY2hpdmUub3JnL3dlYi8yMDIzMDUyODE1MzMzNi9odHRwczovL3d3dy5ydS5ubC9zb2Npb2xvZ3kvcmVzZWFyY2gvc3RhZmYvIikKc29jX3N0YWZmX3J1IDwtIHNvY19zdGFmZl9ydSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50KCJib2R5IikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoInRkIikgJT4lCiAgcnZlc3Q6Omh0bWxfdGV4dCgpCgp2aWV3KHNvY19zdGFmZl9ydSkKYGBgCgpgYGB7ciBiZXR0ZXIsIGVjaG8gPSBGfQojbm93IEJldHRlcgpzb2Nfc3RhZmYgPC0gcmVhZF9odG1sKCJodHRwOi8vd2ViLmFyY2hpdmUub3JnL3dlYi8yMDIzMDUyODE1MzMzNi9odHRwczovL3d3dy5ydS5ubC9zb2Npb2xvZ3kvcmVzZWFyY2gvc3RhZmYvIikKc29jX3N0YWZmIDwtIHNvY19zdGFmZiAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50KCJib2R5IikKc29jX3N0YWZmIDwtIHNvY19zdGFmZiAlPiUKICBydmVzdDo6aHRtbF90YWJsZSgpCnZpZXcoc29jX3N0YWZmKSAgCmBgYAoKVGhlbiB3ZSBnbyB0byBhbm90aGVyIGRlcGFydG1lbnQ6IExlaWRlbidzIFBvbGl0aWNhbCBTY2llbmNlIERlcGFydG1lbnQKYGBge3Igc3RhZmYgbGVpZGVuLCBlY2hvID0gRn0KI2ZpbmQgdGhlIGJlc3QgbGluayB0byBnaXZlIHVzIGFsbCB0aGUgc3RhZmYgb2YgaW50ZXJlc3Qgb24gb25lIHdlYnBhZ2UgCnBvbF9zdGFmZl9sZWlkZW5fYiA8LSByZWFkX2h0bWwoImh0dHBzOi8vd3d3LnVuaXZlcnNpdGVpdGxlaWRlbi5ubC9lbi9zb2NpYWwtYmVoYXZpb3VyYWwtc2NpZW5jZXMvcG9saXRpY2FsLXNjaWVuY2Uvc3RhZmYjdGFiLTEiKSAjcGFnZSAKI3N0cihwb2xfc3RhZmZfbGVpZGVuX2IpCiNleHRyYWN0IHRoZSBpbmZvcm1hdGlvbiAtIHNob3J0ZXN0IHdheSB0byBnbyAKcG9sX3N0YWZmX2xlaWRlbl9hbGwgPC0gcG9sX3N0YWZmX2xlaWRlbl9iICU+JSAjbmFtZXMgb2Ygc3RhZmYKICBydmVzdDo6aHRtbF9lbGVtZW50cygidWwiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygibGkiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygiYSIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJkaXYiKSAlPiUKICBydmVzdDo6aHRtbF90ZXh0KCkKI2V4dHJhY3QgdGhlIGluZm9ybWF0aW9uIC0gbG9uZ2VyIHdheSB0byBnbyAKcG9sX3N0YWZmX2xlaWRlbl9iIDwtIHJlYWRfaHRtbCgiaHR0cHM6Ly93d3cudW5pdmVyc2l0ZWl0bGVpZGVuLm5sL2VuL3NvY2lhbC1iZWhhdmlvdXJhbC1zY2llbmNlcy9wb2xpdGljYWwtc2NpZW5jZS9zdGFmZiN0YWItMSIpICNwYWdlIApwb2xfc3RhZmZfbGVpZGVuX25hbWVzIDwtIHBvbF9zdGFmZl9sZWlkZW5fYiAlPiUgI25hbWVzIG9mIHN0YWZmCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoInVsIikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImxpIikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImEiKSAlPiUKICBydmVzdDo6aHRtbF9lbGVtZW50cygiZGl2IikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoInN0cm9uZyIpICU+JQogIHJ2ZXN0OjpodG1sX3RleHQoKQojbm93IHRoZSBwb3NpdGlvbnMgb2YgdGhlIHN0YWZmCnBvbF9zdGFmZl9sZWlkZW5fYiA8LSByZWFkX2h0bWwoImh0dHBzOi8vd3d3LnVuaXZlcnNpdGVpdGxlaWRlbi5ubC9lbi9zb2NpYWwtYmVoYXZpb3VyYWwtc2NpZW5jZXMvcG9saXRpY2FsLXNjaWVuY2Uvc3RhZmYjdGFiLTEiKSAjcGFnZSAKcG9sX3N0YWZmX2xlaWRlbl9wb3NpdGlvbiA8LSBwb2xfc3RhZmZfbGVpZGVuX2IgJT4lICNwb3NpdGlvbiBvZiBzdGFmZgogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJ1bCIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJsaSIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJhIikgJT4lCiAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImRpdiIpICU+JQogIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJzcGFuIikgJT4lCiAgcnZlc3Q6Omh0bWxfdGV4dCgpCiNzZWUgd2hlcmUgdGhlIG1pc3NpbmcgaW5mb3JtYXRpb24gaXMKdmlldyhwb2xfc3RhZmZfbGVpZGVuX3Bvc2l0aW9uKQp2aWV3KHBvbF9zdGFmZl9sZWlkZW5fbmFtZXMpCiNjcmVhdGUgTkEgdmFsdWUKbmV3cm93IDwtICJOQSIKaW5kZXggPC0gNzYKI21ha2UgZGF0YWZyYW1lCnBvbF9zdGFmZl9sZWlkZW5fcG9zaXRpb24gPC0gYXMuZGF0YS5mcmFtZShwb2xfc3RhZmZfbGVpZGVuX3Bvc2l0aW9uKQojYWRkIHRoZSBOQSB0byB0aGUgZGF0YWZyYW1lCnBvbF9zdGFmZl9sZWlkZW5fcG9zaXRpb24gPC0gSW5zZXJ0Um93KHBvbF9zdGFmZl9sZWlkZW5fcG9zaXRpb24sIG5ld3JvdywgaW5kZXgpCnZpZXcocG9sX3N0YWZmX2xlaWRlbl9uYW1lcykKdmlldyhwb2xfc3RhZmZfbGVpZGVuX3Bvc2l0aW9uKQp2aWV3KHBvbF9zdGFmZl9sZWlkZW5fYWxsKQpgYGAKCiMgQnV0IFdoYXQgSWYgSSBXYW50IHRvIEtub3cgTW9yZT8KCldlbGwsIHN1cmUgd2UgaGF2ZSBzb21lIGZ1biBpbmZvIGFib3V0IHRoZSBuYW1lcyBhbmQgcG9zaXRpb25zIG9mIHRoZSBzdGFmZi4gQnV0IGhvdyBjYW4gd2UgdXNlIHRoaXMgdG8gKmRvKiBzb21ldGhpbmcgd2l0aCB0aGUgaW5mb3JtYXRpb24uLwpMZXQgbWUgdGVsbCB5b3UgaG93IHlvdSBjYW4gdXNlIHRoaXMhIEJ5IHVzaW5nIHRoZSBuYW1lcyBhcyBzdGFydGluZyBwb2ludHMgZm9yIHNldHRpbmcgdXAgY29sbGFib3JhdGlvbiBuZXR3b3Jrcy4vCi8KQmVjYXVzZSB3ZSBoYXZlIHRoZXNlIG5hbWVzLCB3ZSBjYW4gbm93IHVzZSAqKndlYnNjcmFwaW5nKiogdG8gZmluZCBhZGRpdGlvbmFsIGluZm9ybWF0aW9uIGFzc29jaWF0ZWQgd2l0aCB0aGVzZSBuYW1lcyAtLSBzdWNoIGFzIHRoZSBwYXBlcnMgdGhleSBoYXZlIHB1Ymxpc2hlZCwgYW5kIHdpdGggd2hvbSB0aGV5IGhhdmUgYmVlbiBwdWJsaXNoZWQuLwpXZSBkbyB0aGlzIGJ5IGdvaW5nIHRvIHRoZSBPcGVuQWxleCBBUEksIGFuZCBleHRyYWN0aW5nIG91ciBpbmZvcm1hdGlvbiBvZiBjaG9pY2UgYWNjb3JkaW5nbHkuCgojIyBHZXQgdGhpbmdzIHN0YXJ0ZWQgCgpgYGB7ciB0cnkgb3BlbiBhbGV4IGZpcnN0IHBhcnQsIGVjaG8gPSBGfQojaW5zdGFsbC5wYWNrYWdlcygianNvbmxpdGUiKSAjbWFraW5nIGpzb24gb2JqZWN0cwojaW5zdGFsbC5wYWNrYWdlcygib3BlbmFsZXhSIikgI09wZW5BbGV4IGZvciBSCmxpYnJhcnkob3BlbmFsZXhSKQpsaWJyYXJ5KGpzb25saXRlKQoKb3B0aW9ucyhvcGVuYWxleFIubWFpbHRvID0gImhhbm5haEBncm9lbm5vdS5ubCIpICAjbXkgb3duIGVtYWlsIGJiCnVybCA8LSAiaHR0cHM6Ly9hcGkub3BlbmFsZXgub3JnL2F1dGhvcnM/c2VhcmNoPUpvY2hlbSBUb2xzbWEiCgpqdF9qc29uIDwtIGZyb21KU09OKCJodHRwczovL2FwaS5vcGVuYWxleC5vcmcvYXV0aG9ycz9zZWFyY2g9Sm9jaGVtK1RvbHNtYSIsIHNpbXBsaWZ5VmVjdG9yID0gRkFMU0UpCmdsaW1wc2UoanRfanNvbiwgbWF4LmxldmVsID0gMSkKI2p0X2pzb25bWyJyZXN1bHRzIl1dW1sxXV1bWyJkaXNwbGF5X25hbWUiXV0KI2RmX2p0IDwtIGp0X2pzb24gJT4lCiMgICAgLiRyZXN1bHRzICU+JQojICAuW1sxXV0gJT4lCiMgICAgZGlzY2FyZChpc19lbXB0eSkKYGBgCgojIyBGaW5kIHNvbWUgSm9jaGVtIGluZm8gCmBgYHtyIEpvY2hlbSBvcGVuIGFsZXgsIGVjaG8gPSBGfQpkZl9qb2NoZW0gPC0gb2FfZmV0Y2goZW50aXR5ID0gImF1dGhvciIsIHNlYXJjaCA9ICJKb2NoZW0gVG9sc21hIikKdmlldyhkZl9qb2NoZW0pICN3ZSd2ZSBsb3N0IGhpcyBzZWNvbmRhcnkgaW5mb3JtYXRpb24gLS0tIHNvIGlmIHlvdSB3YW50IHRvIGRlY2lkZSBvbiB3cmFwcGVyIG9yIGRpcmVjdCBpbnRlcmFjdGlvbiB3L3RoZSBBUEkKCmRmX2pvY2hlbV9wYXBlcnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gZGZfam9jaGVtJGlkKQpzdHIoZGZfam9jaGVtX3BhcGVycykKdmlldyhkZl9qb2NoZW1fcGFwZXJzKQpgYGAKCiMjIFVzZSB0aGUgV3JhcHBlciAKCkJlY2F1c2Ugd2UgYXJlICh3ZWFrKSwgd2UgYXJlIHVzaW5nIHRoZSB3cmFwcGVyIChiZWNhc3VlIGl0J3MgZWFzaWVyKQpcCkdldCB0aGUgcGVvcGxlIGZpcnN0IApgYGB7ciBmaWx0ZXJzLCBlY2hvID0gRn0Kb3B0aW9ucyhvcGVuYWxleFIubWFpbHRvID0gImhhbm5haC5ncm9lbm5vdUBydS5ubCIpICNpbmRpY2F0ZSB5b3UncmUgeW91CgpydV9pZCA8LSBpbnN0aXR1dGlvbnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gImluc3RpdHV0aW9ucyIsIHNlYXJjaCA9ICJSYWRib3VkIFVuaXZlcnNpdHkiKSAjZ2V0IHRoZSBpZCBvZiB0aGUgcmFkYm91ZCB1bml2ZXJzaXR5IApydV9pZAoKdXZhX2lkIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJpbnN0aXR1dGlvbnMiLCBzZWFyY2ggPSAiVW5pdmVyc2l0ZWl0IHZhbiBBbXN0ZXJkYW0iKSAjZ2V0IHV2YSdzIGlkIAp1dmFfaWQKCmpvY2hlbV90b2xzbWEgPC0gb2FfZmV0Y2goZW50aXR5ID0gImF1dGhvciIsIHNlYXJjaCA9ICJKb2NoZW0gVG9sc21hIiwgYWZmaWxpYXRpb25zLmluc3RpdHV0aW9uLmlkID0gImh0dHBzOi8vb3BlbmFsZXgub3JnL0kxNDU4NzI0MjciKSAjZ2V0IGpvY2hlbSBpbmZvCgp0b21fdmRfbWVlciAgPC0gb2FfZmV0Y2goZW50aXR5ID0gImF1dGhvciIsIHNlYXJjaCA9ICJUb20gdmFuIGRlciBNZWVyIiwgYWZmaWxpYXRpb25zLmluc3RpdHV0aW9uLmlkID0gdXZhX2lkJGlkKSAjVG9uaSBpcyBpbiB0aGVyZSwgYnV0IGxldCdzIGlnbm9yZSBoaW0gYmVjYXVzZSB3ZSBhcmUgb25seSB1c2luZyBUb20tMSAgKGdldCB0b20gaW5mbykKdG9tX3ZkX21lZXIgPC0gdG9tX3ZkX21lZXJbMSxdICNnZXQgdGhlIFJJR0hUIHRvbSAKCm1hdXJpY2VfZ2VzdGh1aXplbiA8LSBvYV9mZXRjaChlbnRpdHkgPSAiYXV0aG9yIiwgc2VhcmNoID0gIk1hdXJpY2UgR2VzdGh1aXplbiIsIGFmZmlsaWF0aW9ucy5pbnN0aXR1dGlvbi5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9JMTQ1ODcyNDI3IikgI21hdXJpY2UKCm1pY2hhZWxfc2F2ZWxrb3VsIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJhdXRob3IiLCBzZWFyY2ggPSAiTWljaGFlbCBTYXZlbGtvdWwiLCBhZmZpbGlhdGlvbnMuaW5zdGl0dXRpb24uaWQgPSAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvSTE0NTg3MjQyNyIpICNtaWNoYWVsCmBgYAoKRmlyc3QgbWFrZSBzZXBhcmF0ZSBvYmplY3RzIGZvciBhbGwgdGhlaXIgd29ya3MgClwKYGBge3IgYWxsIHBhcGVycywgZWNobyA9IEZ9CmpvY2hlbV90b2xzbWFfcGFwZXJzIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJ3b3JrcyIsIGF1dGhvci5pZCA9IGpvY2hlbV90b2xzbWEkaWQpICNqb2NoZW0KdG9tX3ZkX21lZXJfcGFwZXJzIDwtIG9hX2ZldGNoKGVudGl0eSA9ICJ3b3JrcyIsIGF1dGhvci5pZCA9IHRvbV92ZF9tZWVyJGlkKSAjdG9tCm1hdXJpY2VfZ2VzdGh1aXplbl9wYXBlcnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gbWF1cmljZV9nZXN0aHVpemVuJGlkKSAjbWF1cmljZQptaWNoYWVsX3NhdmVsa291bF9wYXBlcnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gbWljaGFlbF9zYXZlbGtvdWwkaWQpICNtaWNoYWVsCmBgYAoKVGhlbiBjcmVhdGUgb25lIGJpZyBvYmplY3QsIGluIHdoaWNoIHdlIGNvbGxlY3QgYWxsIGZvdXIgcGVvcGxlJ3Mgd29yayAoYWxsIG9mICdlbSkKXApgYGB7ciBtYWtlIGFsbCB3b3JrcyB0b2dldGhlciwgZWNobyA9IEZ9CmFsbF93b3JrcyA8LSByYmluZChqb2NoZW1fdG9sc21hX3BhcGVycywgdG9tX3ZkX21lZXJfcGFwZXJzKQphbGxfd29ya3MgPC0gcmJpbmQoYWxsX3dvcmtzLCBtYXVyaWNlX2dlc3RodWl6ZW5fcGFwZXJzKQphbGxfd29ya3MgPC0gcmJpbmQoYWxsX3dvcmtzLCBtaWNoYWVsX3NhdmVsa291bF9wYXBlcnMpCmBgYAoKVGhlbiB3ZSBjcmVhdGUgYW4gYWRqYWNlbmN5IG1hdHJpeCAtLSBmaXJzdCBieSBmaWx0ZXJpbmcgb3V0IHRoZSBkYXRhIGZyb20gb25seSB0aGUgcmVsZXZhbnQgeWVhcnMgKDIwMTkgLSAyMDIzKQoKYGBge3IgZmlsdGVyIG91dCB5ZWFycywgZWNobyA9IEZ9CmFsbF93b3JrcyA8LSBhbGxfd29ya3MgJT4lICNmaWx0ZXIgb3V0IHllYXJzIAogIGZpbHRlcigKICAgIHB1YmxpY2F0aW9uX3llYXIgPj0gMjAxOSkgJT4lCiAgZmlsdGVyKAogICAgcHVibGljYXRpb25feWVhciA8PSAyMDIzKQpgYGAKClRoZW4sIHdlIHB1dCBhbGwgdGhlIGluZm9ybWF0aW9uIGluIGEgbWF0cml4IC0tIHRvIGNyZWF0ZSBhbiBhZGphY2VuY3kgbWF0cml4IHRvIGFzc2VzcyBwYXR0ZXJucyBvZiBjb2xsYWJvcmF0aW9uClwKYGBge3IgbWFrZSBtYXRyaXgsIGVjaG8gPSBGfQphZGphY2VuY3lfbWF0cml4IDwtIG1hdHJpeCgwLCBucm93ID0gNCwgbmNvbCA9IDQpICNmaXJzdCB3ZSBtYWtlIGFuIGVtcHR5IG1hdHJpeCAKICAKZGltbmFtZXMoYWRqYWNlbmN5X21hdHJpeCkgI3RoZW4gd2UgYXNrIGZvciB0aGUgbmFtZXMgb2YgdGhlIHJvd3MgYW5kIGNvbHVtbnMgCnJvd25hbWVzKGFkamFjZW5jeV9tYXRyaXgpIDwtIGMoam9jaGVtX3RvbHNtYSRpZCwgdG9tX3ZkX21lZXIkaWQsIG1hdXJpY2VfZ2VzdGh1aXplbiRpZCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbWljaGFlbF9zYXZlbGtvdWwkaWQpICNuYW1lIHRoZSByb3dzIGFmdGVyIGlkJ3MgCmNvbG5hbWVzKGFkamFjZW5jeV9tYXRyaXgpIDwtIGMoam9jaGVtX3RvbHNtYSRpZCwgdG9tX3ZkX21lZXIkaWQsIG1hdXJpY2VfZ2VzdGh1aXplbiRpZCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbWljaGFlbF9zYXZlbGtvdWwkaWQpICNuYW1lIHRoZSBjb2x1bW5zIGFmdGVyIGlkJ3MKYWRqYWNlbmN5X21hdHJpeCAjbm93IHdoYXQgZG9lcyB0aGUgbWF0cml4IGxvb2sgbGlrZT8KCnZpZXcoYWxsX3dvcmtzKSAjc28gd2hhdCdzIHRoZSBkYXRhc2V0IGxvb2sgbGlrZSBhZ2FpbiAKZWdvIDwtIGFsbF93b3Jrc1sxLF0kYXV0aG9yW1sxXV0kYXVfaWRbMV0gI3NlbGVjdCB0aGUgZmlyc3QgYXV0aG9yIG9mIHRoZSBmaXJzdCB3b3JrIChlZ28pCnZpZXcoZWdvKQphbHRlcnMgPC0gIGFsbF93b3Jrc1sxLF0kYXV0aG9yW1sxXV0kYXVfaWRbLTFdICNzZWxlY3QgdGhlIG5vbi1maXJzdCBhdXRob3Igb2YgdGhlIGZpcnN0IHdvcmsgKGFsdGVyKQp2aWV3KGFsdGVycykKCiN0aGV5IHJlZnVzZSBybi4gc2VlIGxhdGVyIHdoeSAKI2FkamFjZW5jeV9tYXRyaXhbZWdvLCBhbHRlcnNdIDwtIDEgCiN2aWV3KGFkamFjZW5jeV9tYXRyaXgpCiNhZGphY2VuY3lfbWF0cml4W2VnbywgYWx0ZXJzXSA8LSAxICNvbmNlIG1vcmUKYGBgCgo=</div>
 
 
 </div>
