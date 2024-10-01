@@ -18,6 +18,8 @@ navbar:
         href: Week2.html
       - text: "Week 3"
         href: Week3Webscraping.html
+      - text: "Week 4"
+        href: Graphs2.html
     - text: "F*cking Around and Finding Out"
       menu:
       - text: "Making Graphs and Taking Names"

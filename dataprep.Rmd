@@ -68,12 +68,12 @@ df_works <- df_works[-dups, ]
 df_works_newer <- df_works[df_works$works_year > 2014, ]
 df_works_w2 <- df_works[df_works$works_year > 2019, ] 
 ```
-
+```{r jochem deed dit, include = F, echo = F}
 # Chunk 4
 
 ## If we wanted to, we could
 
-first to others
+#first to others
 for (i in 1:nrow(df_works_w2)) {
     ego <- df_works_w2$works_author[i][[1]]$au_id[1]
     alters <- df_works_w2$works_author[i][[1]]$au_id[-1]
@@ -81,9 +81,10 @@ for (i in 1:nrow(df_works_w2)) {
     if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
         wave2[which(ids %in% ego), which(ids %in% alters)] <- 1
     }
-} for each row, of dataframes of work, do egos (first auth) and alters (others) on matrix (and then: are they the same or not)
+} 
+#for each row, of dataframes of work, do egos (first auth) and alters (others) on matrix (and then: are they the same or not)
 
-last to others
+#last to others
 for (i in 1:nrow(df_works_w2)) {
     ego <- rev(df_works_w2$works_author[i][[1]]$au_id)[1]
     alters <- rev(df_works_w2$works_author[i][[1]]$au_id)[-1]
@@ -91,32 +92,34 @@ for (i in 1:nrow(df_works_w2)) {
     if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
         wave2[which(ids %in% ego), which(ids %in% alters)] <- 1
     }
-} for each row, of dataframes of work, do egos (last auth) and alters (others) on matrix (and then: are they the same or not)
+} 
+#for each row, of dataframes of work, do egos (last auth) and alters (others) on matrix (and then: are they the same or not)
 
-undirected
+#undirected
 for (i in 1:nrow(df_works_w2)) {
     egos <- df_works_w2$works_author[i][[1]]$au_id
 
     if (sum(ids %in% egos) > 0) {
         wave2[which(ids %in% egos), which(ids %in% egos)] <- 1
     }
-}for each row, of dataframes of work, do egos (all authors) on matrix (and then: are they the same or not)
-
+}
+#for each row, of dataframes of work, do egos (all authors) on matrix (and then: are they the same or not)
+```
 
 
 # About the parameters:
 
-[data]: our scholars file
-university: Character vector with names of universities. We have several universities in the Netherlands. See above for relevant names.
-discipline: Character vector, either sociology or political science or both.
-waves: a list of numeric vectors with start and end year of wave.
-type:
-"first": directed: first author sending to others
-"last": directed: last author sending to others
-"all": undirected: ties between all authors
-Output: - a list
-- $nets: array of nomination networks.
-- $data: sample of data (scholars)
+[data]: our scholars file\
+university: Character vector with names of universities. We have several universities in the Netherlands. See above for relevant names.\
+discipline: Character vector, either sociology or political science or both.\
+waves: a list of numeric vectors with start and end year of wave.\
+type:\
+- "first": directed: first author sending to others\
+- "last": directed: last author sending to others\
+- "all": undirected: ties between all authors\
+Output: - a list\
+- $nets: array of nomination networks.\
+- $data: sample of data (scholars)\
 
 # Chunk 5
 ```{r copied from jochem 5}
@@ -331,7 +334,7 @@ matrix_all_socpol <- fcolnet(data = scholars,
                 waves = list(c(2015, 2018), c(2019, 2023))) 
 
 mall_w1 <- igraph::graph_from_adjacency_matrix(
-  matrix_all_socpol$nets, #now, I take the second wave
+  matrix_all_socpol$nets[1,,],
   mode = c("directed"),
   weighted = NULL,
   diag = FALSE,
@@ -344,12 +347,14 @@ mall_w1 <- igraph::graph_from_adjacency_matrix(
 random <- layout_randomly(mall_w1)
 
 plot(mall_w1,
-     vertex.color = ifelse(matrix_all_socpol$discipline.24 == "sociology", "red", "blue"),
+     vertex.color = ifelse(mrusp_df_ego$discipline.24 == "sociology", "red", "blue"),
      vertex.size = 4,  # we'll vertices a bit smaller
      vertex.label = NA,  
      edge.curved = 0.2, # curved edges is always a nice touch
      edge.arrow.size = 0.1)
 ```
+\
+OK, so that worked! -- I think that if I add my gender variables (spoilers! for the next part) to this, I'll also be able to use that to create some fun. 
 
 And extract all names of the researchers
 
