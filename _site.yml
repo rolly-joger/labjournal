@@ -10,7 +10,7 @@ navbar:
   left:
     - icon: fa-home
       href: index.html
-    - text: "My Journal"
+    - text: "Workshop Content"
       menu:
       - text: "Week 1"
         href: Week1.html
@@ -18,6 +18,14 @@ navbar:
         href: Week2.html
       - text: "Week 3"
         href: Week3Webscraping.html
+    - text: "F*cking Around and Finding Out"
+      menu:
+      - text: "Making Graphs and Taking Names"
+        href: Graphs1.html
+      - text: "Never Gonna Prep You Up"
+        href: dataprep.html
+      - text: "Scrapey Doo"
+        href: Wrangling_Some_Data.html
     - text: "First Drafts"
       menu:
       - text: "Introduction First Draft"
@@ -25,7 +33,7 @@ navbar:
       - text: "Introduction, Revised"
         href: IntroRSQ.html
 
-        # here, other .Rmds can be added
+
 
 
   right:

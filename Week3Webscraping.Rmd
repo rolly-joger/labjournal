@@ -5,7 +5,6 @@ date: "2024-09-18"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 #install.packages("DataCombine")
 library(DataCombine)
 library(tidyverse)
@@ -20,7 +19,7 @@ library(scholar)
 
 So, we are going to do some good-good webscraping for dummies!
 
-```{r first part, echo = F}
+```{r first part, echo=TRUE, fig.height=4}
 #first, we are going to 'scrape' something from the Radboud website - the members of the sociology department
 soc_staff_ru <- read_html("http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/")
 str(soc_staff_ru)
@@ -38,7 +37,7 @@ soc_staff_ru <- soc_staff_ru %>%
 view(soc_staff_ru)
 ```
 
-```{r better, echo = F}
+```{r better, echo=TRUE, fig.height=4}
 #now Better
 soc_staff <- read_html("http://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/")
 soc_staff <- soc_staff %>%
@@ -49,7 +48,7 @@ view(soc_staff)
 ```
 
 Then we go to another department: Leiden's Political Science Department
-```{r staff leiden, echo = F}
+```{r staff leiden, include = F, echo = T}
 #find the best link to give us all the staff of interest on one webpage 
 pol_staff_leiden_b <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") #page 
 #str(pol_staff_leiden_b)
@@ -103,7 +102,7 @@ We do this by going to the OpenAlex API, and extracting our information of choic
 
 ## Get things started 
 
-```{r try open alex first part, echo = F}
+```{r try open alex first part, echo=TRUE, fig.height=4}
 #install.packages("jsonlite") #making json objects
 #install.packages("openalexR") #OpenAlex for R
 library(openalexR)
@@ -122,7 +121,7 @@ glimpse(jt_json, max.level = 1)
 ```
 
 ## Find some Jochem info 
-```{r Jochem open alex, echo = F}
+```{r Jochem open alex, echo=TRUE, fig.height=4}
 df_jochem <- oa_fetch(entity = "author", search = "Jochem Tolsma")
 view(df_jochem) #we've lost his secondary information --- so if you want to decide on wrapper or direct interaction w/the API
 
@@ -136,7 +135,7 @@ view(df_jochem_papers)
 Because we are (weak), we are using the wrapper (becasue it's easier)
 \
 Get the people first 
-```{r filters, echo = F}
+```{r filters, echo=TRUE, fig.height=4}
 options(openalexR.mailto = "hannah.groennou@ru.nl") #indicate you're you
 
 ru_id <- institutions <- oa_fetch(entity = "institutions", search = "Radboud University") #get the id of the radboud university 
@@ -157,7 +156,7 @@ michael_savelkoul <- oa_fetch(entity = "author", search = "Michael Savelkoul", a
 
 First make separate objects for all their works 
 \
-```{r all papers, echo = F}
+```{r all papers, echo=TRUE, fig.height=4}
 jochem_tolsma_papers <- oa_fetch(entity = "works", author.id = jochem_tolsma$id) #jochem
 tom_vd_meer_papers <- oa_fetch(entity = "works", author.id = tom_vd_meer$id) #tom
 maurice_gesthuizen_papers <- oa_fetch(entity = "works", author.id = maurice_gesthuizen$id) #maurice
@@ -166,7 +165,7 @@ michael_savelkoul_papers <- oa_fetch(entity = "works", author.id = michael_savel
 
 Then create one big object, in which we collect all four people's work (all of 'em)
 \
-```{r make all works together, echo = F}
+```{r make all works together, echo=TRUE, fig.height=4}
 all_works <- rbind(jochem_tolsma_papers, tom_vd_meer_papers)
 all_works <- rbind(all_works, maurice_gesthuizen_papers)
 all_works <- rbind(all_works, michael_savelkoul_papers)
@@ -174,7 +173,7 @@ all_works <- rbind(all_works, michael_savelkoul_papers)
 
 Then we create an adjacency matrix -- first by filtering out the data from only the relevant years (2019 - 2023)
 
-```{r filter out years, echo = F}
+```{r filter out years, echo=TRUE, fig.height=4}
 all_works <- all_works %>% #filter out years 
   filter(
     publication_year >= 2019) %>%
@@ -184,7 +183,7 @@ all_works <- all_works %>% #filter out years
 
 Then, we put all the information in a matrix -- to create an adjacency matrix to assess patterns of collaboration
 \
-```{r make matrix, echo = F}
+```{r make matrix, echo=TRUE, fig.height=4}
 adjacency_matrix <- matrix(0, nrow = 4, ncol = 4) #first we make an empty matrix 
   
 dimnames(adjacency_matrix) #then we ask for the names of the rows and columns 

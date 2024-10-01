@@ -1,5 +1,5 @@
 ---
-title: "Week2"
+title: "Week 2"
 author: "Hannah Groennou"
 date: "`r Sys.Date()`"
 output: 
@@ -14,15 +14,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 require(tidyverse)
 require(igraph)
-require(shiny)
-require(RSiena)
-require(SN)
-require(rmdformats)
-require(prettydoc)
 require(hrbrthemes)
-require(tint)
-require(tufte)
-require(psych)
 ```
 
 ---
@@ -84,9 +76,9 @@ Then we look at the centrality of each node, which concerns the number of edges 
 \
 Centrality scores can either be calculated to yield raw, or normalised measures. Raw measures are particular to networks or samples, and as such cannot be used to compare across samples, but only to investigate within one. Normalised measures, on the other hand, allow one to compare across networks or samples --- which is often more useful in research.\
 ```{r small degree centrality}
-degree_t1 <- degree(small_graph_t1, mode = "out") #only look at outgoing edges 
+degree_t1 <- igraph::degree(small_graph_t1)#don't care about directions 
 degree_t1 #not normalised, it seems 
-degree_t1_norm_a <- degree(small_graph_t1, mode = "out", normalized = T)
+degree_t1_norm_a <- igraph::degree(small_graph_t1, normalized = T)
 degree_t1_norm_a #normalised using only sample? 
 
 #let's see how it differs if we calculate degree according to the formula given by Jochem
@@ -101,7 +93,9 @@ normalised_cent_t1 #significanly different, it appears
 Closeness centrality of a vertix, or node, is the average distance between the node of concern, and the other nodes it is connected with in the sample. It is calculated by taking the total number of nodes in a vertix' network, the sum of distances between the node of concern, and subsequently dividing the former by the latter. 
 
 ```{r small closeness centrality}
-closeness_t1 <- closeness(small_graph_t1, mode = "out")
+small_t1 <- s501[c(1:10), c(1:10)] #sample matrix t1
+small_graph_t1 <- graph_from_adjacency_matrix(small_t1)
+closeness_t1 <- igraph::closeness(small_graph_t1)
 closeness_t1
 ```
 \
@@ -114,9 +108,9 @@ closeness_t1
 Betweenness centrality is essentially the number of shortest paths between vertix *a* and vertix *b* while going through vertix *c*. In order to be able to compare the measure between samples, a normalised version can be calculated by first subtracting from the *betweenness centrality* of the certain vector from the minimum score in the sample, and dividing it by the range of *betweenness centrality* in the entire sample.
 
 ```{r small betweenness centrality}
-between_t1 <- betweenness(small_graph_t1, directed = T, normalized = F )
+between_t1 <- igraph::betweenness(small_graph_t1, directed = T, normalized = F)
 between_t1 #zeroes
-between_t1_norm <- betweenness(small_graph_t1, directed = T, normalized = T)
+between_t1_norm <- igraph::betweenness(small_graph_t1, directed = T, normalized = T)
 between_t1_norm #normalisation does not matter, because the zeroes 
 ```
 \
@@ -127,328 +121,8 @@ Due to the structure of our sample, where the largest closed networks consist of
 
 Clustering refers to the amount of 'clumping' one might see in a network. It is quantified as the proportion of actual- compared to possible- ties of a specific vertix. The level of clustering is therefore a characteristic of an ego-network and --- when it concerns undirected ties --- the same as a transitivity index.
 ```{r small clustering}
-transitivity_t1 <- transitivity(small_graph_t1, type = "local")
+transitivity_t1 <- igraph::transitivity(small_graph_t1, type = "local")
 transitivity_t1
 ```
 
 
----
-
-# Large Graphs 
-
-Having evaluated the ways in which igraph measures several descriptives, and how these measures compare to the formulas taught in class, we can now see how they apply to larger, and more complex, networks. We do this by going back to the initial networks from which we took a smaller sample --- RSiena's s501 and s502. These two matrices concern the same sample of actors, at two different times. Right now this is not that relevant, but later on --- when we are going to compare the differences between these snapshots --- we can see how they have changed.
-
-\
-
-## Graphing the Network 
-
-First we are going to look at some visual graphs of the networks we are concerned with here. 
-
-```{r large graphs, echo=F}
-graph_t1 <- graph_from_adjacency_matrix(t1)
-plot.igraph(graph_t1, main = "Network at t1")
-graph_t2 <- graph_from_adjacency_matrix(t2)
-plot.igraph(graph_t2, main = "Network at t2")
-```
-
-\
-
-## Density
-
-Before, when we took a smaller sample from these data, the density was 0.111. This number was, partially, due to the small size of our network, and partially since it consisted of isolated nodes, dyads, and triads. While our current networks are much more complex --- as demonstrated by the graphs displayed above --- we do not expect the density to be much higher than in the smaller sample. Due to the much more extensive nature of our matrix, the possible number of edges is much higher. While there are parts of our network that look quite 'busy', there are also still a significant number of singular ego's, dyads, and triads. As such, we  expect the density of the networks to be lower than before.  
-
-```{r all density t1}
-density_all_t1 <- edge_density(graph_t1)
-density_all_t1
-```
-\
-As predicted, with a value of 0.046, the density of this network is lower than that of our sample network ... 
-\
-```{r all density t2}
-density_all_t2 <- edge_density(graph_t2)
-density_all_t2
-```
-\
-... as is the case for t2. One thing of note, however, is that the density has increased between t1 and t2, we have to analyse some other descriptives before we can know exactly what this means, but it does tell us that some change has occured. 
-
-\
-
-## Centrality 
-As discussed previously, centrality concerns the amount of edges a specific vertix has. While both raw and normalised measures of centrality exist, we will be employing a normalised measure as to better compare the networks at t1 and t2. The normalised measure calculated here is not the one included in the `igraph` package, but instead follows the formula demonstrated in class.  
-
-
-Since we are dealing with 50 vertices instead of 10, getting an overview of the data through reading a list of scores will do more harm than good. Instead, we will therefore put our results in a histogram so we can best understand what is happening, and to make comparison between cases easier since we can see the differences in patterns at a glance. 
-
-
-```{r all degree centrality t1, echo=F}
-degree_all_t1 <- degree(graph_t1, mode = "out")
-degree_all_t2 <- degree(graph_t2, mode = "out")
-
-normalised_all_cent_t1 <- (degree_all_t1 - min(degree_all_t1))/(max(degree_all_t1)) - min(degree_all_t1)
-hist(normalised_all_cent_t1, main = "Histogram Network Centrality t1", xlab = "Normalised Centrality")
-```
-
-```{r all degree centrality t2, echo=F}
-normalised_all_cent_t2 <- (degree_all_t2 - min(degree_all_t2))/(max(degree_all_t2)) - min(degree_all_t2)
-hist(normalised_all_cent_t2, main = "Histogram Network Centrality t2", xlab = "Normalised Centrality")
-```
-\
-What we see here is that, while there are more cases at the lower end of the spectrum at *t2*, there is also a higher frequrency of cases with higher levels of normalised centrality. This means that there are more vertices with a relatively higher number of edges at *t2*. 
-
-\
-
-## Closeness Centrality 
-The normalised closeness centrality, or the average distance between a particular node and other nodes in its ego network in the sample, was either 1 or 0.5 in our smaller sample. In this sample, however, we expect a different distribution with more different values. 
-
-
-```{r all closeness centrality t1 plot, echo=F}
-closeness_all_t1 <- closeness(graph_t1, mode = "out")
-plot(closeness_all_t1, main = "Plot Closeness Centrality t1", ylab = "Normalised Closeness Centrality")
-```
-\
-The plot shows us that, for most nodes in the network, the closeness centrality score lies somewhere between 0 and 0.2. What this concretely means, is that for most nodes the distance to other nodes is quite low. A histogram can show us more, most specifically when it comes to the frequency of vectices' score on closeness centrality. 
-\
-```{r all closeness centrality t1 histo, echo=F}
-hist(closeness_all_t1, breaks = 100, main = "Histogram Closeness Centrality t1", xlab = "Normalised Closeness Centrality")
-```
-\
-Demonstrating that most scores seem to cluster somewhere between 0.0 and 0.05. 
-
-Since these scores are normalised, we can compare them to the results from *t2*. 
-\
-```{r all closeness centrality plot t2, echo=F}
-closeness_all_t2 <- closeness(graph_t2, mode = "out")
-plot(closeness_all_t2, main = "Plot Closeness Centrality t2", ylab = "Normalised Closeness Centrality")
-```
-\
-There's not that much change here from *t1*. Except, however, that the nodes in the beginning- and mid-40s have a significantly lower score at *t2*, than in *t1* --- the nodes at the beginning of the matrix, however, have not changed much. 
-\
-```{r all closeness centrality hist t2, echo=F}
-hist(closeness_all_t2, breaks = 100, main = "Histogram Closeness Centrality t2", xlab = "Normalised Closeness Centrality")
-```
-\
-Besides the changes oberved in the plot above, this histogram also shows some additional shifts from *t1*. The main thing is that there are fewer nodes with a score of 0.5 compared to before, and more at the lower side of the spectrum. What this essentially means is that there are more nodes with a distance of 0 to their alters. 
-
-\
-
-## Betweenness Centrality
-Betweenness centrality concerns the number of paths from vertix *a* to vertix *b*, taken through vertix *c* --- with vertix *c* being the vertix of interest. 
-
-```{r all betweenness centrality t1, echo=F}
-between_all_t1 <- betweenness(graph_t1, directed = T)
-hist(between_all_t1, breaks = 100, main = "Histogram Betweenness Centrality t1", xlab = "Betweenness Centrality")
-```
-
-```{r all betweenness centrality t2, echo=F}
-between_all_t2 <- betweenness(graph_t2, directed = T)
-hist(between_all_t2, breaks = 100, main = "Histogram Betweenness Centrality t2", xlab = "Betweenness Centrality")
-```
-
-## Clustering 
-
-As noted before, clustering concerns the clumps of nodes present in social networks, and they are formally measured by looking at the 1.5 degree ego network of each node in the network. Previously, in the small sample, we looked only at the local transitivity measures since the global ones did not yield any significant results. For the full samples, however, we have enough relevant information to investigate both measures. 
-
-**First** we look at the global clustering of the network at *t1*, and the global clustering of the network at *t2*
-
-```{r all clustering global}
-transitivity_all_t1 <- transitivity(graph_t1, type = "global")
-transitivity_all_t1
-transitivity_all_t2 <- transitivity(graph_t2, type = "global")
-transitivity_all_t2
-```
-\
-As demonstrated by the output here, the degree of clustering has decreased by approximately 8% between *t1* and *t2*. This means that in the time that passed between these two snapshots, the global clustering in this network became less dense --- the percentage of people who knew people they also know has, in other words, decreased. 
-\
-\
-Another way to look at clustering is by looking at local measures. Local clustering measures assess all ego networks in a sample, and yield a clustering measure for each of the vertices included in that sample. 
-
-```{r all clustering local t1, echo=F}
-transitivity_t1 <- transitivity(graph_t1, type = "local")
-hist(transitivity_t1, breaks = 20, main = "Histogram Clustering t1", xlab = "Clustering t1")
-```
-\
-The clustering measure indicates the proportion of alters in an ego's network that have a tie to another alter in the ego's network, compared to the total possible number. Therefore, a 1 on the scale indicates that all an ego's alters are also connected. 
-\
-
-```{r all clustering local t2, echo=F}
-transitivity_t2 <- transitivity(graph_t2, type = "local")
-hist(transitivity_t2, breaks = 20, main = "Histogram Clustering t2", xlab = "Clustering t2")
-```
-\
-The second histogram, at *t2*, yields quite a different distribution of clustering coefficients than that at *t1* --- with an especially significant decrease in clustering measures above 0.5 between the the two times. While we already knew about this change somewhat, as indicated by the global measures, we see an especially large increase of coefficients below 0.35 --- which means that nodes in the network have become less interconnected throughout time. 
-\
-\
-
----
-
-# How To Plot a Network
-
-Until now, we have worked with the standard settings of the igraph plot feature. Now we're done with the boring stuff (descriptives (which are of course very interesting of course)), we can take a look at the different ways in which we can adjust graphs, and make them look different and more to our liking. 
-
-## igraph
-Some surfing on the web brings us [this](https://kateto.net/network-visualization) gem of a website from Katya Ognyanova. It contains an impressively extensive number of ways in which one can create and modify networks in R. 
-To be able to follow the instructions from that website, we first `require` the relevant packages 
-```{r libraries kateto, echo=T, message=F}
-require(igraph) 
-require(network)
-require(sna)
-require(ggraph)
-require(visNetwork)
-require(threejs)
-require(networkD3)
-require(ndtv)
-```
-Then we can extract some attributes from our graph objects to increase the ease of use of packages other than `igraph` to draw and plot networks. 
-```{r extract graph info}
-edges_t1 <- E(graph_t1) #extract edges from t1    
-vertices_t1 <- V(graph_t1) #extract vertices from t1 
-```
-
-The first plot we'll draw is a similar one to those which we have plotted before: a simple `igraph` network plot with no added constraints. 
-```{r simpeles plot igraph}
-plot.igraph(graph_t1)
-```
-
-This is not exactly the most legible graph, but we can change that! We do this by introducing several constraints that eliminate some of the clutter: we remove loops and vertice labels, and decrease the size of the arrows.
-```{r remove labels}
-plot.igraph(graph_t1, remove.loops = T, edge.arrow.size = .4, vertex.label = NA)
-```
-
-Then, since the edges themselves are still not as easily distinguishable as we would like them to be, we modify the edges and make them somewhat curved.
-```{r do some curved edges}
-plot.igraph(graph_t1, remove.loops = T, edge.arrow.size = .4, vertex.label = NA, edge.curved=.5)
-```
-
-That helped ... somewhat. Lets see if there are any further characteristics included in the matrices we have been using. 
-```{r see if there are any more kinds of info here}
-str(s501)
-```
-
-OK so there are absolutely no other kinds of information here --- which is sad for those of us who'd like more information to be included in the plot (like me), but despair not, there is more to do with what we have!
-We can, for example, adjust the layout through some functions included in the package. 
-```{r several layouts testing}
-graph_attr(graph_t1, "layout") <- layout_on_grid #layout on a grid
-plot(graph_t1) 
-graph_attr(graph_t1, "layout") <- layout_with_graphopt #layout with force-directed algoritm
-plot(graph_t1) #I think that we need a way to have the graph be less clumped, so we can better understand what we see
-graph_attr(graph_t1, "layout") <- layout_with_fr #force directed
-plot(graph_t1) 
-```
-
-The main problem seems to be that the vertices are way too big to see what is 'under there'. So let us see if we can solve *that* issue next. 
-```{r random layout using these things}
-random <- layout_randomly(graph_t1)
-plot(graph_t1, layout=random) #first we make a random layout
-#so what does size 5 give us?
-plot.igraph(graph_t1, layout=random, remove.loops = T, edge.arrow.size = .4, vertex.label = NA, edge.curved=.5, vertex.size = 5) #a way better result -- maybe see if even smaller would help, but probably not
-plot.igraph(graph_t1, layout=random, remove.loops = T, edge.arrow.size = .4, vertex.label = NA, edge.curved=.5, vertex.size = 1) #the very fancy thing that's happening here, is that we've moved on from focussing on vertices, to focussing on edges. 'Cause that's all that's showing up here. 
-```
-
-So now we have a way to make the connections --- the edges --- more legible, though also at the cost of the bottom edge, but that's something I can currently live with. The next step is highlighting the communities in the graph. The following chunck is based on code from [Ognyanova](https://kateto.net/network-visualization)
-```{r copied from ognyanova look at her}
-# First we 'detect' the optimal clustering, i.e. the groups in the sample
-clp <- cluster_optimal(graph_t1)
-class(clp)
-
-# then, when we have detected the communities, we include them in the plot syntax, to yield a plot based on these communities
-plot(clp, graph_t1, remove.loops = T, edge.arrow.size = .4, vertex.label = NA, edge.curved=.5, vertex.size = 1) #baby that looks fun!
-```
-
-We can also do it ourselves, by assigning colours to the vertices based on the communities found in the graph.
-```{r do it ourselves}
-V(graph_t1)$community <- clp$membership
-#creating our own set of colours
-colrs <- adjustcolor( c("gray50", "tomato", "gold", "yellowgreen"), alpha=.6)
-#and making a graph
-plot(graph_t1, remove.loops = T, edge.arrow.size = .4, vertex.label = NA, edge.curved=.5, vertex.size = 10, vertex.color=colrs[V(graph_t1)$community]) #had to make the vertices somewhat larger to make the colour legible, but this also looks fun --- though the circle-things do have my preference
-```
-
-Due to the limitations of our data --- it only yielding information on ties, and nothing on characteristics of the nodes --- there's not much else we can do. However, there are other packages we can use to do some more exiting things `igraph` cannot --- as far as I know --- do (such as interactive graphs!)
-
-\
-
-## ggraph
-Love of my life ggplot also --- of course --- has a way to graph networks. To see how much we can adjust the plot to our likings we are gonna fuck around and find out, by first doing something very simple (because to find out by fucking around, we must first know what we are fucking around with).
-```{r ggraph simple}
-ggraph(graph_t1) + #the basic for the graph-object 
-  geom_edge_link() +  #edges
-  geom_node_point()   #nodes 
-```
-
-\
-Boy is she ugly, let's see if we can solve that:
-```{r}
-ggraph(graph_t1, layout = "fr") + #force directed?
-  geom_node_point() +
-  geom_edge_arc(color="gray", strength = 0.3) + 
-  theme_void()
-#Rorschachtest for network analysts: what do you see? (hint: happy feet?)
-```
-\
-Ggraph can do much more, especially if your edges and vertices have (multiple) characteristics. One of the main advantages of ggplot/graph in this respect is that the legend is automatically included, and that you can quite easily adjust the size of the graphs, which is something I have struggled with in `igraph`. 
-
-\
-
-## visNetwork
-
-`visNetwork` gives you graphs that you can zoom in- and out- of, and can 'look around' in. While this is more fun when your graph is much bigger, and more informative, it might be a better idea to learn how it works on a smaller network you already have some experience with. As such, let us commence. 
-
-The plotting functions in `visNetwork` work with seperate objects representing the vertices and edges of a graph, instead of the `igraph` objects we have thus far worked with. Luckily enough, there's a simple way to convert the latter into an object the former can work with. 
-```{r interactive visNetwork setup part 1, include=F}
-#first we look at the two objects, to make sure we can use them in the visNetwork function 
-visnet_t1 <- toVisNetworkData(graph_t1)
-summary(visnet_t1)
-```
-```{r interactive visNetwork output part 1}
-visnet_t1_vertices <- visnet_t1$nodes
-visnet_t1_edges <- visnet_t1$edges
-visNetwork(visnet_t1_vertices, visnet_t1_edges, width="100%", height="400px") #look at her i can move things around!
-```
-\
-With some adjustments to the nodes and links, we can make them a bit sexier --- add some dropshadows, some names, and if we had the info, we could have even added some edge-weight and vertix-size values related to scores and values. 
-
-## Configurations 
-`igraph` can also do some other things for the looks of our plot, ones that are even *functional*. One of these is the layout function, which includes several different algorithmic functions with which to configure the layout of our plots. 
-
-```{r random layouts all igraph}
-random <- layout_randomly(graph_t1) #because we're not interested in descriptives anymore, we're just dealing with the t1 graph. 
-plot(graph_t1, layout = random) #a random layout
-
-circle <- layout_in_circle(graph_t1) #a circle
-plot(graph_t1, layout = circle) #well, that's an absolute choice i guess... 
-
-sphere <- layout_on_sphere(graph_t1) #a sphere
-plot(graph_t1, layout = sphere) #well that just tickles my fancy, absolutely useless for yielding any information, but so fun to look at
-
-drl <- layout_with_drl(graph_t1) #Distributed Recursive Layout
-plot(graph_t1, layout = drl) #this i Hate, absolutely Hate
-
-fr <- layout_with_fr(graph_t1) #Fruchterman-Reingold force-directed algorithm
-plot(graph_t1, layout = fr) #Honestly, looks quite ok, not as fun to look at as some others, but more informative.
-
-lgl <- layout_with_lgl(graph_t1) #The LGL (Large Graph Layout) algorithm
-plot(graph_t1, layout = lgl) #so only the big chunk of interconnected nodes shows up
-
-kk <- layout_with_kk(graph_t1) #Kamada-Kawai force-directed algorithm
-plot(graph_t1, layout = kk) #fun, informative, cool, hip, it's awesome (especially that half moon on the right, big fun)
-
-nicely_chosen <- layout_nicely(graph_t1) #nice
-plot(graph_t1, layout = nicely_chosen) #nice 
-#also: mirrored Fruchterman-Reingold?
-```
-
-\
-
-## Colours 
-
-There's also some further bullshit we can employ to add some sparkle to our plots.
-
-```{r colour nodes}
-#we are, of course, starting with a nice graph
-plot(graph_t1, layout = nicely_chosen, vertex.color = "#A6BCB0") #and now it's sage bb
-plot(graph_t1, layout = nicely_chosen, vertex.color = "#A6BCB0", vertex.label.color = "black") #lovely, changed the text
-plot(graph_t1, layout = nicely_chosen, vertex.color = "#A6BCB0", vertex.label.color = "black", edge.color = "black") #got me some black edges too
-plot(graph_t1, layout = nicely_chosen, vertex.color = "#A6BCB0", vertex.label.color = "black", edge.color = "black", edge.curved = T) #ok so thus arrows are doing me wrong right now
-plot(graph_t1, layout = nicely_chosen, vertex.color = "#A6BCB0", vertex.label.color = "black", edge.color = "black", edge.curved = T, edge.arrow.size = 0.3, size = 50, vertex.label = NA) #have solved the arrows, life is good again, now have to find a way to get those vertices further away from each other
-plot(graph_t1, vertex.color = "#A6BCB0", vertex.label.color = "black", edge.color = "black", edge.curved = T, edge.arrow.size = 0.3, size = 50, vertex.label = NA) #maybe the real friends were the layout we had all along
-```

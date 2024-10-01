@@ -1,0 +1,626 @@
+---
+title: "Scraping Some Data"
+output: html_document
+date: "2024-09-29"
+---
+
+```{r libraries a, include = F, echo = F}
+#rm(list = ls())
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+```
+```{r setup a, include = F, echo = F}
+load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
+scholars <- x
+rm(x)
+```
+```{r copied from jochem 1a, include = F, echo = F}
+#copied from jochem
+# (sociology, RU)
+demographics <- do.call(rbind.data.frame, scholars$demographics)
+demographics <- demographics %>% # who's who
+    mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+        is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+        ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+        is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+sample <- which((demographics$Universiteit1.22 == "RU" | demographics$Universiteit2.22 == "RU" | demographics$Universiteit1.24 ==
+    "RU" | demographics$Universiteit2.24 == "RU") & (demographics$discipline.22 == "sociology" | demographics$discipline.24 ==
+    "sociology")) #sociologists at ru
+
+demographics_soc <- demographics[sample, ]
+scholars_sel <- lapply(scholars, "[", sample)
+```
+```{r copied from jochem 2a, include = F, echo = F}
+ids <- demographics_soc$au_id #openalex ids
+wave2 <- wave1 <- matrix(0, nrow = length(ids), ncol = length(ids), dimnames = list(ids, ids))
+#matrix for all ids
+```
+```{r copied from jochem 3a, include = F, echo = F}
+works <- scholars_sel$work
+works_id <- unlist(lapply(works, function(l) l$id)) #id for works
+works_author <- unlist(lapply(works, function(l) l$author), recursive = FALSE) #authors of the work
+works_year <- unlist(lapply(works, function(l) l$publication_year), recursive = FALSE) #year
+df_works <- tibble(works_id, works_author, works_year) #id-work, authors, year
+
+dups <- which(duplicated(works_id))
+# why are there some many papers of Batenburg duplicates
+
+df_works <- df_works[-dups, ]
+df_works_w2 <- df_works[df_works$works_year > 2019, ] #wave 2 only above 2019
+```
+```{r copied from jochem 5a, include = F, echo = F}
+#so this is all we are doin'
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+
+```
+```{r jochem function, echo = F, include = F}
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+```
+```{r something, include = F, echo = F}
+#save the output of your function
+matrix_ru_soc <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "sociology", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+
+mrs_graph1 <- igraph::graph_from_adjacency_matrix(
+  matrix_ru_soc$nets[1,,], #for this example I take the first wave of data. (thus I select the array of networks and take the first matrix)
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL,
+  add.rownames = NULL
+)
+
+plot(mrs_graph1,
+  vertex.label= NA,
+  edge.width = 0.2,
+  edge.arrow.size =0.2)
+```
+```{r packages, include=F, echo=F}
+# first we get a library, to install something
+library(tidyverse)
+library(foreign)
+library(haven)
+library(labelled)
+library(devtools)
+#devtools::install_github("kalimu/genderizeR")
+library(genderizeR)
+library(httr)
+library(xml2)
+library(reshape2)
+library(stringr)
+```
+```{r custom packages, include = F, echo = F}
+#'own' packages----
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+  ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+  ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+  if (is.null(file))
+    file = deparse(substitute(x))
+  datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+  totalname <- paste(location, datename, file, ".rda", sep = "")
+  save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+  load(filename)
+  get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+  knitr::kable(x, digits = 2, "html", ...) %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+    kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+colorize <- function(x, color) {
+  sprintf("<span style='color: %s;'>%s</span>", color, x)
+}
+
+```
+
+# The Data 
+
+For our project, we're working with a dataset containing all works written by all academic staff at all Dutch universities in 2022 and 2024. Before we can do anything with these data, we're going to visualise it to get some quick info for our eyeballs to process. 
+
+```{r graphs first time}
+matrix_ru_soc <- fcolnet(data = scholars, 
+                university = c("UU", "RUG", "UvA", "EUR", "Leiden"),
+                discipline = "sociology",
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+#demographics <- as.data.frame(demographics)
+#demographics$dep_col <- if_else(demographics$discipline.24 == "political science", "#D81B60", "#1E88E5")
+#net1_g <- graph_from_adjacency_matrix(matrix_ru_soc, mode = c("undirected"))
+#plot(net1_g, #vertex.color = demographics$dep_col,
+#  vertex.size = 4,  
+# vertex.label = NA,
+#  edge.curved = 0.2, 
+#  edge.arrow.size = 0.1) #ok so that's uneventful
+```
+Ok, something absolutely and categorically failed to work, but that's for future me -- because time is a thing and there is a max. 
+
+\
+
+In order to facilitate the answering of the questions we have formulated, some data-wrangling has to be done first. We're going to use our data on the demographics of our sample of scientists to assess, first, their gender, and then their ethnicity. 
+
+```{r data}
+#demographics <- read_csv("demographics.csv") #load the demographics 
+```
+
+# Data Transformation -- Get Some Gender 
+
+Having loaded the data into out Global Environment, we can now extract the first thing we are going to need in order to be able to ascertain each individual's gender, based on their first names. 
+
+```{r split names}
+head(demographics) #so what does our demographics data look like 
+#then we create a vector of all names
+names_NL <- demographics$Naam
+#and split names in 'first' and 'last'
+names_sep <- stringr::str_split_fixed(names_NL, "\\s", 2) #note: this is not perfect, the dutch have some fascinating 'tussenvoegsels', but that's something we're going to have to deal with one's we get to the ethnicity thing. 
+names_sep <- as.data.frame(names_sep) #then we create a df with the seperated names t
+au_id <- demographics$au_id #we'll also extract their openalex id to add to the df
+names <- cbind(names_sep, au_id) #and col.bind this openalex id with the the seperate names 
+view(names) #look if all's gone well
+
+names <- names %>% #then, to make things a bit easier to understand later on, we rename the variables
+  rename(
+    first_name = V1,
+    last_name = V2
+  )
+#and then we change the value lables, so it's even easier to understand 
+var_label(names$first_name) <- "A person's first name" 
+var_label(names$last_name) <- "A person's last name"
+var_label(names$au_id) <- "One's OpenAlex ID"
+view(names)
+```
+
+Having prepped the data, we are now going to use a wrapper for the GenderizeR api, to assess the gender of all first names. 
+
+```{r genderize names}
+library(genderizeR) #load the package
+#only small chunks of names work, large one's don't 
+gendered_names_1 <- genderizeAPI(names$first_name[c(1:10)], country = NULL, ssl.verifypeer = T ) #we can only ask for 100 names a day, so we're doing the first 100
+gendered_names_2 <- genderizeAPI(names$first_name[c(11:20)], country = NULL, ssl.verifypeer = T )
+gendered_names_3 <- genderizeAPI(names$first_name[c(21:30)], country = NULL, ssl.verifypeer = T )
+gendered_names_4 <- genderizeAPI(names$first_name[c(31:40)], country = NULL, ssl.verifypeer = T )
+gendered_names_5 <- genderizeAPI(names$first_name[c(41:50)], country = NULL, ssl.verifypeer = T )
+gendered_names_6 <- genderizeAPI(names$first_name[c(51:60)], country = NULL, ssl.verifypeer = T )
+gendered_names_7 <- genderizeAPI(names$first_name[c(61:70)], country = NULL, ssl.verifypeer = T )
+gendered_names_8 <- genderizeAPI(names$first_name[c(71:80)], country = NULL, ssl.verifypeer = T )
+gendered_names_9 <- genderizeAPI(names$first_name[c(81:90)], country = NULL, ssl.verifypeer = T )
+gendered_names_10 <- genderizeAPI(names$first_name[c(91:100)], country = NULL, ssl.verifypeer = T )
+
+#let's look at the names and see if we can find some edge-cases: aka names that might not be 
+#decidedly male or female, so we can check them, and change them by hand if necessary
+gendered_names_1
+gendered_names_2 #edgecase: antonie
+gendered_names_3 #edgecase: deni
+gendered_names_4
+gendered_names_5
+gendered_names_6
+gendered_names_7
+gendered_names_8
+gendered_names_9
+gendered_names_10
+```
+
+The thing with GenderizeR, however, is that one is -- as previously noted -- limited to a 100 names a day, at least, in the free version. Paying for the possiblity to assess the gender of more names was something that I briefly considered, but it eventually looked like a waste of money -- because we can also write our own function.\
+\
+Well ... other people can write a function we can use. @nielsvullings has created the following function, which can be used to assign a gender score to each name, based on Meertens name-repository.
+
+```{r Niels function}
+all_data <- fcolnet(data = scholars, 
+                    university = c("UU", "RUG", "UvA", "EUR",
+                                    "Leiden", "RU", "VU", "UvT", "TU Delft",
+                                    "UvH"),
+                    discipline = c("sociology", "political science"),
+                    waves = list(c(2015, 2019), c(2020, 2024)),
+                    type = c("first"))
+df <- all_data$data
+df_ego <- do.call(rbind.data.frame, df$demographics)
+
+
+x <- data.frame(Naam = df_ego$Naam)
+
+first_name <- sapply(strsplit(x$Naam, " "), `[`, 1)  # This code should work as a way to extract first names from the ego characteristics dataset
+
+
+
+df_names <- data.frame(x, first_name, male = NA, female = NA)  # seem to have worked
+
+head(df_names)
+
+i <- 1
+df_names$first_name[i]
+
+gender_scraper.NV <- function(names = "names element", web_page = "https://nvb.meertens.knaw.nl/naam/is/") {
+  
+  names$first_name <- sapply(strsplit(names$Naam, " "), `[`, 1)  # This code should work as a way to extract first names from the ego characteristics dataset
+  names$male <- NA
+  names$female <- NA
+  
+  for (i in 1:nrow(names)) {
+    
+    # print(names$first_name[i])
+    
+    web_page <- read_html(paste0("https://nvb.meertens.knaw.nl/naam/is/", names$first_name[i]))
+    
+    table <- web_page %>%
+      rvest::html_elements("body") %>%
+      rvest::html_elements("table") %>%
+      rvest::html_table()
+    
+    if (length(table) == 0) {
+      
+      print(length(table))
+      
+      names$male[i] <- NA
+      names$female[i] <- NA
+      
+    } else {
+      
+      # print(table) print(table[[1]][[2,3]]) # Check if values for male are coherent and
+      # accurate print(table[[1]][[6,3]]) # Check if values for female are coherent and
+      # accurate
+      
+      names$male[i] <- as.numeric(ifelse(table[[1]][[2, 3]] == "--", 0, table[[1]][[2, 3]]))  # Make sure non-occurences are not registered as '--'
+      names$female[i] <- as.numeric(ifelse(table[[1]][[6, 3]] == "--", 0, table[[1]][[6, 3]]))  # Make sure non-occurences are not registered as '--'
+      
+    }
+    
+  }  # end forloop
+  
+  names <- names %>%
+    mutate(perc_female = case_when(is.na(female == TRUE) & is.na(male) == TRUE ~ NA, is.na(female) ==
+                                     TRUE ~ 0, is.na(male == TRUE) ~ 1, .default = round((female/(male + female)), 2))) %>%
+    select(!c(male, female, first_name))
+  
+  return(names)
+  
+  
+}  # end function
+
+
+```
+
+... and then we test and apply the function ...
+
+```{r Niels function application}
+gender_tested <- gender_scraper.NV(names = df_ego, web_page = "https://nvb.meertens.knaw.nl/naam/is/")
+view(gender_tested)
+```
+
+... and end up with a gendered dataset! How wonderful!
+
+# Data Transformation -- Ethnicity 
+
+Gender was easy, ethnicity, however, is going to be a little more difficult. Not only because we live in a world that has been subject to some intensive globalisation -- which has spread last names beyond the scope of their origin, thus leading them to be less strongly associated with ethnicity -- but also because it is such a sensitive subject. How are we going to characterise the groups? Are we goign to be looking at white, and non-white people? Are we going to scrape images of them and assess whether their skin colour is white enough -- or not? Or, are we going to assess them based on their last name, something that is quite difficult in countries with populations descendent from former slaves.\
+\
+Sadly enough, we do not have enough time and space (and know-how, on a webscraping level) to fully and adequately deal with this. As such, we try several different ways, and find out if we can discover one that would be most useful to our research -- starting with one's last name
+
+## Last Names 
+
+Theoretically, one of the easiest ways to determine one's ethnicity, would be to find out where they come from. And the best -- well, quickest -- way to find out where they come from is by using their last name.\
+Now, we've already created a variable containing each person's last name in our [names] dataset, and we can enter each of these names into the CBS *namenbank* to find out its origin. While this is easier said than done, we do know how to start: by trying to remember how webscraping worked again. 
+
+### Webscraping -- a tutorial
+
+Let's follow one of Jochem's tutorials: 
+
+```{r polstaff}
+#staff leiden political science
+lpol_staff <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1")
+#extract specific info
+lpol_staff <- lpol_staff %>%
+  html_nodes("body") %>%
+  html_nodes(xpath = "//a") %>%
+  html_text()
+head(lpol_staff) #this seems useless
+view(lpol_staff) #this is a lot 
+
+#we can also get More from scraping 
+lpol_staff_names <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") %>%
+  html_element("section.tab.active") %>%
+  html_elements("ul.table-list") %>%
+  html_elements("li") %>%
+  html_elements("a") %>%
+  html_elements("div") %>%
+  html_elements("strong") %>%
+  html_text()
+
+lpol_staff_functions <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") %>%
+  html_element("section.tab.active") %>%
+  html_elements("ul.table-list") %>%
+  html_elements("li") %>%
+  html_elements("a") %>%
+  html_elements("div") %>%
+  html_elements("span") %>%
+  html_text()
+```
+
+### Webscraping: Following the Tutorial
+
+Since we are dealing with a website that has a specific webpage for each name, we start by inspecting the location of the origin of the name using the first individual in the dataset who'se name came up as 'not-western' when manually entering last names into the search engine: **Arat**
+```{r}
+arat <- rvest::read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Arat&nfd_naam=Arat&info=analyse+en+verklaring&operator=eq&taal=") %>%
+  html_nodes("body") %>%
+  html_text()
+head(arat) #so, we get a big string full of words, let's see if we can find a standardised way to extract the country of origin
+
+#we'll be using stringr -- with much difficulty 
+arat <- as.data.frame(arat)  #is it the structure of my data?
+arat <- str_extract_all(arat, boundary("word")) #what if we seperate 
+substring(arat, "De", "\\.") #nope
+str_detect(arat, "Turkije") #dus ik kan hier iets mee: ik kan zeggen, 
+#voor elk land ooit dat wel, maar kijke of dit land in deze string staat,
+#en als er een true teruggegeven wordt, note dan het land 
+```
+
+So that was a masterclass in how *not* to succeed, let me see if I can do it differently:
+
+```{r better}
+arat <- rvest::read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Bilecen&nfd_naam=Bilecen&info=analyse+en+verklaring&operator=eq&taal=")  %>% #take a look at the website, and see if you can find a more precise text extraction
+  html_nodes("body") %>%
+  html_elements("div") %>%
+  html_elements("p") %>%
+  html_text() #ok that works-ish
+groennou <- rvest::read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Sivak&nfd_naam=Sivak&info=analyse+en+verklaring&operator=eq&taal=")  %>%
+  html_nodes("body") %>%
+  html_elements("div") %>%
+  html_elements("p") %>%
+  html_text() #but it does not work for a non-western/dutch name 
+
+
+name_ethnicity <- function(names = "names element") { 
+
+names$name_origin[i] <- names$read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=",
+                                  name$last_name[i],
+                                  "&nfd_naam=",
+                                  name$last_name[i],
+                                  "&info=analyse+en+verklaring&operator=eq&taal=") %>%  
+                                  html_nodes("body") %>%
+                                  html_elements("div") %>%
+                                  html_elements("p") %>%
+                                  html_text() #and neither does this, apparently
+}
+```
+
+... ok, so that is also a no... Maybe we'll get further with RSelenium/Java things? 
+
+### Webscraping -- RSelenium ftw?
+
+In other words, let's get our laptop do make some clicks on websites -- using RSelenium.\
+\
+First, we load our libraries 
+
+```{r}
+#so, this is like try 15 -- but, I've figured out how to do this now 
+#install.packages("seleniumPipes") #use pipes in RSelenium
+library(seleniumPipes) 
+library(RSelenium) #RSelenium to use the webdriver
+library(selenium) #selenium if RSelenium is giving me errors I cannot deal with 
+library(httr)
+library(curl)
+library(tidyverse)
+```
+Then we try to get RSelenium / Selenium started: I figured it out, finally, after several attempts. The main thing that solved it for me was to install docker, run a r-selenium firefox image, and run my webscraping on the hub/port the container is also running on. 
+```{r selenium tries}
+#selenium_server_available(4444L) #check if my port is available 
+#get_server_status(4444L) #check the status of the port 
+#sessionInfo() -- use this if I want to know what the sesion looks like 
+
+#then we do an initial test with a search engine: 
+#url <- "https://www.ecosia.org" #assign webadress to object 'url'
+#remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444L, browserName = "firefox") #assign attributes to remote driver/remDr
+#remDr$open() #open the webpage 
+
+#then open the Selenium Grid Console, so I can see what I'm doing 
+
+#remDr$navigate(url) #navigate to the previously assigned url
+#remDr$findElement(using = "css", value = "div.search-form__search-field")$highlightElement() #highlight the search bar 
+#remDr$findElement(using = "css", value = "div.search-form__search-field")$clickElement() #click on the search bar
+
+# ok, so we now know how it works, then we can go to the cbgfamilienamenbank
+
+#url <- "https://www.cbgfamilienamen.nl" #url 
+#remDr$navigate(url) #navigate to website 
+#remDr$findElement(using = "css", value = "input")$highlightElement() #highlight search bar 
+#remDr$findElement(using = "css", value = "input")$sendKeysToElement(list("Ou", key = "enter")) #enter a name into search bar (when making function, the string the content of my df/vector/list)
+
+#new page has a navigation bar, we want to click on. the 'analyse en verklaring' element=
+#remDr$findElement("link text", "analyse en verklaring")$highlightElement() #highlight
+#remDr$findElement("link text", "analyse en verklaring")$clickElement() #gotten to the right page 
+#remDr$findElement(using = "id", value = "href")$getElementText() #ok so that's now what I want, I need to furhter figure out how to achieve what I want using this. 
+```
+This -- the webscraping using RSelenium -- is still a work in progress. I need to do several other things before I can automate this:
+\
+I. First I have to find a way to extract the text beneath "kenmerken";\
+II. Then I'll have to assign each 'kenmerken' string with a name/id;\
+III. Then I'll have to rbind it into a dataframe;\
+IV. Then I'll have to make a list, and give each author a tibble consisting of the string split up in all its individual elements;\
+V. Then I'll apply "is_country" to each element;\
+VI. If "if_country" is true, then we print the name of the country;\
+VII. And then we have to see if we can clean something up
+
+
+view(name_ethnicity)

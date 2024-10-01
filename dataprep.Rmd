@@ -1,0 +1,374 @@
+---
+title: "Dataprep"
+output: html_document
+date: "2024-09-25"
+---
+
+```{r libraries, include = F}
+#rm(list = ls())
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+```
+
+```{r setup, include=FALSE}
+load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
+scholars <- x
+rm(x)
+```
+
+# Chunk 1
+
+```{r copied from jochem 1}
+#copied from jochem
+# (sociology, RU)
+demographics <- do.call(rbind.data.frame, scholars$demographics)
+demographics <- demographics %>% # who's who
+    mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+        is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+        ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+        is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+sample <- which((demographics$Universiteit1.22 == "RU" | demographics$Universiteit2.22 == "RU" | demographics$Universiteit1.24 ==
+    "RU" | demographics$Universiteit2.24 == "RU") & (demographics$discipline.22 == "sociology" | demographics$discipline.24 ==
+    "sociology")) #sociologists at ru
+
+demographics_soc <- demographics[sample, ]
+scholars_sel <- lapply(scholars, "[", sample)
+```
+
+# Chunk 2
+
+```{r copied from jochem 2}
+ids <- demographics_soc$au_id #openalex ids
+wave2 <- wave1 <- matrix(0, nrow = length(ids), ncol = length(ids), dimnames = list(ids, ids))
+#matrix for all ids
+```
+
+# Chunk 3
+
+```{r copied from jochem 3}
+works <- scholars_sel$work
+works_id <- unlist(lapply(works, function(l) l$id)) #id for works
+works_author <- unlist(lapply(works, function(l) l$author), recursive = FALSE) #authors of the work
+works_year <- unlist(lapply(works, function(l) l$publication_year), recursive = FALSE) #year
+df_works <- tibble(works_id, works_author, works_year) #id-work, authors, year
+view(df_works)
+dups <- which(duplicated(works_id))
+# why are there some many papers of Batenburg duplicates
+
+df_works <- df_works[-dups, ]
+df_works_newer <- df_works[df_works$works_year > 2014, ]
+df_works_w2 <- df_works[df_works$works_year > 2019, ] 
+```
+
+# Chunk 4
+
+## If we wanted to, we could
+
+first to others
+for (i in 1:nrow(df_works_w2)) {
+    ego <- df_works_w2$works_author[i][[1]]$au_id[1]
+    alters <- df_works_w2$works_author[i][[1]]$au_id[-1]
+
+    if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+        wave2[which(ids %in% ego), which(ids %in% alters)] <- 1
+    }
+} for each row, of dataframes of work, do egos (first auth) and alters (others) on matrix (and then: are they the same or not)
+
+last to others
+for (i in 1:nrow(df_works_w2)) {
+    ego <- rev(df_works_w2$works_author[i][[1]]$au_id)[1]
+    alters <- rev(df_works_w2$works_author[i][[1]]$au_id)[-1]
+
+    if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+        wave2[which(ids %in% ego), which(ids %in% alters)] <- 1
+    }
+} for each row, of dataframes of work, do egos (last auth) and alters (others) on matrix (and then: are they the same or not)
+
+undirected
+for (i in 1:nrow(df_works_w2)) {
+    egos <- df_works_w2$works_author[i][[1]]$au_id
+
+    if (sum(ids %in% egos) > 0) {
+        wave2[which(ids %in% egos), which(ids %in% egos)] <- 1
+    }
+}for each row, of dataframes of work, do egos (all authors) on matrix (and then: are they the same or not)
+
+
+
+# About the parameters:
+
+[data]: our scholars file
+university: Character vector with names of universities. We have several universities in the Netherlands. See above for relevant names.
+discipline: Character vector, either sociology or political science or both.
+waves: a list of numeric vectors with start and end year of wave.
+type:
+"first": directed: first author sending to others
+"last": directed: last author sending to others
+"all": undirected: ties between all authors
+Output: - a list
+- $nets: array of nomination networks.
+- $data: sample of data (scholars)
+
+# Chunk 5
+```{r copied from jochem 5}
+#so this is all we are doin'
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+
+```
+# Chunk 6
+
+```{r}
+#save the output of your function
+matrix_ru_soc <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "sociology", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+
+mrs_graph1 <- igraph::graph_from_adjacency_matrix(
+  matrix_ru_soc$nets[1,,], #for this example I take the first wave of data. (thus I select the array of networks and take the first matrix)
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL,
+  add.rownames = NULL
+)
+
+plot(mrs_graph1,
+  vertex.label= NA,
+  edge.width = 0.2,
+  edge.arrow.size =0.2)
+```
+
+# Chunk 7
+
+more!
+```{r}
+matrix_ru_socpol <- fcolnet(data = scholars, 
+                university = c("RU", "UvT"), 
+                discipline = c("sociology", "political science"), 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("all"))
+
+mrsp <- igraph::graph_from_adjacency_matrix(
+  matrix_ru_socpol$nets[2,,], #now, I take the second wave
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL
+)
+
+plot(mrsp,
+     vertex.label = NA,
+     vertex.size = .5,
+     edge.curved = 0.2, # curved edges is always a nice touch
+     edge.arrow.size = 0.1)
+```
+
+```{r now some more}
+#Let us find ego characteristics. 
+#first fish out the data
+matrix_ru_socpol_df <- matrix_ru_socpol$data
+
+#same complicated structure as 'scholars' thus first make a dataframe from the list in which all info was saved. 
+mrusp_df_ego <- do.call(rbind.data.frame, matrix_ru_socpol_df$demographics)
+
+#DO NOT MESS UP THE ORDER! THUS IF YOU JOIN THIS DATA WITH YOUR OWN DATA CHECK THAT ORDER REMAINED THE SAME!! 
+
+plot(mrsp,
+  vertex.color = ifelse(mrusp_df_ego$discipline.24 == "sociology", "red", "blue"), #now, I can use actor attributes for plotting. 
+  vertex.label = NA,
+  edge.width = 0.2,
+  edge.arrow.size =0.2,
+  vertex.size = 5)
+```
+
+
+# Hannah's Shit 
+
+Ok, we want an overview of the different universities we are dealing with, and the different disciplines -- in other words, we want to see how clean our data actually is.\
+
+```{r, include = F, echo = F}
+universities_1_2022 <- unique(demographics$Universiteit1.22)
+universities_2_2022 <- unique(demographics$Universiteit2.22)
+universities_1_2024 <- unique(demographics$Universiteit1.24)
+universities_2_2024 <- unique(demographics$Universiteit2.24)
+
+universities_1_2022 
+universities_2_2022
+universities_1_2024
+universities_2_2024
+
+#"UU", "RUG", "UvA", "EUR", "Leiden", "Bocconi University", RU", "Universita degli studi di Milano", "VU", "UvT", "Universiteit Gent", "Universiteit Stockholm", "University Linköping", "TU Delft", "University of Turku", "Frankfurt School of Finance & Management", "University of Lausanne", "UvH", "Boston University", "Trento University", "Uni Gothenburg", "Uni Berlijn", "Uni of Victoria", "Uni of Lausanne", "Shadona uni", "University of Cologne","Shandong uni"   
+```
+The Universities\
+
+
+|Abbreviation | Name and City | Country |
+|:---------:|:---------:|:---------:|
+|"UU"| Utrecht University | the Netherlands |
+|"RUG"| Rijksuniversiteit Groningen | the Netherlands|
+|"UvA"| Universiteit van Amsterdam | the Netherlands|
+|"EUR"| Erasmus Universiteit Rotterdam | the Netherlands |
+|"Leiden"| Leiden University | the Netherlands |
+|"Bocconi University"| Bocconi University, Milan | Italy |
+| RU" | Radboud University | the Netherlands |
+|"Universita degli studi di Milano"| Universita degli studi di Milano | Italy |
+|"VU"| Vrije Universiteit, Amsterdam | the Netherlands |
+|"UvT"| Tilburg University | the Netherlands |
+|"Universiteit Gent"| University Gent| Belgium |
+|"Universiteit Stockholm"| University of Stockholm | Sweden |
+|"University Linköping"| University of Linköping | Sweden |
+|"TU Delft"| TU Delft | the Netherlands |
+|"University of Turku"| University of Turku | Finland |
+|"Frankfurt School of Finance & Management"| Frankfurt School of Finance & Management | Germany |
+|"University of Lausanne"| University of Lausanne | Switzerland |
+|"UvH"| University of Humanistic Studies, Utrecht | the Netherlands |
+|"Boston University"| Boston University | the US |
+|"Trento University"| Trento Univeristy | Italy |
+|"Uni Gothenburg"| University of Gothenburg | Sweden |
+|"Uni Berlijn"| University of Berling | Germany |
+|"Uni of Victoria"| University of Victoria | Canada |
+|"Uni of Lausanne"| University of Lausanne | Switzerland |
+|"Shadona uni"| Shadong University | China | 
+|"University of Cologne"| University of Cologne | Germany |
+|"Shandong uni"| Shadong University | China |
+\
+
+Now see if we can put this into a social network plot/graph/whatever. 
+
+```{r}
+matrix_all_socpol <- fcolnet(data = scholars, 
+                university = c("UU", "RUG", "UvA", "EUR", "Leiden", "RU", 
+                               "VU", "UvT", "TU Delft", "UvH"), 
+                discipline = c("sociology", "political science"), 
+                waves = list(c(2015, 2018), c(2019, 2023))) 
+
+mall_w1 <- igraph::graph_from_adjacency_matrix(
+  matrix_all_socpol$nets, #now, I take the second wave
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL
+)
+
+#nicely_chosen <- layout_nicely(mall_w1)
+#kk <- layout_with_kk(mall_w1)
+#lgl <- layout_with_lgl(mall_w1)
+random <- layout_randomly(mall_w1)
+
+plot(mall_w1,
+     vertex.color = ifelse(matrix_all_socpol$discipline.24 == "sociology", "red", "blue"),
+     vertex.size = 4,  # we'll vertices a bit smaller
+     vertex.label = NA,  
+     edge.curved = 0.2, # curved edges is always a nice touch
+     edge.arrow.size = 0.1)
+```
+
+And extract all names of the researchers
+
+```{r}
+view(demographics)
+names <- demographics$Naam
+au_id <- demographics$au_id
+names <- cbind(names, au_id)
+view(names)
+```
+
+
+
+
+
+
+
+
+
+
+
+
