@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-10-08" />
+
+<title>Ethnicity and Race</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprepping For the Apocalypse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="gender.final.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="ethnicity.scraping.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="describeyour.ideal.man.html">Prelim. Info(graphics)</a>
+    </li>
+    <li>
+      <a href="results.prelim.prelim.html">Some First Analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    F*cking Around and Finding Out
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Graphs1.html">Making Graphs and Taking Names</a>
+    </li>
+    <li>
+      <a href="dataprep.html">Never Gonna Prep You Up</a>
+    </li>
+    <li>
+      <a href="Wrangling_Some_Data.html">Scrapey Doo</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Introduction</li>
+    <li class="dropdown-header">Theoretical Framework</li>
+    <li class="dropdown-header">Data and Methods</li>
+    <li class="dropdown-header">Analysis et al.</li>
+    <li class="dropdown-header">Conclusions</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Ethnicity and Race</h1>
+<h4 class="date">2024-10-08</h4>
+
+</div>
+
+
+<div id="data-transformation-ethnicity" class="section level1"
+number="1">
+<h1><span class="header-section-number">1</span> Data Transformation –
+Ethnicity</h1>
+<p>Gender was easy, ethnicity, however, is going to be a little more
+difficult. Not only because we live in a world that has been subject to
+some intensive globalisation – which has spread last names beyond the
+scope of their origin, thus leading them to be less strongly associated
+with ethnicity – but also because it is such a sensitive subject. How
+are we going to characterise the groups? Are we goign to be looking at
+white, and non-white people? Are we going to scrape images of them and
+assess whether their skin colour is white enough – or not? Or, are we
+going to assess them based on their last name, something that is quite
+difficult in countries with populations descendent from former
+slaves.<br />
+<br />
+Sadly enough, we do not have enough time and space (and know-how, on a
+webscraping level) to fully and adequately deal with this. As such, we
+try several different ways, and find out if we can discover one that
+would be most useful to our research – starting with one’s last name</p>
+<div id="last-names" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Last Names</h2>
+<p>Theoretically, one of the easiest ways to determine one’s ethnicity,
+would be to find out where they come from. And the best – well, quickest
+– way to find out where they come from is by using their last
+name.<br />
+Now, we’ve already created a variable containing each person’s last name
+in our [names] dataset, and we can enter each of these names into the
+CBS <em>namenbank</em> to find out its origin. While this is easier said
+than done, we do know how to start: by trying to remember how
+webscraping worked again.</p>
+<div id="webscraping-a-tutorial" class="section level3" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> Webscraping – a
+tutorial</h3>
+<p>Let’s follow one of Jochem’s tutorials:</p>
+<pre class="r"><code>#staff leiden political science
+lpol_staff &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1&quot;)
+#extract specific info
+lpol_staff &lt;- lpol_staff %&gt;%
+  html_nodes(&quot;body&quot;) %&gt;%
+  html_nodes(xpath = &quot;//a&quot;) %&gt;%
+  html_text()
+head(lpol_staff) #this seems useless</code></pre>
+<pre><code>## [1] &quot;Leiden University&quot;        &quot;Students&quot;                
+## [3] &quot;Staff members&quot;            &quot;Organisational structure&quot;
+## [5] &quot;Library&quot;                  &quot;\n&quot;</code></pre>
+<pre class="r"><code>view(lpol_staff) #this is a lot 
+
+#we can also get More from scraping 
+lpol_staff_names &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1&quot;) %&gt;%
+  html_element(&quot;section.tab.active&quot;) %&gt;%
+  html_elements(&quot;ul.table-list&quot;) %&gt;%
+  html_elements(&quot;li&quot;) %&gt;%
+  html_elements(&quot;a&quot;) %&gt;%
+  html_elements(&quot;div&quot;) %&gt;%
+  html_elements(&quot;strong&quot;) %&gt;%
+  html_text()
+
+lpol_staff_functions &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1&quot;) %&gt;%
+  html_element(&quot;section.tab.active&quot;) %&gt;%
+  html_elements(&quot;ul.table-list&quot;) %&gt;%
+  html_elements(&quot;li&quot;) %&gt;%
+  html_elements(&quot;a&quot;) %&gt;%
+  html_elements(&quot;div&quot;) %&gt;%
+  html_elements(&quot;span&quot;) %&gt;%
+  html_text()</code></pre>
+</div>
+<div id="webscraping-following-the-tutorial" class="section level3"
+number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> Webscraping:
+Following the Tutorial</h3>
+<p>Since we are dealing with a website that has a specific webpage for
+each name, we start by inspecting the location of the origin of the name
+using the first individual in the dataset who’se name came up as
+‘not-western’ when manually entering last names into the search engine:
+<strong>Arat</strong></p>
+<pre class="r"><code>arat &lt;- rvest::read_html(&quot;https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Arat&amp;nfd_naam=Arat&amp;info=analyse+en+verklaring&amp;operator=eq&amp;taal=&quot;) %&gt;%
+  html_nodes(&quot;body&quot;) %&gt;%
+  html_text()
+head(arat) #so, we get a big string full of words, let&#39;s see if we can find a standardised way to extract the country of origin</code></pre>
+<pre><code>## [1] &quot;\n\n  \n    \n    \n    \n  \n\t\n\n\n  \n\t\t\n\n\t\n      \n\n \n\n\n\t\tNederlandse Familienamenbank\n\t\t\n\t\t\n\t\t  \n\t\t    Naam \n\t\t\t\t    is gelijk aanbegint meteindigt opbevatgeavanceerd\n\t\t\t\t    \n\t\t\t\t    \n\t\t\t\t  \n\t\t\n\t\t  Arat\n\n        &lt;\n    \n    \n\t  \t\t  \t\t\t  Arad\n  aantal en verspreiding\t\t\t\n\t\t\t\t\t\tanalyse en verklaring\t\t\t\n\t\t\t\t\t\tdocumentatie\t\t\t\n\t\t\t\t\t\tvarianten\t\t\t\n\t\t\t\t\t  \t\t    catalogus\t\t  \t\t\t\n\t\n\n\t\t\t\n\t\t\tverklaring: De familienaam Arat is afkomstig uit Turkije.\n\t\t\n\n\t\tkenmerken:\n\t\t\t\n\t\t\t\n\t\n\t\t\tTurkse naam\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\n\t\t\n\t\t\t\n\n\n\n \n\n     \n    \n      \n          © 2000-2024 CBG|Centrum voor familiegeschiedenis \n        \n    \n      \n        CBG|Centrum voor familiegeschiedenis Postbus 11755, 2502 AT Den Haag. Telefoon +31 (0)70 31 50 500.\n        service@cbg.nl\n      \n    \n   \n  \n  \n  \n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag(&#39;js&#39;, new Date());\n\n    gtag(&#39;config&#39;, &#39;G-RLJGMPMPC4&#39;);\n  &quot;</code></pre>
+<pre class="r"><code>#we&#39;ll be using stringr -- with much difficulty 
+arat &lt;- as.data.frame(arat)  #is it the structure of my data?
+arat &lt;- str_extract_all(arat, boundary(&quot;word&quot;)) #what if we seperate 
+substring(arat, &quot;De&quot;, &quot;\\.&quot;) #nope</code></pre>
+<pre><code>## Warning in substring(arat, &quot;De&quot;, &quot;\\.&quot;): NAs introduced by coercion
+## Warning in substring(arat, &quot;De&quot;, &quot;\\.&quot;): NAs introduced by coercion</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>str_detect(arat, &quot;Turkije&quot;) #dus ik kan hier iets mee: ik kan zeggen, </code></pre>
+<pre><code>## Warning in stri_detect_regex(string, pattern, negate = negate, opts_regex =
+## opts(pattern)): argument is not an atomic vector; coercing</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#voor elk land ooit dat wel, maar kijke of dit land in deze string staat,
+#en als er een true teruggegeven wordt, note dan het land </code></pre>
+<p>So that was a masterclass in how <em>not</em> to succeed, let me see
+if I can do it differently:</p>
+<pre class="r"><code>arat &lt;- rvest::read_html(&quot;https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Bilecen&amp;nfd_naam=Bilecen&amp;info=analyse+en+verklaring&amp;operator=eq&amp;taal=&quot;)  %&gt;% #take a look at the website, and see if you can find a more precise text extraction
+  html_nodes(&quot;body&quot;) %&gt;%
+  html_elements(&quot;div&quot;) %&gt;%
+  html_elements(&quot;p&quot;) %&gt;%
+  html_text() #ok that works-ish
+groennou &lt;- rvest::read_html(&quot;https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Sivak&amp;nfd_naam=Sivak&amp;info=analyse+en+verklaring&amp;operator=eq&amp;taal=&quot;)  %&gt;%
+  html_nodes(&quot;body&quot;) %&gt;%
+  html_elements(&quot;div&quot;) %&gt;%
+  html_elements(&quot;p&quot;) %&gt;%
+  html_text() #but it does not work for a non-western/dutch name 
+
+
+name_ethnicity &lt;- function(names = &quot;names element&quot;) { 
+
+names$name_origin[i] &lt;- names$read_html(&quot;https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=&quot;,
+                                  name$last_name[i],
+                                  &quot;&amp;nfd_naam=&quot;,
+                                  name$last_name[i],
+                                  &quot;&amp;info=analyse+en+verklaring&amp;operator=eq&amp;taal=&quot;) %&gt;%  
+                                  html_nodes(&quot;body&quot;) %&gt;%
+                                  html_elements(&quot;div&quot;) %&gt;%
+                                  html_elements(&quot;p&quot;) %&gt;%
+                                  html_text() #and neither does this, apparently
+}</code></pre>
+<p>… ok, so that is also a no… Maybe we’ll get further with
+RSelenium/Java things?</p>
+</div>
+<div id="webscraping-rselenium-ftw" class="section level3"
+number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> Webscraping –
+RSelenium ftw?</h3>
+<p>In other words, let’s get our laptop do make some clicks on websites
+– using RSelenium.<br />
+<br />
+First, we load our libraries</p>
+<pre class="r"><code>#so, this is like try 15 -- but, I&#39;ve figured out how to do this now 
+#install.packages(&quot;seleniumPipes&quot;) #use pipes in RSelenium
+library(seleniumPipes) </code></pre>
+<pre><code>## Loading required package: httr</code></pre>
+<pre><code>## Loading required package: jsonlite</code></pre>
+<pre><code>## 
+## Attaching package: &#39;jsonlite&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:shiny&#39;:
+## 
+##     validate</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     flatten</code></pre>
+<pre><code>## Loading required package: magrittr</code></pre>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<pre><code>## Loading required package: whisker</code></pre>
+<pre><code>## 
+## Attaching package: &#39;seleniumPipes&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:rvest&#39;:
+## 
+##     back, forward</code></pre>
+<pre class="r"><code>library(RSelenium) #RSelenium to use the webdriver
+library(selenium) #selenium if RSelenium is giving me errors I cannot deal with 
+library(httr)
+library(curl)</code></pre>
+<pre><code>## Using libcurl 8.7.1 with LibreSSL/3.3.6</code></pre>
+<pre><code>## 
+## Attaching package: &#39;curl&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:httr&#39;:
+## 
+##     handle_reset</code></pre>
+<pre><code>## The following object is masked from &#39;package:readr&#39;:
+## 
+##     parse_date</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<p>Then we try to get RSelenium / Selenium started: I figured it out,
+finally, after several attempts. The main thing that solved it for me
+was to install docker, run a r-selenium firefox image, and run my
+webscraping on the hub/port the container is also running on.</p>
+<pre class="r"><code>#selenium_server_available(4444L) #check if my port is available 
+#get_server_status(4444L) #check the status of the port 
+#sessionInfo() -- use this if I want to know what the sesion looks like 
+
+#then we do an initial test with a search engine: 
+#url &lt;- &quot;https://www.ecosia.org&quot; #assign webadress to object &#39;url&#39;
+#remDr &lt;- remoteDriver(remoteServerAddr = &quot;localhost&quot;, port = 4444L, browserName = &quot;firefox&quot;) #assign attributes to remote driver/remDr
+#remDr$open() #open the webpage 
+
+#then open the Selenium Grid Console, so I can see what I&#39;m doing 
+
+#remDr$navigate(url) #navigate to the previously assigned url
+#remDr$findElement(using = &quot;css&quot;, value = &quot;div.search-form__search-field&quot;)$highlightElement() #highlight the search bar 
+#remDr$findElement(using = &quot;css&quot;, value = &quot;div.search-form__search-field&quot;)$clickElement() #click on the search bar
+
+# ok, so we now know how it works, then we can go to the cbgfamilienamenbank
+
+#url &lt;- &quot;https://www.cbgfamilienamen.nl&quot; #url 
+#remDr$navigate(url) #navigate to website 
+#remDr$findElement(using = &quot;css&quot;, value = &quot;input&quot;)$highlightElement() #highlight search bar 
+#remDr$findElement(using = &quot;css&quot;, value = &quot;input&quot;)$sendKeysToElement(list(&quot;Ou&quot;, key = &quot;enter&quot;)) #enter a name into search bar (when making function, the string the content of my df/vector/list)
+
+#new page has a navigation bar, we want to click on. the &#39;analyse en verklaring&#39; element=
+#remDr$findElement(&quot;link text&quot;, &quot;analyse en verklaring&quot;)$highlightElement() #highlight
+#remDr$findElement(&quot;link text&quot;, &quot;analyse en verklaring&quot;)$clickElement() #gotten to the right page 
+#remDr$findElement(using = &quot;id&quot;, value = &quot;href&quot;)$getElementText() #ok so that&#39;s now what I want, I need to furhter figure out how to achieve what I want using this. </code></pre>
+<p>This – the webscraping using RSelenium – is still a work in progress.
+I need to do several other things before I can automate this:<br />
+I. First I have to find a way to extract the text beneath
+“kenmerken”;<br />
+II. Then I’ll have to assign each ‘kenmerken’ string with a
+name/id;<br />
+III. Then I’ll have to rbind it into a dataframe;<br />
+IV. Then I’ll have to make a list, and give each author a tibble
+consisting of the string split up in all its individual elements;<br />
+V. Then I’ll apply “is_country” to each element;<br />
+VI. If “if_country” is true, then we print the name of the
+country;<br />
+VII. And then we have to see if we can clean something up</p>
+</div>
+</div>
+</div>
+<div id="manual" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Manual</h1>
+<p>So, that did not work – and would honestly take up too much time to
+fully carry out, which is a waste of time in a class focussed on
+<em>data analysis</em>, and not webscraping. As such, I will therefore
+acquire these data by ‘scraping’ them by hand – which essentially means
+that I will look up each individual in de data, and find out what their
+score is on the variable that I want to create.<br />
+<br />
+This ‘variable’ is another difficult aspect, because how do you quantify
+whether someone would belong to a marginalised identity-group – and how
+do you conceptualise this group. I believe that the best way to do this
+is by taking a two pronged approach: country of birth, and
+‘whiteness’.<br />
+<strong>Country of Birth</strong> would indicate whether someone was
+born in the Netherlands or not, and would allow me to see if there are
+any differences in the ways collaboration-networks of ego’s not born in
+the Netherlands (substantially) differ from those who are.
+<em>However</em>, country of birth does not fully cover what I want to
+capture here, and might instead give a skewed image due to the
+dimensionality of the concept. The Netherlands has a rather sizeable
+proportion of people with a Morrocan background, for example, but many
+of them are born in the Netherlands – and would thus be excluded if one
+measured ethnicity by country of birth. Therefore, I will add in another
+measure: white-passing. My intention with this variale is to see if an
+individual is white-passing, and whether this leads to any structural
+differences in networks of white-passing, and non-white passing people.
+<strong>White Passing</strong> is of course, a highly subjective
+variable, but since I am coding and collecting this variable by hand, I
+believe that the measurement will be as close to what I intend to
+measure as possible. Whether and individual is <em>white passing</em>
+will be assessed based on a picture of theirs I can find on the internet
+– and if such an image cannot be found, I will code their score as
+‘missing’.</p>
+</div>
+<div id="the-data" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> The Data</h1>
+<p>The “country of birth” data was gathered using the place of birth
+found on people’s PhD theses, information found on their CV’s and
+personal websites, and even in several cases by looking at their
+LinkedIn pages. Alltogether it yielded the following dataset:<br />
+</p>
+<pre class="r"><code>library(readr)
+subset_gender &lt;- read_csv(&quot;subset_gender.csv&quot;)
+head(subset_gender[,c(1, 22:24)])</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   Naam             perc_female born_in     white_or_not
+##   &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+## 1 Ece Arat                1    Turkey                 0
+## 2 Marcel Van Assen        0    Netherlands            1
+## 3 Vardan Barsegyan        0    Russia                 0
+## 4 Anne Brons              0.79 Netherlands            1
+## 5 Vincent Buskens         0    Netherlands            1
+## 6 Tobias Cinjee           0    Netherlands            1</code></pre>
+<div id="creating-some-new-variables" class="section level2"
+number="3.1">
+<h2><span class="header-section-number">3.1</span> Creating Some New
+Variables</h2>
+<pre class="r"><code>subset_gender &lt;- sort_by(subset_gender, subset_gender$Universiteit.22)
+view(subset_gender)
+subset_gender &lt;- subset_gender %&gt;%
+  drop_na(Naam)
+subset_gender &lt;- subset_gender %&gt;%
+  drop_na(white_or_not)
+view(subset_gender)
+unique(subset_gender$born_in)</code></pre>
+<pre><code>##  [1] &quot;United States of America&quot; &quot;Netherlands&quot;             
+##  [3] &quot;Belgium&quot;                  &quot;Canada&quot;                  
+##  [5] &quot;Hungary&quot;                  &quot;0&quot;                       
+##  [7] &quot;Turkey&quot;                   &quot;China&quot;                   
+##  [9] &quot;Germany&quot;                  &quot;Singapore&quot;               
+## [11] &quot;Russia&quot;                   &quot;France&quot;                  
+## [13] &quot;Serbia&quot;                   NA                        
+## [15] &quot;Poland&quot;                   &quot;Switzerland&quot;             
+## [17] &quot;India&quot;                    &quot;United Kingdom&quot;          
+## [19] &quot;Brazil&quot;                   &quot;Lithuania&quot;               
+## [21] &quot;Iran&quot;                     &quot;Brasil&quot;                  
+## [23] &quot;Sweden&quot;                   &quot;Palestina&quot;               
+## [25] &quot;Austria&quot;                  &quot;Ecuador&quot;</code></pre>
+<pre class="r"><code>#binary born_in ----
+subset_gender &lt;- subset_gender %&gt;%
+  mutate(
+    born_in_binary = ifelse(born_in == &quot;Netherlands&quot;, 1, 0)
+  )
+hist(subset_gender$born_in_binary)</code></pre>
+<p><img src="ethnicity.scraping_files/figure-html/subset%20gender-1.png" width="672" /></p>
+<pre class="r"><code>hist(subset_gender$white_or_not)</code></pre>
+<p><img src="ethnicity.scraping_files/figure-html/subset%20gender-2.png" width="672" /></p>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRXRobmljaXR5IGFuZCBSYWNlIgpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQKZGF0ZTogIjIwMjQtMTAtMDgiCi0tLQoKYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9CnJlcXVpcmUodGlkeXZlcnNlKQpyZXF1aXJlKGlncmFwaCkKcmVxdWlyZShzaGlueSkKcmVxdWlyZShSU2llbmEpCnJlcXVpcmUocm1kZm9ybWF0cykKcmVxdWlyZShwcmV0dHlkb2MpCnJlcXVpcmUoaHJicnRoZW1lcykKcmVxdWlyZSh0aW50KQpyZXF1aXJlKHR1ZnRlKQpyZXF1aXJlKHBzeWNoKQpsaWJyYXJ5KGRhdGEudGFibGUpICAKbGlicmFyeSh4bWwyKQpsaWJyYXJ5KHJ2ZXN0KQpsaWJyYXJ5KHhtbDIpCmxpYnJhcnkoWE1MKQpgYGAKIyBEYXRhIFRyYW5zZm9ybWF0aW9uIC0tIEV0aG5pY2l0eSAKCkdlbmRlciB3YXMgZWFzeSwgZXRobmljaXR5LCBob3dldmVyLCBpcyBnb2luZyB0byBiZSBhIGxpdHRsZSBtb3JlIGRpZmZpY3VsdC4gTm90IG9ubHkgYmVjYXVzZSB3ZSBsaXZlIGluIGEgd29ybGQgdGhhdCBoYXMgYmVlbiBzdWJqZWN0IHRvIHNvbWUgaW50ZW5zaXZlIGdsb2JhbGlzYXRpb24gLS0gd2hpY2ggaGFzIHNwcmVhZCBsYXN0IG5hbWVzIGJleW9uZCB0aGUgc2NvcGUgb2YgdGhlaXIgb3JpZ2luLCB0aHVzIGxlYWRpbmcgdGhlbSB0byBiZSBsZXNzIHN0cm9uZ2x5IGFzc29jaWF0ZWQgd2l0aCBldGhuaWNpdHkgLS0gYnV0IGFsc28gYmVjYXVzZSBpdCBpcyBzdWNoIGEgc2Vuc2l0aXZlIHN1YmplY3QuIEhvdyBhcmUgd2UgZ29pbmcgdG8gY2hhcmFjdGVyaXNlIHRoZSBncm91cHM/IEFyZSB3ZSBnb2lnbiB0byBiZSBsb29raW5nIGF0IHdoaXRlLCBhbmQgbm9uLXdoaXRlIHBlb3BsZT8gQXJlIHdlIGdvaW5nIHRvIHNjcmFwZSBpbWFnZXMgb2YgdGhlbSBhbmQgYXNzZXNzIHdoZXRoZXIgdGhlaXIgc2tpbiBjb2xvdXIgaXMgd2hpdGUgZW5vdWdoIC0tIG9yIG5vdD8gT3IsIGFyZSB3ZSBnb2luZyB0byBhc3Nlc3MgdGhlbSBiYXNlZCBvbiB0aGVpciBsYXN0IG5hbWUsIHNvbWV0aGluZyB0aGF0IGlzIHF1aXRlIGRpZmZpY3VsdCBpbiBjb3VudHJpZXMgd2l0aCBwb3B1bGF0aW9ucyBkZXNjZW5kZW50IGZyb20gZm9ybWVyIHNsYXZlcy5cClwKU2FkbHkgZW5vdWdoLCB3ZSBkbyBub3QgaGF2ZSBlbm91Z2ggdGltZSBhbmQgc3BhY2UgKGFuZCBrbm93LWhvdywgb24gYSB3ZWJzY3JhcGluZyBsZXZlbCkgdG8gZnVsbHkgYW5kIGFkZXF1YXRlbHkgZGVhbCB3aXRoIHRoaXMuIEFzIHN1Y2gsIHdlIHRyeSBzZXZlcmFsIGRpZmZlcmVudCB3YXlzLCBhbmQgZmluZCBvdXQgaWYgd2UgY2FuIGRpc2NvdmVyIG9uZSB0aGF0IHdvdWxkIGJlIG1vc3QgdXNlZnVsIHRvIG91ciByZXNlYXJjaCAtLSBzdGFydGluZyB3aXRoIG9uZSdzIGxhc3QgbmFtZQoKIyMgTGFzdCBOYW1lcyAKClRoZW9yZXRpY2FsbHksIG9uZSBvZiB0aGUgZWFzaWVzdCB3YXlzIHRvIGRldGVybWluZSBvbmUncyBldGhuaWNpdHksIHdvdWxkIGJlIHRvIGZpbmQgb3V0IHdoZXJlIHRoZXkgY29tZSBmcm9tLiBBbmQgdGhlIGJlc3QgLS0gd2VsbCwgcXVpY2tlc3QgLS0gd2F5IHRvIGZpbmQgb3V0IHdoZXJlIHRoZXkgY29tZSBmcm9tIGlzIGJ5IHVzaW5nIHRoZWlyIGxhc3QgbmFtZS5cCk5vdywgd2UndmUgYWxyZWFkeSBjcmVhdGVkIGEgdmFyaWFibGUgY29udGFpbmluZyBlYWNoIHBlcnNvbidzIGxhc3QgbmFtZSBpbiBvdXIgW25hbWVzXSBkYXRhc2V0LCBhbmQgd2UgY2FuIGVudGVyIGVhY2ggb2YgdGhlc2UgbmFtZXMgaW50byB0aGUgQ0JTICpuYW1lbmJhbmsqIHRvIGZpbmQgb3V0IGl0cyBvcmlnaW4uIFdoaWxlIHRoaXMgaXMgZWFzaWVyIHNhaWQgdGhhbiBkb25lLCB3ZSBkbyBrbm93IGhvdyB0byBzdGFydDogYnkgdHJ5aW5nIHRvIHJlbWVtYmVyIGhvdyB3ZWJzY3JhcGluZyB3b3JrZWQgYWdhaW4uIAoKIyMjIFdlYnNjcmFwaW5nIC0tIGEgdHV0b3JpYWwKCkxldCdzIGZvbGxvdyBvbmUgb2YgSm9jaGVtJ3MgdHV0b3JpYWxzOiAKCmBgYHtyIHBvbHN0YWZmfQojc3RhZmYgbGVpZGVuIHBvbGl0aWNhbCBzY2llbmNlCmxwb2xfc3RhZmYgPC0gcmVhZF9odG1sKCJodHRwczovL3d3dy51bml2ZXJzaXRlaXRsZWlkZW4ubmwvZW4vc29jaWFsLWJlaGF2aW91cmFsLXNjaWVuY2VzL3BvbGl0aWNhbC1zY2llbmNlL3N0YWZmI3RhYi0xIikKI2V4dHJhY3Qgc3BlY2lmaWMgaW5mbwpscG9sX3N0YWZmIDwtIGxwb2xfc3RhZmYgJT4lCiAgaHRtbF9ub2RlcygiYm9keSIpICU+JQogIGh0bWxfbm9kZXMoeHBhdGggPSAiLy9hIikgJT4lCiAgaHRtbF90ZXh0KCkKaGVhZChscG9sX3N0YWZmKSAjdGhpcyBzZWVtcyB1c2VsZXNzCnZpZXcobHBvbF9zdGFmZikgI3RoaXMgaXMgYSBsb3QgCgojd2UgY2FuIGFsc28gZ2V0IE1vcmUgZnJvbSBzY3JhcGluZyAKbHBvbF9zdGFmZl9uYW1lcyA8LSByZWFkX2h0bWwoImh0dHBzOi8vd3d3LnVuaXZlcnNpdGVpdGxlaWRlbi5ubC9lbi9zb2NpYWwtYmVoYXZpb3VyYWwtc2NpZW5jZXMvcG9saXRpY2FsLXNjaWVuY2Uvc3RhZmYjdGFiLTEiKSAlPiUKICBodG1sX2VsZW1lbnQoInNlY3Rpb24udGFiLmFjdGl2ZSIpICU+JQogIGh0bWxfZWxlbWVudHMoInVsLnRhYmxlLWxpc3QiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJsaSIpICU+JQogIGh0bWxfZWxlbWVudHMoImEiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJkaXYiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJzdHJvbmciKSAlPiUKICBodG1sX3RleHQoKQoKbHBvbF9zdGFmZl9mdW5jdGlvbnMgPC0gcmVhZF9odG1sKCJodHRwczovL3d3dy51bml2ZXJzaXRlaXRsZWlkZW4ubmwvZW4vc29jaWFsLWJlaGF2aW91cmFsLXNjaWVuY2VzL3BvbGl0aWNhbC1zY2llbmNlL3N0YWZmI3RhYi0xIikgJT4lCiAgaHRtbF9lbGVtZW50KCJzZWN0aW9uLnRhYi5hY3RpdmUiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJ1bC50YWJsZS1saXN0IikgJT4lCiAgaHRtbF9lbGVtZW50cygibGkiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJhIikgJT4lCiAgaHRtbF9lbGVtZW50cygiZGl2IikgJT4lCiAgaHRtbF9lbGVtZW50cygic3BhbiIpICU+JQogIGh0bWxfdGV4dCgpCmBgYAoKIyMjIFdlYnNjcmFwaW5nOiBGb2xsb3dpbmcgdGhlIFR1dG9yaWFsCgpTaW5jZSB3ZSBhcmUgZGVhbGluZyB3aXRoIGEgd2Vic2l0ZSB0aGF0IGhhcyBhIHNwZWNpZmljIHdlYnBhZ2UgZm9yIGVhY2ggbmFtZSwgd2Ugc3RhcnQgYnkgaW5zcGVjdGluZyB0aGUgbG9jYXRpb24gb2YgdGhlIG9yaWdpbiBvZiB0aGUgbmFtZSB1c2luZyB0aGUgZmlyc3QgaW5kaXZpZHVhbCBpbiB0aGUgZGF0YXNldCB3aG8nc2UgbmFtZSBjYW1lIHVwIGFzICdub3Qtd2VzdGVybicgd2hlbiBtYW51YWxseSBlbnRlcmluZyBsYXN0IG5hbWVzIGludG8gdGhlIHNlYXJjaCBlbmdpbmU6ICoqQXJhdCoqCmBgYHtyfQphcmF0IDwtIHJ2ZXN0OjpyZWFkX2h0bWwoImh0dHBzOi8vd3d3LmNiZ2ZhbWlsaWVuYW1lbi5ubC9uZmIvZGV0YWlsX25hYW0ucGhwP2diYV9uYWFtPUFyYXQmbmZkX25hYW09QXJhdCZpbmZvPWFuYWx5c2UrZW4rdmVya2xhcmluZyZvcGVyYXRvcj1lcSZ0YWFsPSIpICU+JQogIGh0bWxfbm9kZXMoImJvZHkiKSAlPiUKICBodG1sX3RleHQoKQpoZWFkKGFyYXQpICNzbywgd2UgZ2V0IGEgYmlnIHN0cmluZyBmdWxsIG9mIHdvcmRzLCBsZXQncyBzZWUgaWYgd2UgY2FuIGZpbmQgYSBzdGFuZGFyZGlzZWQgd2F5IHRvIGV4dHJhY3QgdGhlIGNvdW50cnkgb2Ygb3JpZ2luCgojd2UnbGwgYmUgdXNpbmcgc3RyaW5nciAtLSB3aXRoIG11Y2ggZGlmZmljdWx0eSAKYXJhdCA8LSBhcy5kYXRhLmZyYW1lKGFyYXQpICAjaXMgaXQgdGhlIHN0cnVjdHVyZSBvZiBteSBkYXRhPwphcmF0IDwtIHN0cl9leHRyYWN0X2FsbChhcmF0LCBib3VuZGFyeSgid29yZCIpKSAjd2hhdCBpZiB3ZSBzZXBlcmF0ZSAKc3Vic3RyaW5nKGFyYXQsICJEZSIsICJcXC4iKSAjbm9wZQpzdHJfZGV0ZWN0KGFyYXQsICJUdXJraWplIikgI2R1cyBpayBrYW4gaGllciBpZXRzIG1lZTogaWsga2FuIHplZ2dlbiwgCiN2b29yIGVsayBsYW5kIG9vaXQgZGF0IHdlbCwgbWFhciBraWprZSBvZiBkaXQgbGFuZCBpbiBkZXplIHN0cmluZyBzdGFhdCwKI2VuIGFscyBlciBlZW4gdHJ1ZSB0ZXJ1Z2dlZ2V2ZW4gd29yZHQsIG5vdGUgZGFuIGhldCBsYW5kIApgYGAKClNvIHRoYXQgd2FzIGEgbWFzdGVyY2xhc3MgaW4gaG93ICpub3QqIHRvIHN1Y2NlZWQsIGxldCBtZSBzZWUgaWYgSSBjYW4gZG8gaXQgZGlmZmVyZW50bHk6CgpgYGB7ciBiZXR0ZXJ9CmFyYXQgPC0gcnZlc3Q6OnJlYWRfaHRtbCgiaHR0cHM6Ly93d3cuY2JnZmFtaWxpZW5hbWVuLm5sL25mYi9kZXRhaWxfbmFhbS5waHA/Z2JhX25hYW09QmlsZWNlbiZuZmRfbmFhbT1CaWxlY2VuJmluZm89YW5hbHlzZStlbit2ZXJrbGFyaW5nJm9wZXJhdG9yPWVxJnRhYWw9IikgICU+JSAjdGFrZSBhIGxvb2sgYXQgdGhlIHdlYnNpdGUsIGFuZCBzZWUgaWYgeW91IGNhbiBmaW5kIGEgbW9yZSBwcmVjaXNlIHRleHQgZXh0cmFjdGlvbgogIGh0bWxfbm9kZXMoImJvZHkiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJkaXYiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJwIikgJT4lCiAgaHRtbF90ZXh0KCkgI29rIHRoYXQgd29ya3MtaXNoCmdyb2Vubm91IDwtIHJ2ZXN0OjpyZWFkX2h0bWwoImh0dHBzOi8vd3d3LmNiZ2ZhbWlsaWVuYW1lbi5ubC9uZmIvZGV0YWlsX25hYW0ucGhwP2diYV9uYWFtPVNpdmFrJm5mZF9uYWFtPVNpdmFrJmluZm89YW5hbHlzZStlbit2ZXJrbGFyaW5nJm9wZXJhdG9yPWVxJnRhYWw9IikgICU+JQogIGh0bWxfbm9kZXMoImJvZHkiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJkaXYiKSAlPiUKICBodG1sX2VsZW1lbnRzKCJwIikgJT4lCiAgaHRtbF90ZXh0KCkgI2J1dCBpdCBkb2VzIG5vdCB3b3JrIGZvciBhIG5vbi13ZXN0ZXJuL2R1dGNoIG5hbWUgCgoKbmFtZV9ldGhuaWNpdHkgPC0gZnVuY3Rpb24obmFtZXMgPSAibmFtZXMgZWxlbWVudCIpIHsgCgpuYW1lcyRuYW1lX29yaWdpbltpXSA8LSBuYW1lcyRyZWFkX2h0bWwoImh0dHBzOi8vd3d3LmNiZ2ZhbWlsaWVuYW1lbi5ubC9uZmIvZGV0YWlsX25hYW0ucGhwP2diYV9uYWFtPSIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBuYW1lJGxhc3RfbmFtZVtpXSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICImbmZkX25hYW09IiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5hbWUkbGFzdF9uYW1lW2ldLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIiZpbmZvPWFuYWx5c2UrZW4rdmVya2xhcmluZyZvcGVyYXRvcj1lcSZ0YWFsPSIpICU+JSAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBodG1sX25vZGVzKCJib2R5IikgJT4lCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBodG1sX2VsZW1lbnRzKCJkaXYiKSAlPiUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGh0bWxfZWxlbWVudHMoInAiKSAlPiUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGh0bWxfdGV4dCgpICNhbmQgbmVpdGhlciBkb2VzIHRoaXMsIGFwcGFyZW50bHkKfQpgYGAKCi4uLiBvaywgc28gdGhhdCBpcyBhbHNvIGEgbm8uLi4gTWF5YmUgd2UnbGwgZ2V0IGZ1cnRoZXIgd2l0aCBSU2VsZW5pdW0vSmF2YSB0aGluZ3M/IAoKIyMjIFdlYnNjcmFwaW5nIC0tIFJTZWxlbml1bSBmdHc/CgpJbiBvdGhlciB3b3JkcywgbGV0J3MgZ2V0IG91ciBsYXB0b3AgZG8gbWFrZSBzb21lIGNsaWNrcyBvbiB3ZWJzaXRlcyAtLSB1c2luZyBSU2VsZW5pdW0uXApcCkZpcnN0LCB3ZSBsb2FkIG91ciBsaWJyYXJpZXMgCgpgYGB7cn0KI3NvLCB0aGlzIGlzIGxpa2UgdHJ5IDE1IC0tIGJ1dCwgSSd2ZSBmaWd1cmVkIG91dCBob3cgdG8gZG8gdGhpcyBub3cgCiNpbnN0YWxsLnBhY2thZ2VzKCJzZWxlbml1bVBpcGVzIikgI3VzZSBwaXBlcyBpbiBSU2VsZW5pdW0KbGlicmFyeShzZWxlbml1bVBpcGVzKSAKbGlicmFyeShSU2VsZW5pdW0pICNSU2VsZW5pdW0gdG8gdXNlIHRoZSB3ZWJkcml2ZXIKbGlicmFyeShzZWxlbml1bSkgI3NlbGVuaXVtIGlmIFJTZWxlbml1bSBpcyBnaXZpbmcgbWUgZXJyb3JzIEkgY2Fubm90IGRlYWwgd2l0aCAKbGlicmFyeShodHRyKQpsaWJyYXJ5KGN1cmwpCmxpYnJhcnkodGlkeXZlcnNlKQpgYGAKVGhlbiB3ZSB0cnkgdG8gZ2V0IFJTZWxlbml1bSAvIFNlbGVuaXVtIHN0YXJ0ZWQ6IEkgZmlndXJlZCBpdCBvdXQsIGZpbmFsbHksIGFmdGVyIHNldmVyYWwgYXR0ZW1wdHMuIFRoZSBtYWluIHRoaW5nIHRoYXQgc29sdmVkIGl0IGZvciBtZSB3YXMgdG8gaW5zdGFsbCBkb2NrZXIsIHJ1biBhIHItc2VsZW5pdW0gZmlyZWZveCBpbWFnZSwgYW5kIHJ1biBteSB3ZWJzY3JhcGluZyBvbiB0aGUgaHViL3BvcnQgdGhlIGNvbnRhaW5lciBpcyBhbHNvIHJ1bm5pbmcgb24uIApgYGB7ciBzZWxlbml1bSB0cmllc30KI3NlbGVuaXVtX3NlcnZlcl9hdmFpbGFibGUoNDQ0NEwpICNjaGVjayBpZiBteSBwb3J0IGlzIGF2YWlsYWJsZSAKI2dldF9zZXJ2ZXJfc3RhdHVzKDQ0NDRMKSAjY2hlY2sgdGhlIHN0YXR1cyBvZiB0aGUgcG9ydCAKI3Nlc3Npb25JbmZvKCkgLS0gdXNlIHRoaXMgaWYgSSB3YW50IHRvIGtub3cgd2hhdCB0aGUgc2VzaW9uIGxvb2tzIGxpa2UgCgojdGhlbiB3ZSBkbyBhbiBpbml0aWFsIHRlc3Qgd2l0aCBhIHNlYXJjaCBlbmdpbmU6IAojdXJsIDwtICJodHRwczovL3d3dy5lY29zaWEub3JnIiAjYXNzaWduIHdlYmFkcmVzcyB0byBvYmplY3QgJ3VybCcKI3JlbURyIDwtIHJlbW90ZURyaXZlcihyZW1vdGVTZXJ2ZXJBZGRyID0gImxvY2FsaG9zdCIsIHBvcnQgPSA0NDQ0TCwgYnJvd3Nlck5hbWUgPSAiZmlyZWZveCIpICNhc3NpZ24gYXR0cmlidXRlcyB0byByZW1vdGUgZHJpdmVyL3JlbURyCiNyZW1EciRvcGVuKCkgI29wZW4gdGhlIHdlYnBhZ2UgCgojdGhlbiBvcGVuIHRoZSBTZWxlbml1bSBHcmlkIENvbnNvbGUsIHNvIEkgY2FuIHNlZSB3aGF0IEknbSBkb2luZyAKCiNyZW1EciRuYXZpZ2F0ZSh1cmwpICNuYXZpZ2F0ZSB0byB0aGUgcHJldmlvdXNseSBhc3NpZ25lZCB1cmwKI3JlbURyJGZpbmRFbGVtZW50KHVzaW5nID0gImNzcyIsIHZhbHVlID0gImRpdi5zZWFyY2gtZm9ybV9fc2VhcmNoLWZpZWxkIikkaGlnaGxpZ2h0RWxlbWVudCgpICNoaWdobGlnaHQgdGhlIHNlYXJjaCBiYXIgCiNyZW1EciRmaW5kRWxlbWVudCh1c2luZyA9ICJjc3MiLCB2YWx1ZSA9ICJkaXYuc2VhcmNoLWZvcm1fX3NlYXJjaC1maWVsZCIpJGNsaWNrRWxlbWVudCgpICNjbGljayBvbiB0aGUgc2VhcmNoIGJhcgoKIyBvaywgc28gd2Ugbm93IGtub3cgaG93IGl0IHdvcmtzLCB0aGVuIHdlIGNhbiBnbyB0byB0aGUgY2JnZmFtaWxpZW5hbWVuYmFuawoKI3VybCA8LSAiaHR0cHM6Ly93d3cuY2JnZmFtaWxpZW5hbWVuLm5sIiAjdXJsIAojcmVtRHIkbmF2aWdhdGUodXJsKSAjbmF2aWdhdGUgdG8gd2Vic2l0ZSAKI3JlbURyJGZpbmRFbGVtZW50KHVzaW5nID0gImNzcyIsIHZhbHVlID0gImlucHV0IikkaGlnaGxpZ2h0RWxlbWVudCgpICNoaWdobGlnaHQgc2VhcmNoIGJhciAKI3JlbURyJGZpbmRFbGVtZW50KHVzaW5nID0gImNzcyIsIHZhbHVlID0gImlucHV0Iikkc2VuZEtleXNUb0VsZW1lbnQobGlzdCgiT3UiLCBrZXkgPSAiZW50ZXIiKSkgI2VudGVyIGEgbmFtZSBpbnRvIHNlYXJjaCBiYXIgKHdoZW4gbWFraW5nIGZ1bmN0aW9uLCB0aGUgc3RyaW5nIHRoZSBjb250ZW50IG9mIG15IGRmL3ZlY3Rvci9saXN0KQoKI25ldyBwYWdlIGhhcyBhIG5hdmlnYXRpb24gYmFyLCB3ZSB3YW50IHRvIGNsaWNrIG9uLiB0aGUgJ2FuYWx5c2UgZW4gdmVya2xhcmluZycgZWxlbWVudD0KI3JlbURyJGZpbmRFbGVtZW50KCJsaW5rIHRleHQiLCAiYW5hbHlzZSBlbiB2ZXJrbGFyaW5nIikkaGlnaGxpZ2h0RWxlbWVudCgpICNoaWdobGlnaHQKI3JlbURyJGZpbmRFbGVtZW50KCJsaW5rIHRleHQiLCAiYW5hbHlzZSBlbiB2ZXJrbGFyaW5nIikkY2xpY2tFbGVtZW50KCkgI2dvdHRlbiB0byB0aGUgcmlnaHQgcGFnZSAKI3JlbURyJGZpbmRFbGVtZW50KHVzaW5nID0gImlkIiwgdmFsdWUgPSAiaHJlZiIpJGdldEVsZW1lbnRUZXh0KCkgI29rIHNvIHRoYXQncyBub3cgd2hhdCBJIHdhbnQsIEkgbmVlZCB0byBmdXJodGVyIGZpZ3VyZSBvdXQgaG93IHRvIGFjaGlldmUgd2hhdCBJIHdhbnQgdXNpbmcgdGhpcy4gCmBgYApUaGlzIC0tIHRoZSB3ZWJzY3JhcGluZyB1c2luZyBSU2VsZW5pdW0gLS0gaXMgc3RpbGwgYSB3b3JrIGluIHByb2dyZXNzLiBJIG5lZWQgdG8gZG8gc2V2ZXJhbCBvdGhlciB0aGluZ3MgYmVmb3JlIEkgY2FuIGF1dG9tYXRlIHRoaXM6ClwKSS4gRmlyc3QgSSBoYXZlIHRvIGZpbmQgYSB3YXkgdG8gZXh0cmFjdCB0aGUgdGV4dCBiZW5lYXRoICJrZW5tZXJrZW4iO1wKSUkuIFRoZW4gSSdsbCBoYXZlIHRvIGFzc2lnbiBlYWNoICdrZW5tZXJrZW4nIHN0cmluZyB3aXRoIGEgbmFtZS9pZDtcCklJSS4gVGhlbiBJJ2xsIGhhdmUgdG8gcmJpbmQgaXQgaW50byBhIGRhdGFmcmFtZTtcCklWLiBUaGVuIEknbGwgaGF2ZSB0byBtYWtlIGEgbGlzdCwgYW5kIGdpdmUgZWFjaCBhdXRob3IgYSB0aWJibGUgY29uc2lzdGluZyBvZiB0aGUgc3RyaW5nIHNwbGl0IHVwIGluIGFsbCBpdHMgaW5kaXZpZHVhbCBlbGVtZW50cztcClYuIFRoZW4gSSdsbCBhcHBseSAiaXNfY291bnRyeSIgdG8gZWFjaCBlbGVtZW50O1wKVkkuIElmICJpZl9jb3VudHJ5IiBpcyB0cnVlLCB0aGVuIHdlIHByaW50IHRoZSBuYW1lIG9mIHRoZSBjb3VudHJ5O1wKVklJLiBBbmQgdGhlbiB3ZSBoYXZlIHRvIHNlZSBpZiB3ZSBjYW4gY2xlYW4gc29tZXRoaW5nIHVwCgojIE1hbnVhbAoKU28sIHRoYXQgZGlkIG5vdCB3b3JrIC0tIGFuZCB3b3VsZCBob25lc3RseSB0YWtlIHVwIHRvbyBtdWNoIHRpbWUgdG8gZnVsbHkgY2Fycnkgb3V0LCB3aGljaCBpcyBhIHdhc3RlIG9mIHRpbWUgaW4gYSBjbGFzcyBmb2N1c3NlZCBvbiAqZGF0YSBhbmFseXNpcyosIGFuZCBub3Qgd2Vic2NyYXBpbmcuIEFzIHN1Y2gsIEkgd2lsbCB0aGVyZWZvcmUgYWNxdWlyZSB0aGVzZSBkYXRhIGJ5ICdzY3JhcGluZycgdGhlbSBieSBoYW5kIC0tIHdoaWNoIGVzc2VudGlhbGx5IG1lYW5zIHRoYXQgSSB3aWxsIGxvb2sgdXAgZWFjaCBpbmRpdmlkdWFsIGluIGRlIGRhdGEsIGFuZCBmaW5kIG91dCB3aGF0IHRoZWlyIHNjb3JlIGlzIG9uIHRoZSB2YXJpYWJsZSB0aGF0IEkgd2FudCB0byBjcmVhdGUuXApcClRoaXMgJ3ZhcmlhYmxlJyBpcyBhbm90aGVyIGRpZmZpY3VsdCBhc3BlY3QsIGJlY2F1c2UgaG93IGRvIHlvdSBxdWFudGlmeSB3aGV0aGVyIHNvbWVvbmUgd291bGQgYmVsb25nIHRvIGEgbWFyZ2luYWxpc2VkIGlkZW50aXR5LWdyb3VwIC0tIGFuZCBob3cgZG8geW91IGNvbmNlcHR1YWxpc2UgdGhpcyBncm91cC4gSSBiZWxpZXZlIHRoYXQgdGhlIGJlc3Qgd2F5IHRvIGRvIHRoaXMgaXMgYnkgdGFraW5nIGEgdHdvIHByb25nZWQgYXBwcm9hY2g6IGNvdW50cnkgb2YgYmlydGgsIGFuZCAnd2hpdGVuZXNzJy5cCioqQ291bnRyeSBvZiBCaXJ0aCoqIHdvdWxkIGluZGljYXRlIHdoZXRoZXIgc29tZW9uZSB3YXMgYm9ybiBpbiB0aGUgTmV0aGVybGFuZHMgb3Igbm90LCBhbmQgd291bGQgYWxsb3cgbWUgdG8gc2VlIGlmIHRoZXJlIGFyZSBhbnkgZGlmZmVyZW5jZXMgaW4gdGhlIHdheXMgY29sbGFib3JhdGlvbi1uZXR3b3JrcyBvZiBlZ28ncyBub3QgYm9ybiBpbiB0aGUgTmV0aGVybGFuZHMgKHN1YnN0YW50aWFsbHkpIGRpZmZlciBmcm9tIHRob3NlIHdobyBhcmUuICpIb3dldmVyKiwgY291bnRyeSBvZiBiaXJ0aCBkb2VzIG5vdCBmdWxseSBjb3ZlciB3aGF0IEkgd2FudCB0byBjYXB0dXJlIGhlcmUsIGFuZCBtaWdodCBpbnN0ZWFkIGdpdmUgYSBza2V3ZWQgaW1hZ2UgZHVlIHRvIHRoZSBkaW1lbnNpb25hbGl0eSBvZiB0aGUgY29uY2VwdC4gVGhlIE5ldGhlcmxhbmRzIGhhcyBhIHJhdGhlciBzaXplYWJsZSBwcm9wb3J0aW9uIG9mIHBlb3BsZSB3aXRoIGEgTW9ycm9jYW4gYmFja2dyb3VuZCwgZm9yIGV4YW1wbGUsIGJ1dCBtYW55IG9mIHRoZW0gYXJlIGJvcm4gaW4gdGhlIE5ldGhlcmxhbmRzIC0tIGFuZCB3b3VsZCB0aHVzIGJlIGV4Y2x1ZGVkIGlmIG9uZSBtZWFzdXJlZCBldGhuaWNpdHkgYnkgY291bnRyeSBvZiBiaXJ0aC4gVGhlcmVmb3JlLCBJIHdpbGwgYWRkIGluIGFub3RoZXIgbWVhc3VyZTogd2hpdGUtcGFzc2luZy4gTXkgaW50ZW50aW9uIHdpdGggdGhpcyB2YXJpYWxlIGlzIHRvIHNlZSBpZiBhbiBpbmRpdmlkdWFsIGlzIHdoaXRlLXBhc3NpbmcsIGFuZCB3aGV0aGVyIHRoaXMgbGVhZHMgdG8gYW55IHN0cnVjdHVyYWwgZGlmZmVyZW5jZXMgaW4gbmV0d29ya3Mgb2Ygd2hpdGUtcGFzc2luZywgYW5kIG5vbi13aGl0ZSBwYXNzaW5nIHBlb3BsZS4gKipXaGl0ZSBQYXNzaW5nKiogaXMgb2YgY291cnNlLCBhIGhpZ2hseSBzdWJqZWN0aXZlIHZhcmlhYmxlLCBidXQgc2luY2UgSSBhbSBjb2RpbmcgYW5kIGNvbGxlY3RpbmcgdGhpcyB2YXJpYWJsZSBieSBoYW5kLCBJIGJlbGlldmUgdGhhdCB0aGUgbWVhc3VyZW1lbnQgd2lsbCBiZSBhcyBjbG9zZSB0byB3aGF0IEkgaW50ZW5kIHRvIG1lYXN1cmUgYXMgcG9zc2libGUuIFdoZXRoZXIgYW5kIGluZGl2aWR1YWwgaXMgKndoaXRlIHBhc3NpbmcqIHdpbGwgYmUgYXNzZXNzZWQgYmFzZWQgb24gYSBwaWN0dXJlIG9mIHRoZWlycyBJIGNhbiBmaW5kIG9uIHRoZSBpbnRlcm5ldCAtLSBhbmQgaWYgc3VjaCBhbiBpbWFnZSBjYW5ub3QgYmUgZm91bmQsIEkgd2lsbCBjb2RlIHRoZWlyIHNjb3JlIGFzICdtaXNzaW5nJy4gCgojIFRoZSBEYXRhIAoKVGhlICJjb3VudHJ5IG9mIGJpcnRoIiBkYXRhIHdhcyBnYXRoZXJlZCB1c2luZyB0aGUgcGxhY2Ugb2YgYmlydGggZm91bmQgb24gcGVvcGxlJ3MgUGhEIHRoZXNlcywgaW5mb3JtYXRpb24gZm91bmQgb24gdGhlaXIgQ1YncyBhbmQgcGVyc29uYWwgd2Vic2l0ZXMsIGFuZCBldmVuIGluIHNldmVyYWwgY2FzZXMgYnkgbG9va2luZyBhdCB0aGVpciBMaW5rZWRJbiBwYWdlcy4gQWxsdG9nZXRoZXIgaXQgeWllbGRlZCB0aGUgZm9sbG93aW5nIGRhdGFzZXQ6XApgYGB7ciwgbWVzc2FnZSA9IEZ9CmxpYnJhcnkocmVhZHIpCnN1YnNldF9nZW5kZXIgPC0gcmVhZF9jc3YoInN1YnNldF9nZW5kZXIuY3N2IikKaGVhZChzdWJzZXRfZ2VuZGVyWyxjKDEsIDIyOjI0KV0pCmBgYAoKIyMgQ3JlYXRpbmcgU29tZSBOZXcgVmFyaWFibGVzIAoKYGBge3Igc3Vic2V0IGdlbmRlcn0Kc3Vic2V0X2dlbmRlciA8LSBzb3J0X2J5KHN1YnNldF9nZW5kZXIsIHN1YnNldF9nZW5kZXIkVW5pdmVyc2l0ZWl0LjIyKQp2aWV3KHN1YnNldF9nZW5kZXIpCnN1YnNldF9nZW5kZXIgPC0gc3Vic2V0X2dlbmRlciAlPiUKICBkcm9wX25hKE5hYW0pCnN1YnNldF9nZW5kZXIgPC0gc3Vic2V0X2dlbmRlciAlPiUKICBkcm9wX25hKHdoaXRlX29yX25vdCkKdmlldyhzdWJzZXRfZ2VuZGVyKQp1bmlxdWUoc3Vic2V0X2dlbmRlciRib3JuX2luKQoKI2JpbmFyeSBib3JuX2luIC0tLS0Kc3Vic2V0X2dlbmRlciA8LSBzdWJzZXRfZ2VuZGVyICU+JQogIG11dGF0ZSgKICAgIGJvcm5faW5fYmluYXJ5ID0gaWZlbHNlKGJvcm5faW4gPT0gIk5ldGhlcmxhbmRzIiwgMSwgMCkKICApCmhpc3Qoc3Vic2V0X2dlbmRlciRib3JuX2luX2JpbmFyeSkKaGlzdChzdWJzZXRfZ2VuZGVyJHdoaXRlX29yX25vdCkKYGBgCgo=</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("ethnicity.scraping.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

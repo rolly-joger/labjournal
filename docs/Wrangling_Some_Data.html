@@ -357,6 +357,33 @@ div.tocify {
     <li>
       <a href="Graphs2.html">Week 4</a>
     </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprepping For the Apocalypse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="gender.final.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="ethnicity.scraping.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="describeyour.ideal.man.html">Prelim. Info(graphics)</a>
+    </li>
+    <li>
+      <a href="results.prelim.prelim.html">Some First Analysis</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -390,6 +417,20 @@ div.tocify {
     <li>
       <a href="IntroRSQ.html">Introduction, Revised</a>
     </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Introduction</li>
+    <li class="dropdown-header">Theoretical Framework</li>
+    <li class="dropdown-header">Data and Methods</li>
+    <li class="dropdown-header">Analysis et al.</li>
+    <li class="dropdown-header">Conclusions</li>
   </ul>
 </li>
       </ul>
@@ -814,36 +855,12 @@ RSelenium ftw?</h3>
 First, we load our libraries</p>
 <pre class="r"><code>#so, this is like try 15 -- but, I&#39;ve figured out how to do this now 
 #install.packages(&quot;seleniumPipes&quot;) #use pipes in RSelenium
-library(seleniumPipes) </code></pre>
-<pre><code>## Loading required package: magrittr</code></pre>
-<pre><code>## 
-## Attaching package: &#39;magrittr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     set_names</code></pre>
-<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
-## 
-##     extract</code></pre>
-<pre><code>## Loading required package: whisker</code></pre>
-<pre><code>## 
-## Attaching package: &#39;seleniumPipes&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:rvest&#39;:
-## 
-##     back, forward</code></pre>
-<pre class="r"><code>library(RSelenium) #RSelenium to use the webdriver
+library(seleniumPipes) 
+library(RSelenium) #RSelenium to use the webdriver
 library(selenium) #selenium if RSelenium is giving me errors I cannot deal with 
 library(httr)
-library(curl)</code></pre>
-<pre><code>## Using libcurl 8.7.1 with LibreSSL/3.3.6</code></pre>
-<pre><code>## 
-## Attaching package: &#39;curl&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:httr&#39;:
-## 
-##     handle_reset</code></pre>
-<pre><code>## The following object is masked from &#39;package:readr&#39;:
-## 
-##     parse_date</code></pre>
-<pre class="r"><code>library(tidyverse)</code></pre>
+library(curl)
+library(tidyverse)</code></pre>
 <p>Then we try to get RSelenium / Selenium started: I figured it out,
 finally, after several attempts. The main thing that solved it for me
 was to install docker, run a r-selenium firefox image, and run my

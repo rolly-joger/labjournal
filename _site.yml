@@ -20,6 +20,20 @@ navbar:
         href: Week3Webscraping.html
       - text: "Week 4"
         href: Graphs2.html
+      - text: "Week 5"
+        href: visualise.og.data.html
+    - text: "Dataprepping For the Apocalypse"
+      menu:
+      - text: "The Data"
+        href: dataprep.final.html
+      - text: "Making Gender"
+        href: gender.final.html
+      - text: "Making Ethnicity"
+        href: ethnicity.scraping.html
+      - text: "Prelim. Info(graphics)"
+        href: describeyour.ideal.man.html
+      - text: "Some First Analysis"
+        href: results.prelim.prelim.html
     - text: "F*cking Around and Finding Out"
       menu:
       - text: "Making Graphs and Taking Names"
@@ -34,7 +48,17 @@ navbar:
         href: JournalWeekTwo.html
       - text: "Introduction, Revised"
         href: IntroRSQ.html
-
+    - text: "Final 'Paper'"
+      menu:
+      - text: "Introduction"
+        href:
+      - text: "Theoretical Framework"
+        href:
+      - text: "Data and Methods"
+        href:
+      - text: "Analysis et al."
+        href:
+      - text: "Conclusions"
 
 
 

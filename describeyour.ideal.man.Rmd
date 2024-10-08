@@ -1,0 +1,46 @@
+---
+title: "Descriptives (graphic)"
+output: html_document
+date: "2024-10-08"
+---
+```{r packages, include = F}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+```
+```{r setup, include=FALSE}
+gender_demographics <- read_rds("gender_demographics.rds")
+```
+
+# Let's Get Some Info(graphics)
+```{r}
+gender_demographics %>%
+  mutate(
+    perc_female = ifelse(perc_female >= 0.5, 1, 0)
+  ) %>%
+  count(perc_female)
+hist(gender_demographics$perc_female)
+gender_demographics %>%
+  count(born_in_binary)
+hist(gender_demographics$born_in_binary)
+gender_demographics %>%
+  count(white_or_not)
+hist(gender_demographics$white_or_not)
+gender_demographics %>%
+  count(Functie.22)
+hist(gender_demographics$functie)
+gender_demographics %>%
+  count(hoogleraar)
+hist(gender_demographics$hoogleraar)
+```
+
+
+
+

@@ -1,0 +1,242 @@
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 08/10/2024 19:17:06
+New results follow.
+-----------------------------------
+
+RSiena version 1.4.7 (20 Feb 24)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Random initialization of random number stream.
+Current random number seed is 403481.
+Effects object used: myeff_4 
+Model Type:
+ Forcing model 
+Note that the model type requested has been over-ridden
+Estimation method: conditional moment estimation.
+Conditioning variable is the total number of observed changes ("distance") 
+in the network variable.
+Distance for simulations is  512 .
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.2000000.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  0. Rate parameter                           4.8092
+  1. eval:  degree (density)                               -1.6016
+  2. eval:  degree of alter                                 0.0000
+  3. eval:  degree of ego                                   0.0000
+  4. eval:  network-isolate                                 0.0000
+  5. eval:  white_pass_covar alter                          0.0000
+  6. eval:  white_pass_covar ego                            0.0000
+  7. eval:  same white_pass_covar                           0.0000
+
+
+Values of target statistics are
+  1. Number of edges                                                    258.0000
+  2. Sum of squared degrees                                            3408.0000
+  3. Sum of squared degrees                                            3408.0000
+  4. Number of isolates                                                  64.0000
+  5. Sum of degrees x white_pass_covar                                   31.5990
+  6. Sum of degrees x white_pass_covar                                   31.5990
+  7. number ties between same white_pass_covar                          390.0000
+These were calculated from the data.
+
+ 7 parameters, 7 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2750 iterations.
+Parameter estimates based on 1750 iterations,
+basic rate parameter as well as 
+convergence diagnostics, covariance and derivative matrices based on 1000 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+Overall maximum t-ratio for convergence not computable.
+  1.   32.8480  12.5062   2.6265 
+  2. -154.0960 292.3495  -0.5271 
+  3. -154.0960 292.3495  -0.5271 
+  4.  -15.9140   5.3276  -2.9871 
+  5.  -18.8278   7.9327  -2.3734 
+  6.  -18.8278   7.9327  -2.3734 
+  7.   38.3600  24.9058   1.5402 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  NA .
+One or more of the t-statistics are rather large.
+Convergence of the algorithm is doubtful.
+*** Warning: Covariance matrix not positive definite *** 
+***            Standard errors not reliable           *** 
+The approximate linear combination that has variance 0 is
+1 * beta[2] + -1 * beta[3]
+Do not use any reported standard errors.
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2750 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Rate parameters:
+ 0. Rate parameter                            3.0019  (   0.2531)
+
+Other parameters:
+ 1. eval:  degree (density)                                     NANA
+ 2. eval:  degree of alter                                      NANA
+ 3. eval:  degree of ego                                        NANA
+ 4. eval:  network-isolate                                      NANA
+ 5. eval:  white_pass_covar alter                               NANA
+ 6. eval:  white_pass_covar ego                                 NANA
+ 7. eval:  same white_pass_covar                                NANA
+
+
+@3
+Covariance matrices
+                   
+There is a linear dependency between the parameter estimates
+ therefore the covariance matrix should not be used.
+
+Total computation time 731.14 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 08/10/2024 20:08:25
+New results follow.
+-----------------------------------
+
+RSiena version 1.4.7 (20 Feb 24)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Random initialization of random number stream.
+Current random number seed is 651930.
+Effects object used: myeff_4 
+Model Type:
+ Forcing model 
+Note that the model type requested has been over-ridden
+Estimation method: conditional moment estimation.
+Conditioning variable is the total number of observed changes ("distance") 
+in the network variable.
+Distance for simulations is  512 .
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.2000000.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  0. Rate parameter                           4.8092
+  1. eval:  degree (density)                               -1.6016
+  2. eval:  degree of alter                                 0.0000
+  3. eval:  degree of ego                                   0.0000
+  4. eval:  network-isolate                                 0.0000
+  5. eval:  white_pass_covar alter                          0.0000
+  6. eval:  white_pass_covar ego                            0.0000
+  7. eval:  same white_pass_covar                           0.0000
+
+
+Values of target statistics are
+  1. Number of edges                                                    258.0000
+  2. Sum of squared degrees                                            3408.0000
+  3. Sum of squared degrees                                            3408.0000
+  4. Number of isolates                                                  64.0000
+  5. Sum of degrees x white_pass_covar                                   31.5990
+  6. Sum of degrees x white_pass_covar                                   31.5990
+  7. number ties between same white_pass_covar                          390.0000
+These were calculated from the data.
+
+ 7 parameters, 7 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2850 iterations.
+Parameter estimates based on 1850 iterations,
+basic rate parameter as well as 
+convergence diagnostics, covariance and derivative matrices based on 1000 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+Overall maximum t-ratio for convergence not computable.
+  1.  20.7880  13.4044   1.5508 
+  2.  -7.2900 365.8799  -0.0199 
+  3.  -7.2900 365.8799  -0.0199 
+  4. -11.9770   5.6710  -2.1120 
+  5. -13.5077   7.5734  -1.7836 
+  6. -13.5077   7.5734  -1.7836 
+  7.   8.1000  26.5908   0.3046 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  NA .
+One or more of the t-statistics are rather large.
+Convergence of the algorithm is doubtful.
+*** Warning: Covariance matrix not positive definite *** 
+***            Standard errors not reliable           *** 
+The approximate linear combination that has variance 0 is
+1 * beta[2] + -1 * beta[3]
+Do not use any reported standard errors.
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2850 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Rate parameters:
+ 0. Rate parameter                            3.3496  (   0.3167)
+
+Other parameters:
+ 1. eval:  degree (density)                                     NANA
+ 2. eval:  degree of alter                                      NANA
+ 3. eval:  degree of ego                                        NANA
+ 4. eval:  network-isolate                                      NANA
+ 5. eval:  white_pass_covar alter                               NANA
+ 6. eval:  white_pass_covar ego                                 NANA
+ 7. eval:  same white_pass_covar                                NANA
+
+
+@3
+Covariance matrices
+                   
+There is a linear dependency between the parameter estimates
+ therefore the covariance matrix should not be used.
+
+Total computation time 133.44 seconds.
