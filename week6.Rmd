@@ -1,0 +1,276 @@
+---
+title: "Week 6"
+output: html_document
+date: "2024-10-14"
+---
+
+```{r functions/packages to include, include=FALSE}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+```
+```{r setup 2, include=FALSE}
+load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
+scholars <- x
+rm(x)
+```
+```{r fcolnet, include = F}
+fcolnet <- function(data = scholars, university = "RU", 
+                    discipline = "sociology", waves = list(c(2015,
+                                                             2018), c(2019, 2023)), type = c("first")) {
+  
+  # step 1
+  demographics <- do.call(rbind.data.frame, data$demographics)
+  demographics <- demographics %>%
+    mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+                                                                                                                 is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+                                                                                                                                                                          ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+                                                                                                                                                                                                                                                                                  is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+  
+  sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+                     university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+                     university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+  
+  demographics_soc <- demographics[sample, ]
+  scholars_sel <- lapply(scholars, "[", sample)
+  
+  # step 2
+  ids <- demographics_soc$au_id
+  nwaves <- length(waves)
+  nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+                                                                              ids))
+  dimnames(nets)
+  
+  # step 3
+  df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+                                                                                                                  function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+                                                                                                                                                                                 recursive = FALSE))
+  
+  df_works <- df_works[!duplicated(df_works), ]
+  
+  # step 4
+  if (type == "first") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        ego <- df_works_w$works_author[i][[1]]$au_id[1]
+        alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+        }
+      }
+    }
+  }
+  
+  if (type == "last") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+        alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+        }
+      }
+    }
+  }
+  
+  if (type == "all") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        egos <- df_works_w$works_author[i][[1]]$au_id
+        if (sum(ids %in% egos) > 0) {
+          nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+        }
+      }
+    }
+  }
+  output <- list()
+  output$data <- scholars_sel
+  output$nets <- nets
+  return(output)
+}
+
+```
+```{r mydata, message=F}
+library(readr)
+subset_gender <- read_csv("subset_gender.csv")
+subset_gender <- as.data.frame(subset_gender)
+```
+# Dependent Variable 
+
+```{r}
+library(labelled)
+library(forcats)
+test <- fcolnet(data = scholars,
+                university = c("RU", "UU", "UvA", "EUR"), 
+                discipline = "sociology",
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c("first"))
+df_soc <- test$data
+df_network <- test$nets
+length(df_network)
+
+wave_1 <- df_network[1,,]
+wave_2 <- df_network[2,,]
+net_soc_array <- array(data = c(wave_1, wave_2), dim = c(dim(wave_1), 2))
+
+net <- sienaDependent(net_soc_array)
+```
+
+```{r write em, include = F}
+#write_rds(test, "all_my_data.rds")
+#write_rds(df_soc, "all_my_data_soc.rds")
+#write_rds(net, "all_my_network.rds")
+```
+
+
+# Independent Variable 
+
+```{r}
+#create DF
+demographics_my_data <- df_soc[[1]]
+demographics_my_data <- as.data.frame(do.call(rbind, demographics_my_data))
+Naam <- subset_gender[,1]
+last_columns_gender <- subset_gender[,c(22:24)]
+usable_gender <- cbind(Naam, last_columns_gender)
+usable_gender <- usable_gender %>%
+  drop_na(born_in)
+usable_gender_2 <- left_join(demographics_my_data, usable_gender, by = "Naam")
+view(usable_gender_2)
+
+#Make Binary Variables 
+usable_gender_2 <- usable_gender_2 %>%
+  mutate(
+    born_in_binary = ifelse(born_in == "Netherlands", 1, 0)
+  )
+usable_gender_2 <- usable_gender_2 %>%
+  mutate(
+    hoogleraar = ifelse(Functie.24 == "Hoogleraar", 1,0),
+  )
+usable_gender_2 <- usable_gender_2 %>%
+  mutate(
+    functie = as.factor(Functie.24)
+  ) 
+usable_gender_2 <- usable_gender_2 %>%
+  mutate(
+    functie = as.numeric(functie))
+view(usable_gender_2)
+
+#Independent-Shaped
+hoogleraar_covar <-  coCovar(usable_gender_2$hoogleraar)
+functie_covar <- coCovar(usable_gender_2$functie)
+gender_covar <- coCovar(usable_gender_2$perc_female)
+country_covar <- coCovar(usable_gender_2$born_in_binary)
+white_pass_covar <- coCovar(usable_gender_2$white_or_not)
+```
+
+```{r }
+#write_rds(usable_gender_2, "gender_demographics.rds")
+```
+
+
+# Get Effect Structure 
+
+```{r}
+my_good_data_a <- sienaDataCreate(net)
+myeff_1 <- getEffects(my_good_data_a)
+myeff_1
+```
+
+# Initial Description
+
+```{r}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+print01Report(my_good_data_a, modelname = "./results/prelimsh*t")  
+```
+
+# Specify Model 
+
+```{r}
+myeff_2 <- includeEffects(myeff_1, density)
+myeff_3 <- includeEffects(myeff_2, isolateNet, inPop, outAct)
+```
+
+# Estimate Model 
+
+```{r}
+myAlgorithm <- sienaAlgorithmCreate(projname = "prelimnshit3")
+mod_1_effects <- siena07(myAlgorithm, data = my_good_data_a, effects = myeff_3, returnDeps = TRUE)
+mod_1_effects
+```
+# A Graph
+
+```{r geodesic, include = F}
+# see here: ?'sienaGOF-auxiliary'
+
+# The geodesic distribution is not available from within RSiena, and therefore is copied from the
+# help page of sienaGOF-auxiliary:
+
+# GeodesicDistribution calculates the distribution of non-directed geodesic distances; see
+# ?sna::geodist The default for \code{levls} reflects the usual phenomenon that geodesic distances
+# larger than 5 do not differ appreciably with respect to interpretation.  Note that the levels of
+# the result are named; these names are used in the \code{plot} method.
+GeodesicDistribution <- function(i, data, sims, period, groupName, varName, levls = c(1:5, Inf), cumulative = TRUE,
+    ...) {
+    x <- networkExtraction(i, data, sims, period, groupName, varName)
+    require(sna)
+    a <- sna::geodist(symmetrize(x))$gdist
+    if (cumulative) {
+        gdi <- sapply(levls, function(i) {
+            sum(a <= i)
+        })
+    } else {
+        gdi <- sapply(levls, function(i) {
+            sum(a == i)
+        })
+    }
+    names(gdi) <- as.character(levls)
+    gdi
+}
+
+# The following function is taken from the help page for sienaTest
+
+testall <- function(ans) {
+    for (i in which(ans$test)) {
+        sct <- score.Test(ans, i)
+        cat(ans$requestedEffects$effectName[i], "\n")
+        print(sct)
+    }
+    invisible(score.Test(ans))
+}
+```
+
+... make the objects that we can graph-ify...\
+
+```{r a graph}
+gofi0 <- sienaGOF(mod_1_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0 <- sienaGOF(mod_1_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd <- sienaGOF(mod_1_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+... and then graphify!!!\
+```{r}
+plot(gofi0, main = "")
+plot(gofo0, main = "")
+plot(gof0.gd, main = "")
+```
+
+

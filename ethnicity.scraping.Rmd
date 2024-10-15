@@ -183,28 +183,48 @@ This 'variable' is another difficult aspect, because how do you quantify whether
 The "country of birth" data was gathered using the place of birth found on people's PhD theses, information found on their CV's and personal websites, and even in several cases by looking at their LinkedIn pages. Alltogether it yielded the following dataset:\
 ```{r, message = F}
 library(readr)
-subset_gender <- read_csv("subset_gender.csv")
-head(subset_gender[,c(1, 22:24)])
+demographics_hannah <- read_csv("demographics_hannah.csv")
+head(demographics_hannah[,c(1, 22:26)])
 ```
 
 ## Creating Some New Variables 
+```{r h index }
+# Add h-index and i10-index columns to df_ego
+demographics_hannah <- demographics_hannah %>%
+  mutate(h_index = NA_real_, i10_index = NA_real_)
 
-```{r subset gender}
-subset_gender <- sort_by(subset_gender, subset_gender$Universiteit.22)
-view(subset_gender)
-subset_gender <- subset_gender %>%
-  drop_na(Naam)
-subset_gender <- subset_gender %>%
-  drop_na(white_or_not)
-view(subset_gender)
-unique(subset_gender$born_in)
+# Get H-index and i10-index 
+get_openalex_metrics <- function(openalex_id) {
+  url <- paste0("https://api.openalex.org/authors/", openalex_id)
+  author_data <- tryCatch({
+    jsonlite::fromJSON(url)
+  }, error = function(e) {
+    message(paste("Error fetching data for OpenAlex ID:", openalex_id))
+    return(NULL)
+  })
+  
+  if (!is.null(author_data)) {
+    h_index <- author_data$summary_stats$h_index
+    i10_index <- author_data$summary_stats$i10_index
+    works_count <- author_data$works_count
+    cited_by_count <- author_data$cited_by_count
+    return(list(h_index = h_index, i10_index = i10_index, works_count = works_count, cited_by_count = cited_by_count))
+  } else {
+    return(list(h_index = NA, i10_index = NA, works_count = NA, cited_by_count = NA))
+  }
+}
 
-#binary born_in ----
-subset_gender <- subset_gender %>%
-  mutate(
-    born_in_binary = ifelse(born_in == "Netherlands", 1, 0)
-  )
-hist(subset_gender$born_in_binary)
-hist(subset_gender$white_or_not)
+# Loop for each scholar 
+for (i in 1:nrow(demographics_hannah)) {
+  openalex_id <- demographics_hannah$au_id[i]  # assuming au_id is the OpenAlex ID in df_ego
+  metrics <- get_openalex_metrics(openalex_id)
+  demographics_hannah$h_index[i] <- metrics$h_index
+  demographics_hannah$i10_index[i] <- metrics$i10_index
+  demographics_hannah$works_count[i] <- metrics$works_count
+  demographics_hannah$cited_by_count[i] <- metrics$cited_by_count
+}
+
+# View updated df_ego with h-index and i10-index
+View(demographics_hannah)
+write_csv(demographics_hannah, "demographics_hannah_final.csv")
 ```
-

@@ -360,6 +360,9 @@ div.tocify {
     <li>
       <a href="visualise.og.data.html">Week 5</a>
     </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -383,6 +386,9 @@ div.tocify {
     </li>
     <li>
       <a href="results.prelim.prelim.html">Some First Analysis</a>
+    </li>
+    <li>
+      <a href="network.statistics.html">Some Descriptives et al.</a>
     </li>
   </ul>
 </li>
@@ -416,6 +422,9 @@ div.tocify {
     </li>
     <li>
       <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
     </li>
   </ul>
 </li>
@@ -466,80 +475,100 @@ div.tocify {
 </div>
 
 
+<pre class="r"><code>#create DF
+#demographics_my_data &lt;- df_soc[[1]]
+#demographics_my_data &lt;- as.data.frame(do.call(rbind, demographics_my_data))
+#Naam &lt;- subset_gender[,1]
+#last_columns_gender &lt;- subset_gender[,c(22:24)]
+#usable_gender &lt;- cbind(Naam, last_columns_gender)
+#usable_gender &lt;- usable_gender %&gt;%
+#  drop_na(born_in)
+#usable_gender_2 &lt;- left_join(demographics_my_data, usable_gender, by = &quot;Naam&quot;)
+#view(usable_gender_2)
+
+#Make Binary Variables 
+#usable_gender_2 &lt;- usable_gender_2 %&gt;%
+#  mutate(
+#    born_in_binary = ifelse(born_in == &quot;Netherlands&quot;, 1, 0)
+#  )
+#usable_gender_2 &lt;- usable_gender_2 %&gt;%
+#  mutate(
+#    hoogleraar = ifelse(Functie.24 == &quot;Hoogleraar&quot;, 1,0),
+#  )
+#usable_gender_2 &lt;- usable_gender_2 %&gt;%
+#  mutate(
+#    functie = as.factor(Functie.24)
+#  ) 
+#usable_gender_2 &lt;- usable_gender_2 %&gt;%
+#  mutate(
+#    functie = as.numeric(functie))
+#view(usable_gender_2)</code></pre>
 <div id="lets-get-some-infographics" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Let’s Get Some
 Info(graphics)</h1>
-<pre class="r"><code>gender_demographics %&gt;%
+<pre class="r"><code>demographics_hannah.csv %&gt;%
   mutate(
     perc_female = ifelse(perc_female &gt;= 0.5, 1, 0)
   ) %&gt;%
   count(perc_female)</code></pre>
-<pre><code>##   perc_female   n
-## 1           0  95
-## 2           1 102
-## 3          NA  17</code></pre>
-<pre class="r"><code>hist(gender_demographics$perc_female)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   perc_female     n
+##         &lt;dbl&gt; &lt;int&gt;
+## 1           0   105
+## 2           1   109</code></pre>
+<pre class="r"><code>hist(demographics_hannah.csv$perc_female)</code></pre>
 <p><img src="describeyour.ideal.man_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<pre class="r"><code>gender_demographics %&gt;%
+<pre class="r"><code>demographics_hannah.csv %&gt;%
   count(born_in_binary)</code></pre>
-<pre><code>##   born_in_binary   n
-## 1              0  66
-## 2              1 131
-## 3             NA  17</code></pre>
-<pre class="r"><code>hist(gender_demographics$born_in_binary)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   born_in_binary     n
+##            &lt;dbl&gt; &lt;int&gt;
+## 1              0    70
+## 2              1   142
+## 3             NA     2</code></pre>
+<pre class="r"><code>hist(demographics_hannah.csv$born_in_binary)</code></pre>
 <p><img src="describeyour.ideal.man_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
-<pre class="r"><code>gender_demographics %&gt;%
+<pre class="r"><code>demographics_hannah.csv %&gt;%
   count(white_or_not)</code></pre>
-<pre><code>##   white_or_not   n
-## 1            0  22
-## 2            1 175
-## 3           NA  17</code></pre>
-<pre class="r"><code>hist(gender_demographics$white_or_not)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   white_or_not     n
+##          &lt;dbl&gt; &lt;int&gt;
+## 1            0    24
+## 2            1   189
+## 3           NA     1</code></pre>
+<pre class="r"><code>hist(demographics_hannah.csv$white_or_not)</code></pre>
 <p><img src="describeyour.ideal.man_files/figure-html/unnamed-chunk-1-3.png" width="672" /></p>
-<pre class="r"><code>gender_demographics %&gt;%
+<pre class="r"><code>demographics_hannah.csv %&gt;%
   count(Functie.22)</code></pre>
-<pre><code>##                               Functie.22  n
-## 1                   Associate researcher  1
-## 2                   Bijzonder hoogleraar  4
-## 3                                 Docent  2
-## 4                                Docent?  1
-## 5                    Emeritus hoogleraar  1
-## 6                           External Phd  4
-## 7        Gepensioneerd docent sociologie  1
-## 8                       Guest Researcher  2
-## 9                       Hoofdonderzoeker  1
-## 10                            Hoogleraar 31
-## 11 Hoogleraar + Universitair hoofddocent  1
-## 12                              Lecturer  2
-## 13               Lecturer and Researcher  1
-## 14                   Lecturer/researcher  1
-## 15                           Onderzoeker  9
-## 16                  Onderzoeker/Lecturer  1
-## 17    Onderzoeks- en onderwijsmedewerker  1
-## 18                      Other researcher  1
-## 19                           PhD Student 56
-## 20                         Phd &amp; postdoc  1
-## 21                               Postdoc  6
-## 22                   Scholarship student  1
-## 23                     Senior Researcher  1
-## 24                       Senior lecturer  1
-## 25                     Senior researcher  1
-## 26                   Universitair docent 44
-## 27              Universitair hoofddocent 17
-## 28                                  &lt;NA&gt; 21</code></pre>
-<pre class="r"><code>hist(gender_demographics$functie)</code></pre>
+<pre><code>## # A tibble: 28 × 2
+##    Functie.22                          n
+##    &lt;chr&gt;                           &lt;int&gt;
+##  1 Associate researcher                1
+##  2 Bijzonder hoogleraar                4
+##  3 Docent                              2
+##  4 Docent?                             1
+##  5 Emeritus hoogleraar                 1
+##  6 External Phd                        4
+##  7 Gepensioneerd docent sociologie     1
+##  8 Guest Researcher                    2
+##  9 Hoofdonderzoeker                    1
+## 10 Hoogleraar                         31
+## # ℹ 18 more rows</code></pre>
+<pre class="r"><code>hist(demographics_hannah.csv$functie)</code></pre>
 <p><img src="describeyour.ideal.man_files/figure-html/unnamed-chunk-1-4.png" width="672" /></p>
-<pre class="r"><code>gender_demographics %&gt;%
+<pre class="r"><code>demographics_hannah.csv %&gt;%
   count(hoogleraar)</code></pre>
-<pre><code>##   hoogleraar   n
-## 1          0 182
-## 2          1  29
-## 3         NA   3</code></pre>
-<pre class="r"><code>hist(gender_demographics$hoogleraar)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   hoogleraar     n
+##        &lt;dbl&gt; &lt;int&gt;
+## 1          0   183
+## 2          1    29
+## 3         NA     2</code></pre>
+<pre class="r"><code>hist(demographics_hannah.csv$hoogleraar)</code></pre>
 <p><img src="describeyour.ideal.man_files/figure-html/unnamed-chunk-1-5.png" width="672" /></p>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGVzY3JpcHRpdmVzIChncmFwaGljKSIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTEwLTA4IgotLS0KYGBge3IgcGFja2FnZXMsIGluY2x1ZGUgPSBGfQpyZXF1aXJlKHRpZHl2ZXJzZSkKcmVxdWlyZShpZ3JhcGgpCnJlcXVpcmUoc2hpbnkpCnJlcXVpcmUoUlNpZW5hKQpyZXF1aXJlKHJtZGZvcm1hdHMpCnJlcXVpcmUocHJldHR5ZG9jKQpyZXF1aXJlKGhyYnJ0aGVtZXMpCnJlcXVpcmUodGludCkKcmVxdWlyZSh0dWZ0ZSkKcmVxdWlyZShwc3ljaCkKYGBgCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQpnZW5kZXJfZGVtb2dyYXBoaWNzIDwtIHJlYWRfcmRzKCJnZW5kZXJfZGVtb2dyYXBoaWNzLnJkcyIpCmBgYAoKIyBMZXQncyBHZXQgU29tZSBJbmZvKGdyYXBoaWNzKQpgYGB7cn0KZ2VuZGVyX2RlbW9ncmFwaGljcyAlPiUKICBtdXRhdGUoCiAgICBwZXJjX2ZlbWFsZSA9IGlmZWxzZShwZXJjX2ZlbWFsZSA+PSAwLjUsIDEsIDApCiAgKSAlPiUKICBjb3VudChwZXJjX2ZlbWFsZSkKaGlzdChnZW5kZXJfZGVtb2dyYXBoaWNzJHBlcmNfZmVtYWxlKQpnZW5kZXJfZGVtb2dyYXBoaWNzICU+JQogIGNvdW50KGJvcm5faW5fYmluYXJ5KQpoaXN0KGdlbmRlcl9kZW1vZ3JhcGhpY3MkYm9ybl9pbl9iaW5hcnkpCmdlbmRlcl9kZW1vZ3JhcGhpY3MgJT4lCiAgY291bnQod2hpdGVfb3Jfbm90KQpoaXN0KGdlbmRlcl9kZW1vZ3JhcGhpY3Mkd2hpdGVfb3Jfbm90KQpnZW5kZXJfZGVtb2dyYXBoaWNzICU+JQogIGNvdW50KEZ1bmN0aWUuMjIpCmhpc3QoZ2VuZGVyX2RlbW9ncmFwaGljcyRmdW5jdGllKQpnZW5kZXJfZGVtb2dyYXBoaWNzICU+JQogIGNvdW50KGhvb2dsZXJhYXIpCmhpc3QoZ2VuZGVyX2RlbW9ncmFwaGljcyRob29nbGVyYWFyKQpgYGAKCgoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGVzY3JpcHRpdmVzIChncmFwaGljKSIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTEwLTA4IgotLS0KYGBge3IgcGFja2FnZXMsIGluY2x1ZGUgPSBGfQpyZXF1aXJlKHRpZHl2ZXJzZSkKcmVxdWlyZShpZ3JhcGgpCnJlcXVpcmUoc2hpbnkpCnJlcXVpcmUoUlNpZW5hKQpyZXF1aXJlKHJtZGZvcm1hdHMpCnJlcXVpcmUocHJldHR5ZG9jKQpyZXF1aXJlKGhyYnJ0aGVtZXMpCnJlcXVpcmUodGludCkKcmVxdWlyZSh0dWZ0ZSkKcmVxdWlyZShwc3ljaCkKYGBgCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQpkZW1vZ3JhcGhpY3NfaGFubmFoLmNzdiA8LSByZWFkX2NzdigiZGVtb2dyYXBoaWNzX2hhbm5haC5jc3YiKQpgYGAKCmBgYHtyIHRoaW5nc3Nzc30KCiNjcmVhdGUgREYKI2RlbW9ncmFwaGljc19teV9kYXRhIDwtIGRmX3NvY1tbMV1dCiNkZW1vZ3JhcGhpY3NfbXlfZGF0YSA8LSBhcy5kYXRhLmZyYW1lKGRvLmNhbGwocmJpbmQsIGRlbW9ncmFwaGljc19teV9kYXRhKSkKI05hYW0gPC0gc3Vic2V0X2dlbmRlclssMV0KI2xhc3RfY29sdW1uc19nZW5kZXIgPC0gc3Vic2V0X2dlbmRlclssYygyMjoyNCldCiN1c2FibGVfZ2VuZGVyIDwtIGNiaW5kKE5hYW0sIGxhc3RfY29sdW1uc19nZW5kZXIpCiN1c2FibGVfZ2VuZGVyIDwtIHVzYWJsZV9nZW5kZXIgJT4lCiMgIGRyb3BfbmEoYm9ybl9pbikKI3VzYWJsZV9nZW5kZXJfMiA8LSBsZWZ0X2pvaW4oZGVtb2dyYXBoaWNzX215X2RhdGEsIHVzYWJsZV9nZW5kZXIsIGJ5ID0gIk5hYW0iKQojdmlldyh1c2FibGVfZ2VuZGVyXzIpCgojTWFrZSBCaW5hcnkgVmFyaWFibGVzIAojdXNhYmxlX2dlbmRlcl8yIDwtIHVzYWJsZV9nZW5kZXJfMiAlPiUKIyAgbXV0YXRlKAojICAgIGJvcm5faW5fYmluYXJ5ID0gaWZlbHNlKGJvcm5faW4gPT0gIk5ldGhlcmxhbmRzIiwgMSwgMCkKIyAgKQojdXNhYmxlX2dlbmRlcl8yIDwtIHVzYWJsZV9nZW5kZXJfMiAlPiUKIyAgbXV0YXRlKAojICAgIGhvb2dsZXJhYXIgPSBpZmVsc2UoRnVuY3RpZS4yNCA9PSAiSG9vZ2xlcmFhciIsIDEsMCksCiMgICkKI3VzYWJsZV9nZW5kZXJfMiA8LSB1c2FibGVfZ2VuZGVyXzIgJT4lCiMgIG11dGF0ZSgKIyAgICBmdW5jdGllID0gYXMuZmFjdG9yKEZ1bmN0aWUuMjQpCiMgICkgCiN1c2FibGVfZ2VuZGVyXzIgPC0gdXNhYmxlX2dlbmRlcl8yICU+JQojICBtdXRhdGUoCiMgICAgZnVuY3RpZSA9IGFzLm51bWVyaWMoZnVuY3RpZSkpCiN2aWV3KHVzYWJsZV9nZW5kZXJfMikKYGBgCgoKIyBMZXQncyBHZXQgU29tZSBJbmZvKGdyYXBoaWNzKQpgYGB7cn0KZGVtb2dyYXBoaWNzX2hhbm5haC5jc3YgJT4lCiAgbXV0YXRlKAogICAgcGVyY19mZW1hbGUgPSBpZmVsc2UocGVyY19mZW1hbGUgPj0gMC41LCAxLCAwKQogICkgJT4lCiAgY291bnQocGVyY19mZW1hbGUpCmhpc3QoZGVtb2dyYXBoaWNzX2hhbm5haC5jc3YkcGVyY19mZW1hbGUpCmRlbW9ncmFwaGljc19oYW5uYWguY3N2ICU+JQogIGNvdW50KGJvcm5faW5fYmluYXJ5KQpoaXN0KGRlbW9ncmFwaGljc19oYW5uYWguY3N2JGJvcm5faW5fYmluYXJ5KQpkZW1vZ3JhcGhpY3NfaGFubmFoLmNzdiAlPiUKICBjb3VudCh3aGl0ZV9vcl9ub3QpCmhpc3QoZGVtb2dyYXBoaWNzX2hhbm5haC5jc3Ykd2hpdGVfb3Jfbm90KQpkZW1vZ3JhcGhpY3NfaGFubmFoLmNzdiAlPiUKICBjb3VudChGdW5jdGllLjIyKQpoaXN0KGRlbW9ncmFwaGljc19oYW5uYWguY3N2JGZ1bmN0aWUpCmRlbW9ncmFwaGljc19oYW5uYWguY3N2ICU+JQogIGNvdW50KGhvb2dsZXJhYXIpCmhpc3QoZGVtb2dyYXBoaWNzX2hhbm5haC5jc3YkaG9vZ2xlcmFhcikKYGBgCgoKCgo=</div>
 
 
 </div>

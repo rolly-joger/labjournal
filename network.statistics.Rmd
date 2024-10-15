@@ -1,0 +1,220 @@
+---
+title: "Network Statistics"
+output: html_document
+date: "2024-10-14"
+---
+
+```{r setup, include = F, echo = F}
+require(RSiena)
+require(igraph)
+require(tidyverse)
+```
+```{r function jochem, include = F}
+fMoran.I <- function(x, weight, scaled = FALSE, na.rm = FALSE, alternative = "two.sided", rowstandardize = TRUE) {
+  if (rowstandardize) {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop("'weight' must be a square matrix")
+    n <- length(x)
+    if (dim(weight)[1] != n)
+      stop("'weight' must have as many rows as observations in 'x'")
+    ei <- -1/(n - 1)
+    nas <- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x <- x[!nas]
+        n <- length(x)
+        weight <- weight[!nas, !nas]
+      } else {
+        warning("'x' has missing values: maybe you wanted to set na.rm = TRUE?")
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    ROWSUM <- rowSums(weight)
+    ROWSUM[ROWSUM == 0] <- 1
+    weight <- weight/ROWSUM
+    s <- sum(weight)
+    m <- mean(x)
+    y <- x - m
+    cv <- sum(weight * y %o% y)
+    v <- sum(y^2)
+    obs <- (n/s) * (cv/v)
+    if (scaled) {
+      i.max <- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs <- obs/i.max
+    }
+    S1 <- 0.5 * sum((weight + t(weight))^2)
+    S2 <- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq <- s^2
+    k <- (sum(y^4)/n)/(v/n)^2
+    sdi <- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
+    pv <- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == "two.sided")
+      pv <- if (obs <= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == "greater")
+      pv <- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  } else {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop("'weight' must be a square matrix")
+    n <- length(x)
+    if (dim(weight)[1] != n)
+      stop("'weight' must have as many rows as observations in 'x'")
+    ei <- -1/(n - 1)
+    nas <- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x <- x[!nas]
+        n <- length(x)
+        weight <- weight[!nas, !nas]
+      } else {
+        warning("'x' has missing values: maybe you wanted to set na.rm = TRUE?")
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    # ROWSUM <- rowSums(weight) ROWSUM[ROWSUM == 0] <- 1 weight <- weight/ROWSUM
+    s <- sum(weight)
+    m <- mean(x)
+    y <- x - m
+    cv <- sum(weight * y %o% y)
+    v <- sum(y^2)
+    obs <- (n/s) * (cv/v)
+    if (scaled) {
+      i.max <- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs <- obs/i.max
+    }
+    S1 <- 0.5 * sum((weight + t(weight))^2)
+    S2 <- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq <- s^2
+    k <- (sum(y^4)/n)/(v/n)^2
+    sdi <- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
+    pv <- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == "two.sided")
+      pv <- if (obs <= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == "greater")
+      pv <- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  }
+  
+  
+}
+
+```
+# Data 
+First we load in our data -- the wave objects are two matrices, one for wave 1, and one for wave 2. 
+```{r data, message=FALSE}
+demographics_hannah <- read_csv("demographics_hannah.csv")
+wave_1 <- read_rds("wave_1_netw.rds")
+wave_2 <- read_rds("wave_2_netw.rds")
+```
+
+\
+
+... then we make an igraph object from these adjacency matrices, to ensure we can actually **do** something with our data ...
+```{r make netgraphs}
+net_graph_w1 <- graph_from_adjacency_matrix(wave_1) #graph-object wave 1
+net_graph_w2 <- graph_from_adjacency_matrix(wave_2) #graph-object wave 2
+```
+ 
+\
+... once that has happened, we can look at some network statistics (or dyad statistics, tbh).
+
+# Dyad/Ego-network statistics 
+## Reciprocity
+```{r reciprocity w1 and 2}
+#reciprocity w1 
+reciprocity(net_graph_w1, ignore.loops = TRUE, mode = c("default", "ratio"))
+#reciprocity w2 
+reciprocity(net_graph_w2, ignore.loops = TRUE, mode = c("default", "ratio"))
+```
+
+## Degree Centrality 
+```{r degree centrality w1 and 2}
+#degree centrality w1 
+hist(igraph::degree(net_graph_w1), breaks = 20)
+#degree centrality w2 
+hist(igraph::degree(net_graph_w2), breaks = 20)
+
+#could also do -- degree centrality of white v. non-white people, or degree centrality of dutch v. non-dutch people 
+```
+
+## Betweenness Centrality
+```{r betweenness centrality w1 and 2}
+#betweenness centrality w1 
+hist(igraph::betweenness(net_graph_w1, directed = T), breaks = 20)
+#betweenness centrality w2 
+hist(igraph::betweenness(net_graph_w2, directed = T), breaks = 20)
+```
+
+## Clustering 
+```{r clustering w1 and 2}
+#clustering w1 
+hist(igraph::transitivity(net_graph_w1, type = "local"), breaks = 20)
+#clustering w2 
+hist(igraph::transitivity(net_graph_w2, type = "local"), breaks = 20)
+```
+
+# The Full Network 
+Furthermore, we can also look at statistics assessing the *entire* network in question: 
+
+## Density 
+```{r density w1 and 2}
+#density w1
+density_w1 <- igraph::edge_density(net_graph_w1)
+density_w1
+#density w2 
+density_w2 <- igraph::edge_density(net_graph_w2)
+density_w2 #bigger!!!
+```
+
+## Average Path Length
+```{r path length  w1 and 2}
+#average path length w1
+mean((ego_size(net_graph_w1, order = 2, mode = "out") - 1)/vcount(net_graph_w1))
+#average path length w2
+mean((ego_size(net_graph_w2, order = 2, mode = "out") - 1)/vcount(net_graph_w2))
+```
+
+## Segregation / Morton's I
+```{r sna bane of my existence, include = F, echo = F}
+require(sna)
+```
+
+```{r morton w1}
+#segregation/morton's i - wave 1 
+#are nodes who are close to each other more alike?
+geodistances_w1 <- geodist(wave_1, count.paths = TRUE)
+geodistances_w1 <- geodistances_w1$gdist
+diag(geodistances_w1) <- Inf
+# step 2: define a distance decay function.
+weights_w1 <- exp(-geodistances_w1)
+view(weights_w1) #weights for distance
+#moren
+snam1_w1 <- sna::nacf(wave_1, demographics_hannah$perc_female, type = "moran", neighborhood.type = "out", demean = TRUE)
+snam1_w1[2]
+#or, we look at what jochem's function yields
+moran_result_jochem_w1 <- fMoran.I(demographics_hannah$perc_female, scaled = FALSE, weight = weights_w1, na.rm = TRUE, rowstandardize = FALSE)
+moran_result_jochem_w1
+```
+... not that I know what any of this means ... if I am being honest -- what is the meaning of things like "observed' and 'expected'? Why do they differ so much? Does the 'large' difference (I do not know what the scale is, so also cannot assess size tbh) relate to the p-value in some way? Larger difference == larger P?
+```{r morton w2}
+#segregation/morton i  wave 2 
+geodistances_w2 <- geodist(wave_2, count.paths = TRUE)
+geodistances_w2 <- geodistances_w2$gdist
+diag(geodistances_w2) <- Inf
+weights_w2 <- exp(-geodistances_w2)
+# step 2: define a distance decay function
+weights_w2 <- exp(-geodistances_w2)
+view(weights_w2) #weights 3 distance
+#moren
+snam1_w2 <- sna::nacf(wave_2, demographics_hannah$perc_female, type = "moran", neighborhood.type = "out", demean = TRUE)
+snam1_w2[2] #lower
+moran_result_jochem_w2 <- fMoran.I(demographics_hannah$perc_female, scaled = FALSE, weight = weights_w2, na.rm = TRUE, rowstandardize = FALSE)
+moran_result_jochem_w2 #lower but more significant
+```
+... maybe I was right in the 'larger difference, larger p' -- cause we're dealing with a smaller difference, and a smaller (and, signficiant, suddenly) p. 

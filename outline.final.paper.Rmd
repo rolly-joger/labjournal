@@ -1,0 +1,135 @@
+---
+title: "Outline et al."
+output: html_document
+date: "2024-10-15"
+---
+
+Before engaging in an elaborate and unnecesarily extensive monologue (something also known as a paper) I will first provide a general outline of my introduction, theoretical framework, and data and methods here -- which I can come back to and fill out later on. This outline will include my preliminary sources, research questions and hypotheses, which will of course *also* be further elaborated on in the final product.  
+
+# Introduction
+
+## Why This Subject 
+
+- **Diversity is Important**
+- Networks are a large part of any scientists' life *and* prospects\
+- Without a solid network, there are less opportunities, and as such less possibilities for growth -- eg as full professor -- but also in respect to prestige, which in turn affects future possibilities to continue researching, in the form of, amongst others, granting grants.\ 
+- It is known that there are several ego-level demographic characteristics that affect structures of collaboration networks, and subsequent productivity and presitge/chances for developing prestige.\ 
+- Examples of these factors include age, gender, and ethnicity.\
+- *"URM scientists often excluded from networks (no/few ties)* (Gaughan, M., Melkers, J., & Welch, E. (2018). Differential social network effects on scholarly productivity: An intersectional analysis. Science, Technology, & Human Values, 43(3), 570-599)\
+- *Women often develop different network structures than men, with fewer ties* (Gaughan et al., 2018)\
+- *Intersections of marginalised identities, such as those of people who are women of colour, can create even more limits on network development* (Gaughan et al., 2018)\
+
+## Societal and Scientific Relevance 
+
+- As mentioned above, there are several factors known to contribute to differences in networks when it comes to prestige and output.\
+- Knowing how they affect each other in Dutch universities. 
+- Knowing how they affect each other in Social Science departments -- traditionally more densly populated with women.\ 
+
+## Research Questions
+
+... ok, maybe these are more sub-questions that are easily transformable in hypotheses that come from two specific RSQ's -- but they're there nonetheless.\
+
+**Descriptive**\
+- How are h-index and relative number of in- and out-degrees related?\
+- What are the differences in in- and out-degrees between men and women?\
+- What are the differences in in- and out-degrees between different ethnic groups?\
+- What are the differences in in- and out-degrees between white and non-white people?\ 
+- How does academic success differ between those with different marginalised identities?\
+\
+**Causal**\
+- To what extent does the effect of the rate of gender-homophily on the success of an author different between white, and non-white authors?\
+- To what extent does the effect of the rate of race-based-homophily on the success of an author different between men and women?\
+
+## Outline Paper 
+
+... well ... see below I guess? 
+
+# Theoretical Framework
+
+## Mathilda Effect 
+
+**Why/What**\
+- Academic inequality experienced by women: given the exact same circumstances as a man of the exact same 'caliber', they are less likely to be successfull, regardless of their similarity.\
+- In other words: there are some structural/systematic discriminatory practices going on here -- most probably more implicit than explicit or whatever, and also something that might continue/or be helped by the 'old boizz' being somewhere.\
+
+**Sources**\
+- Knobloch-Westerwick, S., Glynn, C. J., & Huge, M. (2013). The Matilda effect in science communication: an experiment on gender bias in publication quality perceptions and collaboration interest. Science communication, 35(5), 603-625.\
+- Knobloch-Westerwick, S., & Glynn, C. J. (2013). The Matilda effect—Role congruity effects on scholarly communication: A citation analysis of Communication Research and Journal of Communication articles. Communication Research, 40(1), 3-26. (**same authors, partially**)\
+- Rossiter, M. W. (1993). The Matthew Matilda effect in science. Social studies of science, 23(2), 325-341.\
+- Heffernan, T. (2021). Academic networks and career trajectory:‘There’s no career in academia without networks’. Higher Education Research & Development, 40(5), 981-994.\
+\
+... and many more 
+
+## Minority Underrepresented Groups
+
+**Why/What**\
+- Ethnicity is *a further* complicating factor.\
+- This can stand on its own, and has been proven to exist for both men and women.\
+- "URM" (UnderRepresented Minorities) often experience, essentially, a Matilda effect but correlated to their race, skin-colour, or ethnicity.\
+- Can, again, be related to names -- people do not want to work together with them based on their names because they are *racist*, but also because of unsafe work environments that can create smaller clusters of collaboration that are partitioned off from more successful brokers, or just altogether a refusal to go further in academia, and thus continue to fall of more easily and earlier than those who do not belong to this group.\
+
+**Sources**\
+- Bertolero, M. A., Dworkin, J. D., David, S. U., Lloreda, C. L., Srivastava, P., Stiso, J., ... & Bassett, D. S. (2020). Racial and ethnic imbalance in neuroscience reference lists and intersections with gender. BioRxiv, 2020-10.\
+- Heffernan, T. (2021). Academic networks and career trajectory:‘There’s no career in academia without networks’. Higher Education Research & Development, 40(5), 981-994. (again)
+- Llamas, J. D., Nguyen, K., & Tran, A. G. (2021). The case for greater faculty diversity: Examining the educational impacts of student-faculty racial/ethnic match. Race Ethnicity and Education, 24(3), 375-391.\
+- AlShebli, B. K., Rahwan, T., & Woon, W. L. (2018). The preeminence of ethnic diversity in scientific collaboration. Nature communications, 9(1), 5163.\
+
+## Intersectionality
+
+**Why/What**\
+- Intersectionality is fun, and recognises the role of intersecting marginalised identies in unique experiences of discrimination etc. 
+- Observed in Networks!!
+
+**Sources**\
+- Bertolero, M. A., Dworkin, J. D., David, S. U., Lloreda, C. L., Srivastava, P., Stiso, J., ... & Bassett, D. S. (2020). Racial and ethnic imbalance in neuroscience reference lists and intersections with gender. BioRxiv, 2020-10. (again)\
+- Gaughan, M., Melkers, J., & Welch, E. (2018). Differential social network effects on scholarly productivity: An intersectional analysis. Science, Technology, & Human Values, 43(3), 570-599.\
+
+etc. 
+
+# Data and Methods 
+
+**Content/Justification**\
+- Social Network Perspective\
+- Looking at similarity, and collaboration -- we want to know how collaboration with similar or different people affects success. In other words: how a *relationship* affects a status -- a relational perspective.\
+- Data is webscraped, partially by Jochem [**how to explain this**] -- and partially by myself, through functions borrowed from others, or by my own hand-scraped data. 
+- Methods will be a combination of Descriptives, Descriptives using `igraph`, *Networks* using `igraph`, and models using `RSiena` and `RSienaTwoStep`. 
+
+## Descriptives 1.0
+
+**Goal**: Give an overview of the characteristics of the ego's in an network, mainly their demographic characteristics, the distribution of these demographic characteristics, and also splitting these distributions up in further groups (eg. differences between white and non-white women)\
+**Method**: Good ol' `tidyverse`/`baseR`. Maybe some linear models, to get some idea of the difference between linear models and what I'm doing -- and hopefully demonstrate the importance of a social network perspective.\
+\
+
+## Descriptives 2.0
+
+**Goal**: Describe the distribution and correlation of ego-characteristics, ego-network descriptives (such as transitivity, centrality etc.) and such things for different demographic/other characteristics groups.\
+**Method**: `igraph` -- with some histograms to make things easier to understand, depending on my enthousiasm it'll be either `tidyverse` or `baseR` (probably base).\
+\
+
+## Descriptives -- Graphs 
+**Goal**: Visualise characteristics of the entire network, such as segregation, and maybe the differences between the univeristies (and genders and ethnicities and places of births and 'roles' and *h*-indices) -- and their differences between the two waves.\
+**Method**: For my own safety and sanity I will restrict myself to `igraph` -- though an interactive graph would be quite great big fun tbh.\
+\
+
+## Models -- RSiena(TwoStep) Time
+
+**Goal**: Demonstrate at least a correlation over time, build models from the ground-up to demonstrate the actual marginalisation/repression/underrepresentation of minority groups, and the effects of identity and collaboration on one's standing.\
+**Methods**: Using `RSiena(TwoStep)` I will build my models one by one, choosing for a directed graph (are you the first author or not?) -- and maybe employing an undirected method for my later exploits in robustness. The first model will be an empty one, which I will build up effect by effect/variable by variable **Once I Understand How It WORKS** (which is a very important caveat).\
+\
+
+# Sources 2.0
+
+All relevant sources I have collected up until now (beware, there is some repetition regarding the previous lists): 
+
+Abbasi, A., Chung, K. S. K., & Hossain, L. (2012). Egocentric analysis of co-authorship network structure, position and performance. Information Processing & Management, 48(4), 671-679.\
+Bertolero, M. A., Dworkin, J. D., David, S. U., Lloreda, C. L., Srivastava, P., Stiso, J., ... & Bassett, D. S. (2020). Racial and ethnic imbalance in neuroscience reference lists and intersections with gender. BioRxiv, 2020-10.\
+Fancher, P., & Faris, M. J. (2022). Social network analysis and feminist methodology. Methods and methodologies for research in digital writing and rhetoric: Centering positionality in computers and writing scholarship, 1, 135-162.\
+Gaughan, M., Melkers, J., & Welch, E. (2018). Differential social network effects on scholarly productivity: An intersectional analysis. Science, Technology, & Human Values, 43(3), 570-599.\
+Heffernan, T. (2021). Academic networks and career trajectory:‘There’s no career in academia without networks’. Higher Education Research & Development, 40(5), 981-994.\
+Knobloch-Westerwick, S., & Glynn, C. J. (2013). The Matilda effect—Role congruity effects on scholarly communication: A citation analysis of Communication Research and Journal of Communication articles. Communication Research, 40(1), 3-26.\
+Llamas, J. D., Nguyen, K., & Tran, A. G. (2021). The case for greater faculty diversity: Examining the educational impacts of student-faculty racial/ethnic match. Race Ethnicity and Education, 24(3), 375-391.\
+Newman, M. E. (2001). The structure of scientific collaboration networks. Proceedings of the national academy of sciences, 98(2), 404-409.\
+Rossiter, M. W. (1993). The Matthew Matilda effect in science. Social studies of science, 23(2), 325-341.\
+Spierings, N. (2023). Quantitative intersectional research: approaches, practices, and needs. In The Routledge International Handbook of Intersectionality Studies (pp. 235-248). Routledge.\
+Perc, M. (2014). The Matthew effect in empirical data. Journal of The Royal Society Interface, 11(98), 20140378.\
+

@@ -383,9 +383,8 @@ Well ... other people can write a function we can use. @nielsvullings has create
 
 ```{r Niels function}
 all_data <- fcolnet(data = scholars, 
-                    university = c("UU", "RUG", "UvA", "EUR",
-                                    "Leiden", "RU", "VU", "UvT", "TU Delft",
-                                    "UvH"),
+                    university = c("UU", "UvA", "EUR",
+                                   "RU"),
                     discipline = c("sociology", "political science"),
                     waves = list(c(2015, 2019), c(2020, 2024)),
                     type = c("first"))
@@ -464,3 +463,9 @@ view(gender_tested)
 ```
 
 ... and end up with a gendered dataset! How wonderful!
+
+
+```{r save file}
+#write_csv(gender_tested, "gender_tested.csv")
+```
+

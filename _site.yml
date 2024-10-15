@@ -22,6 +22,8 @@ navbar:
         href: Graphs2.html
       - text: "Week 5"
         href: visualise.og.data.html
+      - text: "Week 6"
+        href: week6.html
     - text: "Dataprepping For the Apocalypse"
       menu:
       - text: "The Data"
@@ -34,6 +36,8 @@ navbar:
         href: describeyour.ideal.man.html
       - text: "Some First Analysis"
         href: results.prelim.prelim.html
+      - text: "Some Descriptives et al."
+        href: network.statistics.html
     - text: "F*cking Around and Finding Out"
       menu:
       - text: "Making Graphs and Taking Names"
@@ -48,6 +52,8 @@ navbar:
         href: JournalWeekTwo.html
       - text: "Introduction, Revised"
         href: IntroRSQ.html
+      - text: "Preliminary Outline"
+        href: outline.final.paper.html
     - text: "Final 'Paper'"
       menu:
       - text: "Introduction"
