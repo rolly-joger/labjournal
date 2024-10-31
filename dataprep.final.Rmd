@@ -1,10 +1,10 @@
 ---
-title: "Dataprep"
+title: "The Dataset"
 output: html_document
 date: "2024-10-08"
 ---
 
-```{r setup, include=FALSE}
+```{r setup packages, include=FALSE}
 require(tidyverse)
 require(igraph)
 require(shiny)
@@ -22,7 +22,7 @@ library(xml2)
 library(XML)
 ```
 
-```{r setup 2, include=FALSE}
+```{r setup data, include=FALSE}
 load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
 scholars <- x
 rm(x)
@@ -291,4 +291,5 @@ plot(mrsp,
   edge.arrow.size =0.2,
   vertex.size = 5)
 ```
+
 

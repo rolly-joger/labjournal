@@ -6,7 +6,7 @@ Filename is ./results/prelimsh*t.txt.
 
 This file contains primary output for SIENA project <<./results/prelimsh*t>>.
 
-Date and time: 15/10/2024 19:16:15 
+Date and time: 31/10/2024 13:35:41 
 
 RSiena version 1.4.7 (20 02 2024)
 
@@ -21,7 +21,7 @@ Data input.
 0 dependent bipartite variables,
 0 dependent discrete behavior variables,
 0 dependent continuous behavior variables,
-0 constant actor covariates,
+1 constant actor covariates,
 0 exogenous changing actor covariates,
 0 constant dyadic covariates,
 0 exogenous changing dyadic covariates,
@@ -141,9 +141,32 @@ No missing data for observation 2.
 
 
 
+@2
+Reading constant actor covariates.
+----------------------------------
+
+1 variable, named:
+white_pass_covar 
+
+A total of 1 non-changing individual covariate.
+
+Number of missing cases:
+white_pass_covar 17 	( 7.9 %)
+
+Information about covariates:
+              minimum  maximum	  mean  centered 
+white_pass_covar      0.0     1.0      0.888    Y 
+The mean value is subtracted from the centered covariate.
+
+
 
 The mean structural dissimilarity value subtracted in the
 balance calculations is         0.0038.
+
+For the similarity variable calculated from each actor covariate,
+the mean is subtracted.
+These means are:
+Similarity white_pass_covar         :       0.8006 
 
 
 

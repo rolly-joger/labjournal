@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Hannah Groennou" />
+
+<meta name="date" content="2024-10-27" />
+
+<title>Week 2</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprepping For the Apocalypse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="making.gender.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="h.index.html">h-Index</a>
+    </li>
+    <li>
+      <a href="full.and.final.data.html">Final Dataset</a>
+    </li>
+    <li>
+      <a href="all.descriptives.html">Descriptives</a>
+    </li>
+    <li>
+      <a href="rsiena.analysis.html">Analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Week 2</h1>
+<h4 class="author">Hannah Groennou</h4>
+<h4 class="date">2024-10-27</h4>
+
+</div>
+
+
+<hr />
+<div id="acquire-matrices" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Acquire Matrices</h1>
+<p><br />
+</p>
+<div id="simple-matrix" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Simple Matrix</h2>
+<p>First, lets make our own simple matrix, so we can get some feeling
+with the inner workings of matrices, and how adjustments in matrices
+relate to different networks and network descriptives.</p>
+<pre class="r"><code>matrix &lt;- matrix(c(0,0,0,1,
+                   1,0,0,0,
+                   0,0,1,0,
+                   0,0,0,0), nrow = 4, ncol = 4)
+graph &lt;- graph_from_adjacency_matrix(matrix)
+matrix_graph &lt;- triad_census(graph)
+matrix_graph</code></pre>
+<pre><code>##  [1] 1 2 0 0 0 1 0 0 0 0 0 0 0 0 0 0</code></pre>
+<p><br />
+</p>
+</div>
+<div id="rsiena-s501-and-s502" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> RSiena <em>s501</em>
+and <em>s502</em></h2>
+<p>Then we download a few pre-installed matrices, and subset a smaller
+sample to make checking the results easier.</p>
+<pre class="r"><code>t1 &lt;- s501 #matrix at t1
+t2 &lt;- s502 #matrix at t2
+dim(s501) #dimensions full matrix</code></pre>
+<pre><code>## [1] 50 50</code></pre>
+<pre class="r"><code>small_t1 &lt;- s501[c(1:10), c(1:10)] #sample matrix t1
+small_t2 &lt;- s502[c(1:10), c(1:10)] #sample matrix t2
+small_graph_t1 &lt;- graph_from_adjacency_matrix(small_t1)
+small_graph_t2 &lt;- graph_from_adjacency_matrix(small_t2)
+plot(small_graph_t1) #graph of sample matrix t1</code></pre>
+<p><img src="Week2_files/figure-html/all%20matrix-1.png" width="672" /></p>
+<pre class="r"><code>plot(small_graph_t2) #graph of sample matrix t2, some broken relations I see</code></pre>
+<p><img src="Week2_files/figure-html/all%20matrix-2.png" width="672" /></p>
+<hr />
+</div>
+</div>
+<div id="descriptives-small-sample" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Descriptives Small
+Sample</h1>
+<p>To better understand our sample, we look at some descriptives to
+understand some core aspects of the matrix, and the network.</p>
+<p><br />
+</p>
+<div id="density" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Density</h2>
+<p>Density concerns the percentage of possible ties realised in the
+network. In other words, it is calculated by taking the amount of ties
+present in the sample, and dividing this by the total possible amount of
+ties in a — in this case — network with 10 nodes.<br />
+</p>
+<pre class="r"><code>density_t1 &lt;- edge_density(small_graph_t1)
+density_t1 #so that&#39;s approximately 11%</code></pre>
+<pre><code>## [1] 0.1111111</code></pre>
+<p><br />
+</p>
+</div>
+<div id="centrality" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Centrality</h2>
+<p>Then we look at the centrality of each node, which concerns the
+number of edges each one has. The more edges a node has, the more
+central they are. As such, this essentially measures how important or
+well connected each vertix is.<br />
+<br />
+Centrality scores can either be calculated to yield raw, or normalised
+measures. Raw measures are particular to networks or samples, and as
+such cannot be used to compare across samples, but only to investigate
+within one. Normalised measures, on the other hand, allow one to compare
+across networks or samples — which is often more useful in
+research.<br />
+</p>
+<pre class="r"><code>degree_t1 &lt;- igraph::degree(small_graph_t1)#don&#39;t care about directions 
+degree_t1 #not normalised, it seems </code></pre>
+<pre><code>##  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
+##   0   2   4   4   0   2   2   2   4   0</code></pre>
+<pre class="r"><code>degree_t1_norm_a &lt;- igraph::degree(small_graph_t1, normalized = T)
+degree_t1_norm_a #normalised using only sample? </code></pre>
+<pre><code>##        V1        V2        V3        V4        V5        V6        V7        V8        V9       V10 
+## 0.0000000 0.2222222 0.4444444 0.4444444 0.0000000 0.2222222 0.2222222 0.2222222 0.4444444 0.0000000</code></pre>
+<pre class="r"><code>#let&#39;s see how it differs if we calculate degree according to the formula given by Jochem
+normalised_cent_t1 &lt;- (degree_t1 - min(degree_t1))/(max(degree_t1)) - min(degree_t1)
+normalised_cent_t1 #significanly different, it appears</code></pre>
+<pre><code>##  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
+## 0.0 0.5 1.0 1.0 0.0 0.5 0.5 0.5 1.0 0.0</code></pre>
+<p><br />
+</p>
+</div>
+<div id="closeness-centrality" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Closeness
+Centrality</h2>
+<p>Closeness centrality of a vertix, or node, is the average distance
+between the node of concern, and the other nodes it is connected with in
+the sample. It is calculated by taking the total number of nodes in a
+vertix’ network, the sum of distances between the node of concern, and
+subsequently dividing the former by the latter.</p>
+<pre class="r"><code>small_t1 &lt;- s501[c(1:10), c(1:10)] #sample matrix t1
+small_graph_t1 &lt;- graph_from_adjacency_matrix(small_t1)
+closeness_t1 &lt;- igraph::closeness(small_graph_t1)
+closeness_t1</code></pre>
+<pre><code>##  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
+## NaN 1.0 0.5 0.5 NaN 1.0 1.0 1.0 0.5 NaN</code></pre>
+<p><br />
+<em>n.b.</em> the ‘NaN’ in the output refers to the fact that the
+vertices in question lack any ties, and thus result in an error when
+attempting to calculate the closeness.<br />
+<br />
+</p>
+</div>
+<div id="betweenness-centrality" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Betweenness
+Centrality</h2>
+<p>Betweenness centrality is essentially the number of shortest paths
+between vertix <em>a</em> and vertix <em>b</em> while going through
+vertix <em>c</em>. In order to be able to compare the measure between
+samples, a normalised version can be calculated by first subtracting
+from the <em>betweenness centrality</em> of the certain vector from the
+minimum score in the sample, and dividing it by the range of
+<em>betweenness centrality</em> in the entire sample.</p>
+<pre class="r"><code>between_t1 &lt;- igraph::betweenness(small_graph_t1, directed = T, normalized = F)
+between_t1 #zeroes</code></pre>
+<pre><code>##  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
+##   0   0   0   0   0   0   0   0   0   0</code></pre>
+<pre class="r"><code>between_t1_norm &lt;- igraph::betweenness(small_graph_t1, directed = T, normalized = T)
+between_t1_norm #normalisation does not matter, because the zeroes </code></pre>
+<pre><code>##  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
+##   0   0   0   0   0   0   0   0   0   0</code></pre>
+<p><br />
+Due to the structure of our sample, where the largest closed networks
+consist of only 3 nodes, betweenness centrality does not yield a
+meaningful measure because it is not present; as demonstrated by the
+output.<br />
+<br />
+</p>
+</div>
+<div id="clustering" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Clustering</h2>
+<p>Clustering refers to the amount of ‘clumping’ one might see in a
+network. It is quantified as the proportion of actual- compared to
+possible- ties of a specific vertix. The level of clustering is
+therefore a characteristic of an ego-network and — when it concerns
+undirected ties — the same as a transitivity index.</p>
+<pre class="r"><code>transitivity_t1 &lt;- igraph::transitivity(small_graph_t1, type = &quot;local&quot;)
+transitivity_t1</code></pre>
+<pre><code>##  V1  V2  V3  V4  V5  V6  V7  V8  V9 V10 
+## NaN NaN   1   1 NaN NaN NaN NaN   1 NaN</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiV2VlayAyIgphdXRob3I6ICJIYW5uYWggR3JvZW5ub3UiCmRhdGU6ICJgciBTeXMuRGF0ZSgpYCIKb3V0cHV0OiAKICBodG1sX2RvY3VtZW50OgogICAgdGhlbWU6IHBhcGVyCiAgICB0b2M6IHllcwogICAgdG9jX2Zsb2F0OgogICAgICBjb2xsYXBzZWQ6IHRydWUKLS0tCgpgYGB7ciBsaWJyYXJpZXMsIGluY2x1ZGU9RkFMU0V9CmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkKcmVxdWlyZSh0aWR5dmVyc2UpCnJlcXVpcmUoaWdyYXBoKQpyZXF1aXJlKGhyYnJ0aGVtZXMpCmBgYAoKLS0tCgojIEFjcXVpcmUgTWF0cmljZXMKClwKCiMjIFNpbXBsZSBNYXRyaXgKRmlyc3QsIGxldHMgbWFrZSBvdXIgb3duIHNpbXBsZSBtYXRyaXgsIHNvIHdlIGNhbiBnZXQgc29tZSBmZWVsaW5nIHdpdGggdGhlIGlubmVyIHdvcmtpbmdzIG9mIG1hdHJpY2VzLCBhbmQgaG93IGFkanVzdG1lbnRzIGluIG1hdHJpY2VzIHJlbGF0ZSB0byBkaWZmZXJlbnQgbmV0d29ya3MgYW5kIG5ldHdvcmsgZGVzY3JpcHRpdmVzLgpgYGB7ciBmaXJzdCBtYXRyaXh9Cm1hdHJpeCA8LSBtYXRyaXgoYygwLDAsMCwxLAogICAgICAgICAgICAgICAgICAgMSwwLDAsMCwKICAgICAgICAgICAgICAgICAgIDAsMCwxLDAsCiAgICAgICAgICAgICAgICAgICAwLDAsMCwwKSwgbnJvdyA9IDQsIG5jb2wgPSA0KQpncmFwaCA8LSBncmFwaF9mcm9tX2FkamFjZW5jeV9tYXRyaXgobWF0cml4KQptYXRyaXhfZ3JhcGggPC0gdHJpYWRfY2Vuc3VzKGdyYXBoKQptYXRyaXhfZ3JhcGgKYGBgClwKCgojIyBSU2llbmEgKnM1MDEqIGFuZCAqczUwMioKVGhlbiB3ZSBkb3dubG9hZCBhIGZldyBwcmUtaW5zdGFsbGVkIG1hdHJpY2VzLCBhbmQgc3Vic2V0IGEgc21hbGxlciBzYW1wbGUgdG8gbWFrZSBjaGVja2luZyB0aGUgcmVzdWx0cyBlYXNpZXIuCgpgYGB7ciBhbGwgbWF0cml4fQp0MSA8LSBzNTAxICNtYXRyaXggYXQgdDEKdDIgPC0gczUwMiAjbWF0cml4IGF0IHQyCmRpbShzNTAxKSAjZGltZW5zaW9ucyBmdWxsIG1hdHJpeApzbWFsbF90MSA8LSBzNTAxW2MoMToxMCksIGMoMToxMCldICNzYW1wbGUgbWF0cml4IHQxCnNtYWxsX3QyIDwtIHM1MDJbYygxOjEwKSwgYygxOjEwKV0gI3NhbXBsZSBtYXRyaXggdDIKc21hbGxfZ3JhcGhfdDEgPC0gZ3JhcGhfZnJvbV9hZGphY2VuY3lfbWF0cml4KHNtYWxsX3QxKQpzbWFsbF9ncmFwaF90MiA8LSBncmFwaF9mcm9tX2FkamFjZW5jeV9tYXRyaXgoc21hbGxfdDIpCnBsb3Qoc21hbGxfZ3JhcGhfdDEpICNncmFwaCBvZiBzYW1wbGUgbWF0cml4IHQxCnBsb3Qoc21hbGxfZ3JhcGhfdDIpICNncmFwaCBvZiBzYW1wbGUgbWF0cml4IHQyLCBzb21lIGJyb2tlbiByZWxhdGlvbnMgSSBzZWUKCmBgYAoKLS0tCgojIERlc2NyaXB0aXZlcyBTbWFsbCBTYW1wbGUKClRvIGJldHRlciB1bmRlcnN0YW5kIG91ciBzYW1wbGUsIHdlIGxvb2sgYXQgc29tZSBkZXNjcmlwdGl2ZXMgdG8gdW5kZXJzdGFuZCBzb21lIGNvcmUgYXNwZWN0cyBvZiB0aGUgbWF0cml4LCBhbmQgdGhlIG5ldHdvcmsuCgpcCgoKIyMgRGVuc2l0eQpEZW5zaXR5IGNvbmNlcm5zIHRoZSBwZXJjZW50YWdlIG9mIHBvc3NpYmxlIHRpZXMgcmVhbGlzZWQgaW4gdGhlIG5ldHdvcmsuIEluIG90aGVyIHdvcmRzLCBpdCBpcyBjYWxjdWxhdGVkIGJ5IHRha2luZyB0aGUgYW1vdW50IG9mIHRpZXMgcHJlc2VudCBpbiB0aGUgc2FtcGxlLCBhbmQgZGl2aWRpbmcgdGhpcyBieSB0aGUgdG90YWwgcG9zc2libGUgYW1vdW50IG9mIHRpZXMgaW4gYSAtLS0gaW4gdGhpcyBjYXNlIC0tLSBuZXR3b3JrIHdpdGggMTAgbm9kZXMuXApgYGB7ciBzbWFsbCBkZW5zaXR5fQpkZW5zaXR5X3QxIDwtIGVkZ2VfZGVuc2l0eShzbWFsbF9ncmFwaF90MSkKZGVuc2l0eV90MSAjc28gdGhhdCdzIGFwcHJveGltYXRlbHkgMTElCmBgYAoKXAoKIyMgQ2VudHJhbGl0eSAKVGhlbiB3ZSBsb29rIGF0IHRoZSBjZW50cmFsaXR5IG9mIGVhY2ggbm9kZSwgd2hpY2ggY29uY2VybnMgdGhlIG51bWJlciBvZiBlZGdlcyBlYWNoIG9uZSBoYXMuIFRoZSBtb3JlIGVkZ2VzIGEgbm9kZSBoYXMsIHRoZSBtb3JlIGNlbnRyYWwgdGhleSBhcmUuIEFzIHN1Y2gsIHRoaXMgZXNzZW50aWFsbHkgbWVhc3VyZXMgaG93IGltcG9ydGFudCBvciB3ZWxsIGNvbm5lY3RlZCBlYWNoIHZlcnRpeCBpcy5cClwKQ2VudHJhbGl0eSBzY29yZXMgY2FuIGVpdGhlciBiZSBjYWxjdWxhdGVkIHRvIHlpZWxkIHJhdywgb3Igbm9ybWFsaXNlZCBtZWFzdXJlcy4gUmF3IG1lYXN1cmVzIGFyZSBwYXJ0aWN1bGFyIHRvIG5ldHdvcmtzIG9yIHNhbXBsZXMsIGFuZCBhcyBzdWNoIGNhbm5vdCBiZSB1c2VkIHRvIGNvbXBhcmUgYWNyb3NzIHNhbXBsZXMsIGJ1dCBvbmx5IHRvIGludmVzdGlnYXRlIHdpdGhpbiBvbmUuIE5vcm1hbGlzZWQgbWVhc3VyZXMsIG9uIHRoZSBvdGhlciBoYW5kLCBhbGxvdyBvbmUgdG8gY29tcGFyZSBhY3Jvc3MgbmV0d29ya3Mgb3Igc2FtcGxlcyAtLS0gd2hpY2ggaXMgb2Z0ZW4gbW9yZSB1c2VmdWwgaW4gcmVzZWFyY2guXApgYGB7ciBzbWFsbCBkZWdyZWUgY2VudHJhbGl0eX0KZGVncmVlX3QxIDwtIGlncmFwaDo6ZGVncmVlKHNtYWxsX2dyYXBoX3QxKSNkb24ndCBjYXJlIGFib3V0IGRpcmVjdGlvbnMgCmRlZ3JlZV90MSAjbm90IG5vcm1hbGlzZWQsIGl0IHNlZW1zIApkZWdyZWVfdDFfbm9ybV9hIDwtIGlncmFwaDo6ZGVncmVlKHNtYWxsX2dyYXBoX3QxLCBub3JtYWxpemVkID0gVCkKZGVncmVlX3QxX25vcm1fYSAjbm9ybWFsaXNlZCB1c2luZyBvbmx5IHNhbXBsZT8gCgojbGV0J3Mgc2VlIGhvdyBpdCBkaWZmZXJzIGlmIHdlIGNhbGN1bGF0ZSBkZWdyZWUgYWNjb3JkaW5nIHRvIHRoZSBmb3JtdWxhIGdpdmVuIGJ5IEpvY2hlbQpub3JtYWxpc2VkX2NlbnRfdDEgPC0gKGRlZ3JlZV90MSAtIG1pbihkZWdyZWVfdDEpKS8obWF4KGRlZ3JlZV90MSkpIC0gbWluKGRlZ3JlZV90MSkKbm9ybWFsaXNlZF9jZW50X3QxICNzaWduaWZpY2FubHkgZGlmZmVyZW50LCBpdCBhcHBlYXJzCgpgYGAKClwKCiMjIENsb3NlbmVzcyBDZW50cmFsaXR5CkNsb3NlbmVzcyBjZW50cmFsaXR5IG9mIGEgdmVydGl4LCBvciBub2RlLCBpcyB0aGUgYXZlcmFnZSBkaXN0YW5jZSBiZXR3ZWVuIHRoZSBub2RlIG9mIGNvbmNlcm4sIGFuZCB0aGUgb3RoZXIgbm9kZXMgaXQgaXMgY29ubmVjdGVkIHdpdGggaW4gdGhlIHNhbXBsZS4gSXQgaXMgY2FsY3VsYXRlZCBieSB0YWtpbmcgdGhlIHRvdGFsIG51bWJlciBvZiBub2RlcyBpbiBhIHZlcnRpeCcgbmV0d29yaywgdGhlIHN1bSBvZiBkaXN0YW5jZXMgYmV0d2VlbiB0aGUgbm9kZSBvZiBjb25jZXJuLCBhbmQgc3Vic2VxdWVudGx5IGRpdmlkaW5nIHRoZSBmb3JtZXIgYnkgdGhlIGxhdHRlci4gCgpgYGB7ciBzbWFsbCBjbG9zZW5lc3MgY2VudHJhbGl0eX0Kc21hbGxfdDEgPC0gczUwMVtjKDE6MTApLCBjKDE6MTApXSAjc2FtcGxlIG1hdHJpeCB0MQpzbWFsbF9ncmFwaF90MSA8LSBncmFwaF9mcm9tX2FkamFjZW5jeV9tYXRyaXgoc21hbGxfdDEpCmNsb3NlbmVzc190MSA8LSBpZ3JhcGg6OmNsb3NlbmVzcyhzbWFsbF9ncmFwaF90MSkKY2xvc2VuZXNzX3QxCmBgYApcCipuLmIuKiB0aGUgJ05hTicgaW4gdGhlIG91dHB1dCByZWZlcnMgdG8gdGhlIGZhY3QgdGhhdCB0aGUgdmVydGljZXMgaW4gcXVlc3Rpb24gbGFjayBhbnkgdGllcywgYW5kIHRodXMgcmVzdWx0IGluIGFuIGVycm9yIHdoZW4gYXR0ZW1wdGluZyB0byBjYWxjdWxhdGUgdGhlIGNsb3NlbmVzcy5cClwKCgojIyBCZXR3ZWVubmVzcyBDZW50cmFsaXR5CgpCZXR3ZWVubmVzcyBjZW50cmFsaXR5IGlzIGVzc2VudGlhbGx5IHRoZSBudW1iZXIgb2Ygc2hvcnRlc3QgcGF0aHMgYmV0d2VlbiB2ZXJ0aXggKmEqIGFuZCB2ZXJ0aXggKmIqIHdoaWxlIGdvaW5nIHRocm91Z2ggdmVydGl4ICpjKi4gSW4gb3JkZXIgdG8gYmUgYWJsZSB0byBjb21wYXJlIHRoZSBtZWFzdXJlIGJldHdlZW4gc2FtcGxlcywgYSBub3JtYWxpc2VkIHZlcnNpb24gY2FuIGJlIGNhbGN1bGF0ZWQgYnkgZmlyc3Qgc3VidHJhY3RpbmcgZnJvbSB0aGUgKmJldHdlZW5uZXNzIGNlbnRyYWxpdHkqIG9mIHRoZSBjZXJ0YWluIHZlY3RvciBmcm9tIHRoZSBtaW5pbXVtIHNjb3JlIGluIHRoZSBzYW1wbGUsIGFuZCBkaXZpZGluZyBpdCBieSB0aGUgcmFuZ2Ugb2YgKmJldHdlZW5uZXNzIGNlbnRyYWxpdHkqIGluIHRoZSBlbnRpcmUgc2FtcGxlLgoKYGBge3Igc21hbGwgYmV0d2Vlbm5lc3MgY2VudHJhbGl0eX0KYmV0d2Vlbl90MSA8LSBpZ3JhcGg6OmJldHdlZW5uZXNzKHNtYWxsX2dyYXBoX3QxLCBkaXJlY3RlZCA9IFQsIG5vcm1hbGl6ZWQgPSBGKQpiZXR3ZWVuX3QxICN6ZXJvZXMKYmV0d2Vlbl90MV9ub3JtIDwtIGlncmFwaDo6YmV0d2Vlbm5lc3Moc21hbGxfZ3JhcGhfdDEsIGRpcmVjdGVkID0gVCwgbm9ybWFsaXplZCA9IFQpCmJldHdlZW5fdDFfbm9ybSAjbm9ybWFsaXNhdGlvbiBkb2VzIG5vdCBtYXR0ZXIsIGJlY2F1c2UgdGhlIHplcm9lcyAKYGBgClwKRHVlIHRvIHRoZSBzdHJ1Y3R1cmUgb2Ygb3VyIHNhbXBsZSwgd2hlcmUgdGhlIGxhcmdlc3QgY2xvc2VkIG5ldHdvcmtzIGNvbnNpc3Qgb2Ygb25seSAzIG5vZGVzLCBiZXR3ZWVubmVzcyBjZW50cmFsaXR5IGRvZXMgbm90IHlpZWxkIGEgbWVhbmluZ2Z1bCBtZWFzdXJlIGJlY2F1c2UgaXQgaXMgbm90IHByZXNlbnQ7IGFzIGRlbW9uc3RyYXRlZCBieSB0aGUgb3V0cHV0LlwKXAoKIyMgQ2x1c3RlcmluZwoKQ2x1c3RlcmluZyByZWZlcnMgdG8gdGhlIGFtb3VudCBvZiAnY2x1bXBpbmcnIG9uZSBtaWdodCBzZWUgaW4gYSBuZXR3b3JrLiBJdCBpcyBxdWFudGlmaWVkIGFzIHRoZSBwcm9wb3J0aW9uIG9mIGFjdHVhbC0gY29tcGFyZWQgdG8gcG9zc2libGUtIHRpZXMgb2YgYSBzcGVjaWZpYyB2ZXJ0aXguIFRoZSBsZXZlbCBvZiBjbHVzdGVyaW5nIGlzIHRoZXJlZm9yZSBhIGNoYXJhY3RlcmlzdGljIG9mIGFuIGVnby1uZXR3b3JrIGFuZCAtLS0gd2hlbiBpdCBjb25jZXJucyB1bmRpcmVjdGVkIHRpZXMgLS0tIHRoZSBzYW1lIGFzIGEgdHJhbnNpdGl2aXR5IGluZGV4LgpgYGB7ciBzbWFsbCBjbHVzdGVyaW5nfQp0cmFuc2l0aXZpdHlfdDEgPC0gaWdyYXBoOjp0cmFuc2l0aXZpdHkoc21hbGxfZ3JhcGhfdDEsIHR5cGUgPSAibG9jYWwiKQp0cmFuc2l0aXZpdHlfdDEKYGBgCgoK</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("Week2.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

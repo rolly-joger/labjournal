@@ -21,10 +21,12 @@ library(rvest)
 library(xml2)
 library(XML)
 ```
-```{r setup 2, include=FALSE}
-load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
-scholars <- x
-rm(x)
+```{r setup 2 the data}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE)
+view(demographics_hannah)
+net_soc_array <- read_rds("datasets_final/net_soc_array_first_auth.rds")
 ```
 ```{r fcolnet, include = F}
 fcolnet <- function(data = scholars, university = "RU", 
@@ -108,88 +110,26 @@ fcolnet <- function(data = scholars, university = "RU",
 }
 
 ```
-```{r mydata, message=F}
-library(readr)
-subset_gender <- read_csv("subset_gender.csv")
-subset_gender <- as.data.frame(subset_gender)
-```
-# Dependent Variable 
 
-```{r}
-library(labelled)
-library(forcats)
-test <- fcolnet(data = scholars,
-                university = c("RU", "UU", "UvA", "EUR"), 
-                discipline = "sociology",
-                waves = list(c(2015, 2018), c(2019, 2023)),
-                type = c("first"))
-df_soc <- test$data
-df_network <- test$nets
-length(df_network)
+# Variables 
 
-wave_1 <- df_network[1,,]
-wave_2 <- df_network[2,,]
-net_soc_array <- array(data = c(wave_1, wave_2), dim = c(dim(wave_1), 2))
-
+```{r variables definition}
+#dependent variable 
 net <- sienaDependent(net_soc_array)
+
+#independent variable 
+hoogleraar_covar <-  coCovar(demographics_hannah$hoogleraar)
+functie_covar <- coCovar(demographics_hannah$functie)
+gender_covar <- coCovar(demographics_hannah$perc_female)
+country_covar <- coCovar(demographics_hannah$born_in_binary)
+white_pass_covar <- coCovar(demographics_hannah$white_or_not)
+h_index_covar <- coCovar(demographics_hannah$h_index)
 ```
-
-```{r write em, include = F}
-#write_rds(test, "all_my_data.rds")
-#write_rds(df_soc, "all_my_data_soc.rds")
-#write_rds(net, "all_my_network.rds")
-```
-
-
-# Independent Variable 
-
-```{r}
-#create DF
-demographics_my_data <- df_soc[[1]]
-demographics_my_data <- as.data.frame(do.call(rbind, demographics_my_data))
-Naam <- subset_gender[,1]
-last_columns_gender <- subset_gender[,c(22:24)]
-usable_gender <- cbind(Naam, last_columns_gender)
-usable_gender <- usable_gender %>%
-  drop_na(born_in)
-usable_gender_2 <- left_join(demographics_my_data, usable_gender, by = "Naam")
-view(usable_gender_2)
-
-#Make Binary Variables 
-usable_gender_2 <- usable_gender_2 %>%
-  mutate(
-    born_in_binary = ifelse(born_in == "Netherlands", 1, 0)
-  )
-usable_gender_2 <- usable_gender_2 %>%
-  mutate(
-    hoogleraar = ifelse(Functie.24 == "Hoogleraar", 1,0),
-  )
-usable_gender_2 <- usable_gender_2 %>%
-  mutate(
-    functie = as.factor(Functie.24)
-  ) 
-usable_gender_2 <- usable_gender_2 %>%
-  mutate(
-    functie = as.numeric(functie))
-view(usable_gender_2)
-
-#Independent-Shaped
-hoogleraar_covar <-  coCovar(usable_gender_2$hoogleraar)
-functie_covar <- coCovar(usable_gender_2$functie)
-gender_covar <- coCovar(usable_gender_2$perc_female)
-country_covar <- coCovar(usable_gender_2$born_in_binary)
-white_pass_covar <- coCovar(usable_gender_2$white_or_not)
-```
-
-```{r }
-#write_rds(usable_gender_2, "gender_demographics.rds")
-```
-
 
 # Get Effect Structure 
 
-```{r}
-my_good_data_a <- sienaDataCreate(net)
+```{r good data}
+my_good_data_a <- sienaDataCreate(net, white_pass_covar)
 myeff_1 <- getEffects(my_good_data_a)
 myeff_1
 ```
@@ -204,15 +144,18 @@ print01Report(my_good_data_a, modelname = "./results/prelimsh*t")
 # Specify Model 
 
 ```{r}
-myeff_2 <- includeEffects(myeff_1, density)
-myeff_3 <- includeEffects(myeff_2, isolateNet, inPop, outAct)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, alterX, interaction="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, density)
+myeff_1 <- includeEffects(myeff_1, isolateNet, inPop, outAct)
+
 ```
 
 # Estimate Model 
 
 ```{r}
 myAlgorithm <- sienaAlgorithmCreate(projname = "prelimnshit3")
-mod_1_effects <- siena07(myAlgorithm, data = my_good_data_a, effects = myeff_3, returnDeps = TRUE)
+mod_1_effects <- siena07(myAlgorithm, data = my_good_data_a, effects = myeff_1, returnDeps = TRUE)
 mod_1_effects
 ```
 # A Graph

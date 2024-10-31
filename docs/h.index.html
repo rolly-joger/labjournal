@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-10-16" />
+
+<title>h-Index</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprepping For the Apocalypse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="making.gender.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="h.index.html">h-Index</a>
+    </li>
+    <li>
+      <a href="full.and.final.data.html">Final Dataset</a>
+    </li>
+    <li>
+      <a href="all.descriptives.html">Descriptives</a>
+    </li>
+    <li>
+      <a href="rsiena.analysis.html">Analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">h-Index</h1>
+<h4 class="date">2024-10-16</h4>
+
+</div>
+
+
+<pre class="r"><code>require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)</code></pre>
+<pre class="r"><code>demographics_hannah &lt;- read_rds(&quot;gender_demographics.rds&quot;)
+view(demographics_hannah)</code></pre>
+<pre class="r"><code># Add h-index and i10-index columns to df_ego
+demographics_hannah &lt;- demographics_hannah %&gt;%
+  mutate(h_index = NA_real_, i10_index = NA_real_)
+
+# Get H-index and i10-index 
+get_openalex_metrics &lt;- function(openalex_id) {
+  url &lt;- paste0(&quot;https://api.openalex.org/authors/&quot;, openalex_id)
+  author_data &lt;- tryCatch({
+    jsonlite::fromJSON(url)
+  }, error = function(e) {
+    message(paste(&quot;Error fetching data for OpenAlex ID:&quot;, openalex_id))
+    return(NULL)
+  })
+  
+  if (!is.null(author_data)) {
+    h_index &lt;- author_data$summary_stats$h_index
+    i10_index &lt;- author_data$summary_stats$i10_index
+    works_count &lt;- author_data$works_count
+    cited_by_count &lt;- author_data$cited_by_count
+    return(list(h_index = h_index, i10_index = i10_index, works_count = works_count, cited_by_count = cited_by_count))
+  } else {
+    return(list(h_index = NA, i10_index = NA, works_count = NA, cited_by_count = NA))
+  }
+}
+
+# Loop for each scholar 
+for (i in 1:nrow(demographics_hannah)) {
+  openalex_id &lt;- demographics_hannah$au_id[i]  # assuming au_id is the OpenAlex ID in df_ego
+  metrics &lt;- get_openalex_metrics(openalex_id)
+  demographics_hannah$h_index[i] &lt;- metrics$h_index
+  demographics_hannah$i10_index[i] &lt;- metrics$i10_index
+  demographics_hannah$works_count[i] &lt;- metrics$works_count
+  demographics_hannah$cited_by_count[i] &lt;- metrics$cited_by_count
+}</code></pre>
+<pre class="r"><code># View updated df_ego with h-index and i10-index
+View(demographics_hannah)</code></pre>
+<div id="career-age" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Career Age</h1>
+<p>#```{r career age Koen} df_career_age &lt;- df_works %&gt;%
+unnest(author) %&gt;% # unnesting the tibble from the tibble
+filter(au_id %in% df_ego$au_id == TRUE) %&gt;% # authors in df_works
+should match authors in df_ego group_by(au_id) %&gt;%
+mutate(min_year_pub = min(publication_year, na.rm = TRUE), # initial
+calculation of minimum year count_pub = n()) %&gt;% # count number of
+publications mutate(first_year_pub = ifelse(count_pub == 1,
+min_year_pub, # if number of publications is 1, score is min_year_pub {
+filter_year = publication_year[publication_year != min_year_pub] #
+filter minimum year mean_pubyear = mean(filter_year, na.rm = TRUE) #
+calculate mean without min score valid_year =
+min(filter_year[filter_year &gt;= (mean_pubyear - 25)], na.rm = TRUE) #
+minimum year -&gt; range mean-25 valid_year # if number of publications
+is not 1, than score minimum year with first year removed within range
+mean-25 })) %&gt;%</p>
+<p># this line corrects for the warning of returning infinites that for
+some reason were not filtered through the first ifelse command
+mutate(first_year_pub = ifelse(is.infinite(first_year_pub),
+min_year_pub, first_year_pub)) %&gt;% #adjusting infinite scores to
+minimum year</p>
+<p>select(au_id, first_year_pub) %&gt;% # selecting variables
+distinct(au_id, first_year_pub, .keep_all = TRUE) # making sure only
+distinct authors are in data frame</p>
+<div id="add-interaction-for-h-index" class="section level2"
+number="1.1">
+<h2><span class="header-section-number">1.1</span> Add Interaction for
+h-Index</h2>
+<pre class="r"><code>demographics_hannah &lt;- demographics_hannah %&gt;%
+  mutate(
+    int_h_race = h_index*white_or_not
+  ) %&gt;%
+  mutate(
+    int_h_eth = h_index*born_in_binary
+  )</code></pre>
+</div>
+</div>
+<div id="save-the-file" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Save the File</h1>
+<pre class="r"><code>write_csv(demographics_hannah, &quot;demographics_hannah_final.csv&quot;)</code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiaC1JbmRleCIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTEwLTE2IgotLS0KCmBgYHtyIHBhY2thZ2VzfQpyZXF1aXJlKHRpZHl2ZXJzZSkKcmVxdWlyZShpZ3JhcGgpCnJlcXVpcmUoc2hpbnkpCnJlcXVpcmUoUlNpZW5hKQpyZXF1aXJlKHJtZGZvcm1hdHMpCnJlcXVpcmUocHJldHR5ZG9jKQpyZXF1aXJlKGhyYnJ0aGVtZXMpCnJlcXVpcmUodGludCkKcmVxdWlyZSh0dWZ0ZSkKcmVxdWlyZShwc3ljaCkKbGlicmFyeShkYXRhLnRhYmxlKSAgCmxpYnJhcnkoeG1sMikKbGlicmFyeShydmVzdCkKbGlicmFyeSh4bWwyKQpsaWJyYXJ5KFhNTCkKYGBgCgpgYGB7ciBkYXRhfQpkZW1vZ3JhcGhpY3NfaGFubmFoIDwtIHJlYWRfcmRzKCJnZW5kZXJfZGVtb2dyYXBoaWNzLnJkcyIpCnZpZXcoZGVtb2dyYXBoaWNzX2hhbm5haCkKYGBgCgpgYGB7ciBtb3JlIHRoaW5nc30KIyBBZGQgaC1pbmRleCBhbmQgaTEwLWluZGV4IGNvbHVtbnMgdG8gZGZfZWdvCmRlbW9ncmFwaGljc19oYW5uYWggPC0gZGVtb2dyYXBoaWNzX2hhbm5haCAlPiUKICBtdXRhdGUoaF9pbmRleCA9IE5BX3JlYWxfLCBpMTBfaW5kZXggPSBOQV9yZWFsXykKCiMgR2V0IEgtaW5kZXggYW5kIGkxMC1pbmRleCAKZ2V0X29wZW5hbGV4X21ldHJpY3MgPC0gZnVuY3Rpb24ob3BlbmFsZXhfaWQpIHsKICB1cmwgPC0gcGFzdGUwKCJodHRwczovL2FwaS5vcGVuYWxleC5vcmcvYXV0aG9ycy8iLCBvcGVuYWxleF9pZCkKICBhdXRob3JfZGF0YSA8LSB0cnlDYXRjaCh7CiAgICBqc29ubGl0ZTo6ZnJvbUpTT04odXJsKQogIH0sIGVycm9yID0gZnVuY3Rpb24oZSkgewogICAgbWVzc2FnZShwYXN0ZSgiRXJyb3IgZmV0Y2hpbmcgZGF0YSBmb3IgT3BlbkFsZXggSUQ6Iiwgb3BlbmFsZXhfaWQpKQogICAgcmV0dXJuKE5VTEwpCiAgfSkKICAKICBpZiAoIWlzLm51bGwoYXV0aG9yX2RhdGEpKSB7CiAgICBoX2luZGV4IDwtIGF1dGhvcl9kYXRhJHN1bW1hcnlfc3RhdHMkaF9pbmRleAogICAgaTEwX2luZGV4IDwtIGF1dGhvcl9kYXRhJHN1bW1hcnlfc3RhdHMkaTEwX2luZGV4CiAgICB3b3Jrc19jb3VudCA8LSBhdXRob3JfZGF0YSR3b3Jrc19jb3VudAogICAgY2l0ZWRfYnlfY291bnQgPC0gYXV0aG9yX2RhdGEkY2l0ZWRfYnlfY291bnQKICAgIHJldHVybihsaXN0KGhfaW5kZXggPSBoX2luZGV4LCBpMTBfaW5kZXggPSBpMTBfaW5kZXgsIHdvcmtzX2NvdW50ID0gd29ya3NfY291bnQsIGNpdGVkX2J5X2NvdW50ID0gY2l0ZWRfYnlfY291bnQpKQogIH0gZWxzZSB7CiAgICByZXR1cm4obGlzdChoX2luZGV4ID0gTkEsIGkxMF9pbmRleCA9IE5BLCB3b3Jrc19jb3VudCA9IE5BLCBjaXRlZF9ieV9jb3VudCA9IE5BKSkKICB9Cn0KCiMgTG9vcCBmb3IgZWFjaCBzY2hvbGFyIApmb3IgKGkgaW4gMTpucm93KGRlbW9ncmFwaGljc19oYW5uYWgpKSB7CiAgb3BlbmFsZXhfaWQgPC0gZGVtb2dyYXBoaWNzX2hhbm5haCRhdV9pZFtpXSAgIyBhc3N1bWluZyBhdV9pZCBpcyB0aGUgT3BlbkFsZXggSUQgaW4gZGZfZWdvCiAgbWV0cmljcyA8LSBnZXRfb3BlbmFsZXhfbWV0cmljcyhvcGVuYWxleF9pZCkKICBkZW1vZ3JhcGhpY3NfaGFubmFoJGhfaW5kZXhbaV0gPC0gbWV0cmljcyRoX2luZGV4CiAgZGVtb2dyYXBoaWNzX2hhbm5haCRpMTBfaW5kZXhbaV0gPC0gbWV0cmljcyRpMTBfaW5kZXgKICBkZW1vZ3JhcGhpY3NfaGFubmFoJHdvcmtzX2NvdW50W2ldIDwtIG1ldHJpY3Mkd29ya3NfY291bnQKICBkZW1vZ3JhcGhpY3NfaGFubmFoJGNpdGVkX2J5X2NvdW50W2ldIDwtIG1ldHJpY3MkY2l0ZWRfYnlfY291bnQKfQpgYGAKCmBgYHtyIG1vcmUgZXZlbiBtb3JlIHVwZGF0ZWR9CiMgVmlldyB1cGRhdGVkIGRmX2VnbyB3aXRoIGgtaW5kZXggYW5kIGkxMC1pbmRleApWaWV3KGRlbW9ncmFwaGljc19oYW5uYWgpCmBgYAoKIyBDYXJlZXIgQWdlIAoKI2BgYHtyIGNhcmVlciBhZ2UgS29lbn0KZGZfY2FyZWVyX2FnZSA8LSBkZl93b3JrcyAlPiUKICB1bm5lc3QoYXV0aG9yKSAlPiUgIyB1bm5lc3RpbmcgdGhlIHRpYmJsZSBmcm9tIHRoZSB0aWJibGUKICBmaWx0ZXIoYXVfaWQgJWluJSBkZl9lZ28kYXVfaWQgPT0gVFJVRSkgJT4lICMgYXV0aG9ycyBpbiBkZl93b3JrcyBzaG91bGQgbWF0Y2ggYXV0aG9ycyBpbiBkZl9lZ28KICBncm91cF9ieShhdV9pZCkgJT4lCiAgbXV0YXRlKG1pbl95ZWFyX3B1YiA9IG1pbihwdWJsaWNhdGlvbl95ZWFyLCBuYS5ybSA9IFRSVUUpLCAjIGluaXRpYWwgY2FsY3VsYXRpb24gb2YgbWluaW11bSB5ZWFyCiAgICAgICAgIGNvdW50X3B1YiA9IG4oKSkgJT4lICAjIGNvdW50IG51bWJlciBvZiBwdWJsaWNhdGlvbnMKICBtdXRhdGUoZmlyc3RfeWVhcl9wdWIgPSBpZmVsc2UoY291bnRfcHViID09IDEsIG1pbl95ZWFyX3B1YiwgIyBpZiBudW1iZXIgb2YgcHVibGljYXRpb25zIGlzIDEsIHNjb3JlIGlzIG1pbl95ZWFyX3B1YgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsdGVyX3llYXIgPSBwdWJsaWNhdGlvbl95ZWFyW3B1YmxpY2F0aW9uX3llYXIgIT0gbWluX3llYXJfcHViXSAjIGZpbHRlciBtaW5pbXVtIHllYXIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtZWFuX3B1YnllYXIgPSBtZWFuKGZpbHRlcl95ZWFyLCBuYS5ybSA9IFRSVUUpICMgY2FsY3VsYXRlIG1lYW4gd2l0aG91dCBtaW4gc2NvcmUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2YWxpZF95ZWFyID0gbWluKGZpbHRlcl95ZWFyW2ZpbHRlcl95ZWFyID49IChtZWFuX3B1YnllYXIgLSAyNSldLCBuYS5ybSA9IFRSVUUpICMgbWluaW11bSB5ZWFyIC0+IHJhbmdlIG1lYW4tMjUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2YWxpZF95ZWFyICMgaWYgbnVtYmVyIG9mIHB1YmxpY2F0aW9ucyBpcyBub3QgMSwgdGhhbiBzY29yZSBtaW5pbXVtIHllYXIgd2l0aCBmaXJzdCB5ZWFyIHJlbW92ZWQgd2l0aGluIHJhbmdlIG1lYW4tMjUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfSkpICU+JSAKICAKICAjIHRoaXMgbGluZSBjb3JyZWN0cyBmb3IgdGhlIHdhcm5pbmcgb2YgcmV0dXJuaW5nIGluZmluaXRlcyB0aGF0IGZvciBzb21lIHJlYXNvbiB3ZXJlIG5vdCBmaWx0ZXJlZCB0aHJvdWdoIHRoZSBmaXJzdCBpZmVsc2UgY29tbWFuZAogIG11dGF0ZShmaXJzdF95ZWFyX3B1YiA9IGlmZWxzZShpcy5pbmZpbml0ZShmaXJzdF95ZWFyX3B1YiksIG1pbl95ZWFyX3B1YiwgZmlyc3RfeWVhcl9wdWIpKSAlPiUgI2FkanVzdGluZyBpbmZpbml0ZSBzY29yZXMgdG8gbWluaW11bSB5ZWFyCiAgCiAgc2VsZWN0KGF1X2lkLCBmaXJzdF95ZWFyX3B1YikgJT4lICMgc2VsZWN0aW5nIHZhcmlhYmxlcwogIGRpc3RpbmN0KGF1X2lkLCBmaXJzdF95ZWFyX3B1YiwgLmtlZXBfYWxsID0gVFJVRSkgIyBtYWtpbmcgc3VyZSBvbmx5IGRpc3RpbmN0IGF1dGhvcnMgYXJlIGluIGRhdGEgZnJhbWUKCgoKIyMgQWRkIEludGVyYWN0aW9uIGZvciBoLUluZGV4CgpgYGB7ciBpbnRlcmFjdGlvbn0KZGVtb2dyYXBoaWNzX2hhbm5haCA8LSBkZW1vZ3JhcGhpY3NfaGFubmFoICU+JQogIG11dGF0ZSgKICAgIGludF9oX3JhY2UgPSBoX2luZGV4KndoaXRlX29yX25vdAogICkgJT4lCiAgbXV0YXRlKAogICAgaW50X2hfZXRoID0gaF9pbmRleCpib3JuX2luX2JpbmFyeQogICkKYGBgCgojIFNhdmUgdGhlIEZpbGUgCmBgYHtyIHdyaXRlfQp3cml0ZV9jc3YoZGVtb2dyYXBoaWNzX2hhbm5haCwgImRlbW9ncmFwaGljc19oYW5uYWhfZmluYWwuY3N2IikKYGBgCg==</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("h.index.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

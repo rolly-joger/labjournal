@@ -380,37 +380,22 @@ div.tocify {
       <a href="dataprep.final.html">The Data</a>
     </li>
     <li>
-      <a href="gender.final.html">Making Gender</a>
+      <a href="making.gender.html">Making Gender</a>
     </li>
     <li>
-      <a href="ethnicity.scraping.html">Making Ethnicity</a>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
     </li>
     <li>
-      <a href="describeyour.ideal.man.html">Prelim. Info(graphics)</a>
+      <a href="h.index.html">h-Index</a>
     </li>
     <li>
-      <a href="results.prelim.prelim.html">Some First Analysis</a>
+      <a href="full.and.final.data.html">Final Dataset</a>
     </li>
     <li>
-      <a href="network.statistics.html">Some Descriptives et al.</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    F*cking Around and Finding Out
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="Graphs1.html">Making Graphs and Taking Names</a>
+      <a href="all.descriptives.html">Descriptives</a>
     </li>
     <li>
-      <a href="dataprep.html">Never Gonna Prep You Up</a>
-    </li>
-    <li>
-      <a href="Wrangling_Some_Data.html">Scrapey Doo</a>
+      <a href="rsiena.analysis.html">Analysis</a>
     </li>
   </ul>
 </li>
@@ -439,11 +424,27 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Introduction</li>
-    <li class="dropdown-header">Theoretical Framework</li>
-    <li class="dropdown-header">Data and Methods</li>
-    <li class="dropdown-header">Analysis et al.</li>
-    <li class="dropdown-header">Conclusions</li>
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -629,8 +630,8 @@ former can work with.</p>
 <pre class="r"><code>visnet_t1_vertices &lt;- visnet_t1$nodes
 visnet_t1_edges &lt;- visnet_t1$edges
 visNetwork(visnet_t1_vertices, visnet_t1_edges, width=&quot;100%&quot;, height=&quot;400px&quot;) #look at her i can move things around!</code></pre>
-<div id="htmlwidget-8afb9736e1c306fd4828" style="width:100%;height:400px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8afb9736e1c306fd4828">{"x":{"nodes":{"id":["V1","V2","V3","V4","V5","V6","V7","V8","V9","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V27","V28","V29","V30","V31","V32","V33","V34","V35","V36","V37","V38","V39","V40","V41","V42","V43","V44","V45","V46","V47","V48","V49","V50"],"community":[1,2,3,3,4,5,2,5,3,1,1,2,6,1,1,1,7,7,7,8,4,4,7,7,4,9,9,9,9,9,4,4,9,4,7,10,4,10,11,12,10,2,11,2,12,12,12,12,12,13],"label":["V1","V2","V3","V4","V5","V6","V7","V8","V9","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V27","V28","V29","V30","V31","V32","V33","V34","V35","V36","V37","V38","V39","V40","V41","V42","V43","V44","V45","V46","V47","V48","V49","V50"]},"edges":{"from":["V1","V1","V2","V2","V3","V3","V4","V4","V5","V6","V7","V7","V7","V8","V9","V9","V10","V10","V10","V11","V11","V11","V12","V12","V12","V14","V14","V14","V15","V15","V15","V16","V16","V17","V17","V17","V17","V17","V18","V18","V19","V19","V19","V19","V21","V22","V22","V22","V22","V23","V24","V24","V24","V24","V24","V25","V25","V25","V26","V26","V26","V27","V27","V27","V28","V29","V29","V29","V30","V30","V30","V30","V31","V31","V31","V32","V32","V32","V32","V33","V33","V34","V34","V35","V36","V36","V37","V37","V37","V38","V38","V39","V40","V40","V40","V41","V41","V42","V42","V43","V43","V44","V44","V45","V45","V45","V46","V46","V46","V48","V48","V49","V49"],"to":["V11","V14","V7","V11","V4","V9","V3","V9","V32","V8","V2","V42","V44","V6","V3","V4","V11","V15","V33","V2","V15","V16","V7","V42","V44","V1","V10","V11","V10","V11","V16","V11","V15","V18","V19","V21","V22","V24","V19","V35","V11","V24","V26","V30","V22","V17","V21","V31","V34","V24","V17","V19","V21","V22","V23","V22","V31","V32","V7","V29","V44","V28","V29","V30","V27","V26","V30","V33","V11","V26","V29","V33","V21","V25","V32","V5","V21","V31","V37","V10","V30","V31","V37","V18","V38","V41","V31","V32","V34","V36","V41","V43","V45","V46","V47","V36","V38","V7","V44","V22","V39","V7","V42","V40","V46","V47","V40","V45","V49","V46","V49","V46","V48"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":"100%","height":"400px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b00748a11f151a76502c" style="width:100%;height:400px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b00748a11f151a76502c">{"x":{"nodes":{"id":["V1","V2","V3","V4","V5","V6","V7","V8","V9","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V27","V28","V29","V30","V31","V32","V33","V34","V35","V36","V37","V38","V39","V40","V41","V42","V43","V44","V45","V46","V47","V48","V49","V50"],"community":[1,2,3,3,4,5,2,5,3,1,1,2,6,1,1,1,7,7,7,8,4,4,7,7,4,9,9,9,9,9,4,4,9,4,7,10,4,10,11,12,10,2,11,2,12,12,12,12,12,13],"label":["V1","V2","V3","V4","V5","V6","V7","V8","V9","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V27","V28","V29","V30","V31","V32","V33","V34","V35","V36","V37","V38","V39","V40","V41","V42","V43","V44","V45","V46","V47","V48","V49","V50"]},"edges":{"from":["V1","V1","V2","V2","V3","V3","V4","V4","V5","V6","V7","V7","V7","V8","V9","V9","V10","V10","V10","V11","V11","V11","V12","V12","V12","V14","V14","V14","V15","V15","V15","V16","V16","V17","V17","V17","V17","V17","V18","V18","V19","V19","V19","V19","V21","V22","V22","V22","V22","V23","V24","V24","V24","V24","V24","V25","V25","V25","V26","V26","V26","V27","V27","V27","V28","V29","V29","V29","V30","V30","V30","V30","V31","V31","V31","V32","V32","V32","V32","V33","V33","V34","V34","V35","V36","V36","V37","V37","V37","V38","V38","V39","V40","V40","V40","V41","V41","V42","V42","V43","V43","V44","V44","V45","V45","V45","V46","V46","V46","V48","V48","V49","V49"],"to":["V11","V14","V7","V11","V4","V9","V3","V9","V32","V8","V2","V42","V44","V6","V3","V4","V11","V15","V33","V2","V15","V16","V7","V42","V44","V1","V10","V11","V10","V11","V16","V11","V15","V18","V19","V21","V22","V24","V19","V35","V11","V24","V26","V30","V22","V17","V21","V31","V34","V24","V17","V19","V21","V22","V23","V22","V31","V32","V7","V29","V44","V28","V29","V30","V27","V26","V30","V33","V11","V26","V29","V33","V21","V25","V32","V5","V21","V31","V37","V10","V30","V31","V37","V18","V38","V41","V31","V32","V34","V36","V41","V43","V45","V46","V47","V36","V38","V7","V44","V22","V39","V7","V42","V40","V46","V47","V40","V45","V49","V46","V49","V46","V48"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":"100%","height":"400px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
 <p><br />
 With some adjustments to the nodes and links, we can make them a bit
 sexier — add some dropshadows, some names, and if we had the info, we

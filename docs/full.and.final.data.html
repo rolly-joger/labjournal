@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-10-17" />
+
+<title>full data</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprepping For the Apocalypse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="making.gender.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="h.index.html">h-Index</a>
+    </li>
+    <li>
+      <a href="full.and.final.data.html">Final Dataset</a>
+    </li>
+    <li>
+      <a href="all.descriptives.html">Descriptives</a>
+    </li>
+    <li>
+      <a href="rsiena.analysis.html">Analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">full data</h1>
+<h4 class="date">2024-10-17</h4>
+
+</div>
+
+
+<pre class="r"><code>require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+library(labelled)
+library(forcats)</code></pre>
+<pre class="r"><code>demographics_hannah &lt;- read_csv(&quot;demographics_hannah_final.csv&quot;) #ey!</code></pre>
+<pre><code>## Rows: 214 Columns: 33
+## ── Column specification ────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (17): Naam, Universiteit.22, Email-adres.22, Functie.22, Google Scholar ...
+## dbl (14): year.22, year.24, no_oa_id, perc_female, white_or_not, born_in_bin...
+## lgl  (2): Specialisatie.22, Specialisatie.24
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>load(&quot;/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda&quot;)
+scholars &lt;- x
+rm(x)</code></pre>
+<pre class="r"><code>test_all &lt;- fcolnet(data = scholars,
+                university = c(&quot;RU&quot;, &quot;UU&quot;, &quot;UvA&quot;, &quot;EUR&quot;), 
+                discipline = &quot;sociology&quot;,
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c(&quot;all&quot;))
+df_soc_all &lt;- test_all$data
+df_network_all &lt;- test_all$nets
+length(df_network_all)</code></pre>
+<pre><code>## [1] 91592</code></pre>
+<pre class="r"><code>wave_1_all &lt;- df_network_all[1,,]
+wave_2_all &lt;- df_network_all[2,,]
+net_soc_array_all &lt;- array(data = c(wave_1_all, wave_2_all), dim = c(dim(wave_1_all), 2))
+
+#write_rds(net_soc_array_all, &quot;datasets_final/net_soc_array_all_1.rds&quot;)
+#write_rds(df_network_all, &quot;datasets_final/df_network_all_1.rds&quot;)
+#write_rds(df_soc_all, &quot;datasets_final/df_soc_all.rds&quot;)
+#write_rds(test_all, &quot;datasets_final/the_whole_shebang_all.rds&quot;)
+#write_rds(wave_1_all, &quot;datasets_final/wave_1_all_authors.rds&quot;)
+#write_rds(wave_2_all, &quot;datasets_final/wave_2_all_authors.rds&quot;)</code></pre>
+<pre class="r"><code>test_first &lt;- fcolnet(data = scholars,
+                university = c(&quot;RU&quot;, &quot;UU&quot;, &quot;UvA&quot;, &quot;EUR&quot;), 
+                discipline = &quot;sociology&quot;,
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c(&quot;first&quot;))
+df_soc_first &lt;- test_first$data
+df_network_first &lt;- test_first$nets
+length(df_network_first)</code></pre>
+<pre><code>## [1] 91592</code></pre>
+<pre class="r"><code>wave_1_first &lt;- df_network_first[1,,]
+wave_2_first &lt;- df_network_first[2,,]
+net_soc_array_first &lt;- array(data = c(wave_1_first, wave_2_first), dim = c(dim(wave_1_first), 2))
+
+#write_rds(net_soc_array_first, &quot;datasets_final/net_soc_array_first_auth.rds&quot;)
+#write_rds(df_network_first, &quot;datasets_final/df_network_first_auth.rds&quot;)
+#write_rds(df_soc_first, &quot;datasets_final/df_soc_first_auth.rds&quot;)
+#write_rds(test_first, &quot;datasets_final/the_whole_shebang_first_auth.rds&quot;)
+#write_rds(wave_1_first, &quot;datasets_final/wave_1_first_authors.rds&quot;)
+#write_rds(wave_2_first, &quot;datasets_final/wave_2_first_authors.rds&quot;)</code></pre>
+<pre class="r"><code>test_last &lt;- fcolnet(data = scholars,
+                university = c(&quot;RU&quot;, &quot;UU&quot;, &quot;UvA&quot;, &quot;EUR&quot;), 
+                discipline = &quot;sociology&quot;,
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c(&quot;last&quot;))
+df_soc_last &lt;- test_last$data
+df_network_last &lt;- test_first$nets
+length(df_network_last)</code></pre>
+<pre><code>## [1] 91592</code></pre>
+<pre class="r"><code>wave_1_last &lt;- df_network_last[1,,]
+wave_2_last &lt;- df_network_last[2,,]
+net_soc_array_last &lt;- array(data = c(wave_1_last, wave_2_last), dim = c(dim(wave_1_last), 2))
+
+#write_rds(net_soc_array_last, &quot;datasets_final/net_soc_array_last_auth.rds&quot;)
+#write_rds(df_network_last, &quot;datasets_final/df_network_last_auth.rds&quot;)
+#write_rds(df_soc_last, &quot;datasets_final/df_soc_last_auth.rds&quot;)
+#write_rds(test_last, &quot;datasets_final/the_whole_shebang_last_auth.rds&quot;)
+#write_rds(wave_1_last, &quot;datasets_final/wave_1_last_authors.rds&quot;)
+#write_rds(wave_2_last, &quot;datasets_final/wave_2_last_authors.rds&quot;)</code></pre>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiZnVsbCBkYXRhIgpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQKZGF0ZTogIjIwMjQtMTAtMTciCi0tLQpgYGB7ciBwYWNrYWdlc30KcmVxdWlyZSh0aWR5dmVyc2UpCnJlcXVpcmUoaWdyYXBoKQpyZXF1aXJlKHNoaW55KQpyZXF1aXJlKFJTaWVuYSkKcmVxdWlyZShybWRmb3JtYXRzKQpyZXF1aXJlKHByZXR0eWRvYykKcmVxdWlyZShocmJydGhlbWVzKQpyZXF1aXJlKHRpbnQpCnJlcXVpcmUodHVmdGUpCnJlcXVpcmUocHN5Y2gpCmxpYnJhcnkoZGF0YS50YWJsZSkgIApsaWJyYXJ5KHhtbDIpCmxpYnJhcnkocnZlc3QpCmxpYnJhcnkoeG1sMikKbGlicmFyeShYTUwpCmxpYnJhcnkobGFiZWxsZWQpCmxpYnJhcnkoZm9yY2F0cykKYGBgCgpgYGB7ciBkYXRhc2V0fQpkZW1vZ3JhcGhpY3NfaGFubmFoIDwtIHJlYWRfY3N2KCJkZW1vZ3JhcGhpY3NfaGFubmFoX2ZpbmFsLmNzdiIpICNleSEKbG9hZCgiL1VzZXJzL2hhbm5haC9EZXNrdG9wL1NlYXNvbiA3LCBQYXJ0IDEvU29jaWFsIE5ldHdvcmtzL2xhYmpvdXJuYWwvc2Nob2xhcnNfMjAyNDA5MjQucmRhIikKc2Nob2xhcnMgPC0geApybSh4KQpgYGAKCmBgYHtyIGZjb2xuZXQsIGluY2x1ZGUgPSBGfQpmY29sbmV0IDwtIGZ1bmN0aW9uKGRhdGEgPSBzY2hvbGFycywgdW5pdmVyc2l0eSA9ICJSVSIsIAogICAgICAgICAgICAgICAgICAgIGRpc2NpcGxpbmUgPSAic29jaW9sb2d5Iiwgd2F2ZXMgPSBsaXN0KGMoMjAxNSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDIwMTgpLCBjKDIwMTksIDIwMjMpKSwgdHlwZSA9IGMoImZpcnN0IikpIHsKICAKICAjIHN0ZXAgMQogIGRlbW9ncmFwaGljcyA8LSBkby5jYWxsKHJiaW5kLmRhdGEuZnJhbWUsIGRhdGEkZGVtb2dyYXBoaWNzKQogIGRlbW9ncmFwaGljcyA8LSBkZW1vZ3JhcGhpY3MgJT4lCiAgICBtdXRhdGUoVW5pdmVyc2l0ZWl0MS4yMiA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0MS4yMiwgaXMubmEoVW5pdmVyc2l0ZWl0MS4yMiksICIiKSwgVW5pdmVyc2l0ZWl0Mi4yMiA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0Mi4yMiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpcy5uYShVbml2ZXJzaXRlaXQyLjIyKSwgIiIpLCBVbml2ZXJzaXRlaXQxLjI0ID0gcmVwbGFjZShVbml2ZXJzaXRlaXQxLjI0LCBpcy5uYShVbml2ZXJzaXRlaXQxLjI0KSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiIiksIFVuaXZlcnNpdGVpdDIuMjQgPSByZXBsYWNlKFVuaXZlcnNpdGVpdDIuMjQsIGlzLm5hKFVuaXZlcnNpdGVpdDIuMjQpLCAiIiksIGRpc2NpcGxpbmUuMjIgPSByZXBsYWNlKGRpc2NpcGxpbmUuMjIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpcy5uYShkaXNjaXBsaW5lLjIyKSwgIiIpLCBkaXNjaXBsaW5lLjI0ID0gcmVwbGFjZShkaXNjaXBsaW5lLjI0LCBpcy5uYShkaXNjaXBsaW5lLjI0KSwgIiIpKQogIAogIHNhbXBsZSA8LSB3aGljaCgoZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDEuMjIgJWluJSB1bml2ZXJzaXR5IHwgZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDIuMjIgJWluJQogICAgICAgICAgICAgICAgICAgICB1bml2ZXJzaXR5IHwgZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDEuMjQgJWluJSB1bml2ZXJzaXR5IHwgZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDIuMjQgJWluJQogICAgICAgICAgICAgICAgICAgICB1bml2ZXJzaXR5KSAmIChkZW1vZ3JhcGhpY3MkZGlzY2lwbGluZS4yMiAlaW4lIGRpc2NpcGxpbmUgfCBkZW1vZ3JhcGhpY3MkZGlzY2lwbGluZS4yNCAlaW4lIGRpc2NpcGxpbmUpKQogIAogIGRlbW9ncmFwaGljc19zb2MgPC0gZGVtb2dyYXBoaWNzW3NhbXBsZSwgXQogIHNjaG9sYXJzX3NlbCA8LSBsYXBwbHkoc2Nob2xhcnMsICJbIiwgc2FtcGxlKQogIAogICMgc3RlcCAyCiAgaWRzIDwtIGRlbW9ncmFwaGljc19zb2MkYXVfaWQKICBud2F2ZXMgPC0gbGVuZ3RoKHdhdmVzKQogIG5ldHMgPC0gYXJyYXkoMCwgZGltID0gYyhud2F2ZXMsIGxlbmd0aChpZHMpLCBsZW5ndGgoaWRzKSksIGRpbW5hbWVzID0gbGlzdCh3YXZlID0gMTpud2F2ZXMsIGlkcywKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWRzKSkKICBkaW1uYW1lcyhuZXRzKQogIAogICMgc3RlcCAzCiAgZGZfd29ya3MgPC0gdGliYmxlKHdvcmtzX2lkID0gdW5saXN0KGxhcHBseShzY2hvbGFyc19zZWwkd29yaywgZnVuY3Rpb24obCkgbCRpZCkpLCB3b3Jrc19hdXRob3IgPSB1bmxpc3QobGFwcGx5KHNjaG9sYXJzX3NlbCR3b3JrLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmdW5jdGlvbihsKSBsJGF1dGhvciksIHJlY3Vyc2l2ZSA9IEZBTFNFKSwgd29ya3NfeWVhciA9IHVubGlzdChsYXBwbHkoc2Nob2xhcnNfc2VsJHdvcmssIGZ1bmN0aW9uKGwpIGwkcHVibGljYXRpb25feWVhciksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJlY3Vyc2l2ZSA9IEZBTFNFKSkKICAKICBkZl93b3JrcyA8LSBkZl93b3Jrc1shZHVwbGljYXRlZChkZl93b3JrcyksIF0KICAKICAjIHN0ZXAgNAogIGlmICh0eXBlID09ICJmaXJzdCIpIHsKICAgIGZvciAoaiBpbiAxOm53YXZlcykgewogICAgICBkZl93b3Jrc193IDwtIGRmX3dvcmtzW2RmX3dvcmtzJHdvcmtzX3llYXIgPj0gd2F2ZXNbW2pdXVsxXSAmIGRmX3dvcmtzJHdvcmtzX3llYXIgPD0gd2F2ZXNbW2pdXVsyXSwKICAgICAgXQogICAgICBmb3IgKGkgaW4gMTpucm93KGRmX3dvcmtzX3cpKSB7CiAgICAgICAgZWdvIDwtIGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWRbMV0KICAgICAgICBhbHRlcnMgPC0gZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZFstMV0KICAgICAgICBpZiAoc3VtKGlkcyAlaW4lIGVnbykgPiAwICYgc3VtKGlkcyAlaW4lIGFsdGVycykgPiAwKSB7CiAgICAgICAgICBuZXRzW2osIHdoaWNoKGlkcyAlaW4lIGVnbyksIHdoaWNoKGlkcyAlaW4lIGFsdGVycyldIDwtIDEKICAgICAgICB9CiAgICAgIH0KICAgIH0KICB9CiAgCiAgaWYgKHR5cGUgPT0gImxhc3QiKSB7CiAgICBmb3IgKGogaW4gMTpud2F2ZXMpIHsKICAgICAgZGZfd29ya3NfdyA8LSBkZl93b3Jrc1tkZl93b3JrcyR3b3Jrc195ZWFyID49IHdhdmVzW1tqXV1bMV0gJiBkZl93b3JrcyR3b3Jrc195ZWFyIDw9IHdhdmVzW1tqXV1bMl0sCiAgICAgIF0KICAgICAgZm9yIChpIGluIDE6bnJvdyhkZl93b3Jrc193KSkgewogICAgICAgIGVnbyA8LSByZXYoZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZClbMV0KICAgICAgICBhbHRlcnMgPC0gcmV2KGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWQpWy0xXQogICAgICAgIGlmIChzdW0oaWRzICVpbiUgZWdvKSA+IDAgJiBzdW0oaWRzICVpbiUgYWx0ZXJzKSA+IDApIHsKICAgICAgICAgIG5ldHNbaiwgd2hpY2goaWRzICVpbiUgZWdvKSwgd2hpY2goaWRzICVpbiUgYWx0ZXJzKV0gPC0gMQogICAgICAgIH0KICAgICAgfQogICAgfQogIH0KICAKICBpZiAodHlwZSA9PSAiYWxsIikgewogICAgZm9yIChqIGluIDE6bndhdmVzKSB7CiAgICAgIGRmX3dvcmtzX3cgPC0gZGZfd29ya3NbZGZfd29ya3Mkd29ya3NfeWVhciA+PSB3YXZlc1tbal1dWzFdICYgZGZfd29ya3Mkd29ya3NfeWVhciA8PSB3YXZlc1tbal1dWzJdLAogICAgICBdCiAgICAgIGZvciAoaSBpbiAxOm5yb3coZGZfd29ya3NfdykpIHsKICAgICAgICBlZ29zIDwtIGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWQKICAgICAgICBpZiAoc3VtKGlkcyAlaW4lIGVnb3MpID4gMCkgewogICAgICAgICAgbmV0c1tqLCB3aGljaChpZHMgJWluJSBlZ29zKSwgd2hpY2goaWRzICVpbiUgZWdvcyldIDwtIDEKICAgICAgICB9CiAgICAgIH0KICAgIH0KICB9CiAgb3V0cHV0IDwtIGxpc3QoKQogIG91dHB1dCRkYXRhIDwtIHNjaG9sYXJzX3NlbAogIG91dHB1dCRuZXRzIDwtIG5ldHMKICByZXR1cm4ob3V0cHV0KQp9CgpgYGAKCmBgYHtyIHVzZXIgZGVmaW5lZCBmdW5jdGlvbnMsIGluY2x1ZGUgPSBGfQpHZW9kZXNpY0Rpc3RyaWJ1dGlvbiA8LSBmdW5jdGlvbihpLCBkYXRhLCBzaW1zLCBwZXJpb2QsIGdyb3VwTmFtZSwgdmFyTmFtZSwgbGV2bHMgPSBjKDE6NSwgSW5mKSwgY3VtdWxhdGl2ZSA9IFRSVUUsCiAgICAuLi4pIHsKICAgIHggPC0gbmV0d29ya0V4dHJhY3Rpb24oaSwgZGF0YSwgc2ltcywgcGVyaW9kLCBncm91cE5hbWUsIHZhck5hbWUpCiAgICByZXF1aXJlKHNuYSkKICAgIGEgPC0gc25hOjpnZW9kaXN0KHN5bW1ldHJpemUoeCkpJGdkaXN0CiAgICBpZiAoY3VtdWxhdGl2ZSkgewogICAgICAgIGdkaSA8LSBzYXBwbHkobGV2bHMsIGZ1bmN0aW9uKGkpIHsKICAgICAgICAgICAgc3VtKGEgPD0gaSkKICAgICAgICB9KQogICAgfSBlbHNlIHsKICAgICAgICBnZGkgPC0gc2FwcGx5KGxldmxzLCBmdW5jdGlvbihpKSB7CiAgICAgICAgICAgIHN1bShhID09IGkpCiAgICAgICAgfSkKICAgIH0KICAgIG5hbWVzKGdkaSkgPC0gYXMuY2hhcmFjdGVyKGxldmxzKQogICAgZ2RpCn0KCiMgVGhlIGZvbGxvd2luZyBmdW5jdGlvbiBpcyB0YWtlbiBmcm9tIHRoZSBoZWxwIHBhZ2UgZm9yIHNpZW5hVGVzdAoKdGVzdGFsbCA8LSBmdW5jdGlvbihhbnMpIHsKICAgIGZvciAoaSBpbiB3aGljaChhbnMkdGVzdCkpIHsKICAgICAgICBzY3QgPC0gc2NvcmUuVGVzdChhbnMsIGkpCiAgICAgICAgY2F0KGFucyRyZXF1ZXN0ZWRFZmZlY3RzJGVmZmVjdE5hbWVbaV0sICJcbiIpCiAgICAgICAgcHJpbnQoc2N0KQogICAgfQogICAgaW52aXNpYmxlKHNjb3JlLlRlc3QoYW5zKSkKfQpgYGAKCmBgYHtyIGFsbCB0aWVzfQp0ZXN0X2FsbCA8LSBmY29sbmV0KGRhdGEgPSBzY2hvbGFycywKICAgICAgICAgICAgICAgIHVuaXZlcnNpdHkgPSBjKCJSVSIsICJVVSIsICJVdkEiLCAiRVVSIiksIAogICAgICAgICAgICAgICAgZGlzY2lwbGluZSA9ICJzb2Npb2xvZ3kiLAogICAgICAgICAgICAgICAgd2F2ZXMgPSBsaXN0KGMoMjAxNSwgMjAxOCksIGMoMjAxOSwgMjAyMykpLAogICAgICAgICAgICAgICAgdHlwZSA9IGMoImFsbCIpKQpkZl9zb2NfYWxsIDwtIHRlc3RfYWxsJGRhdGEKZGZfbmV0d29ya19hbGwgPC0gdGVzdF9hbGwkbmV0cwpsZW5ndGgoZGZfbmV0d29ya19hbGwpCgp3YXZlXzFfYWxsIDwtIGRmX25ldHdvcmtfYWxsWzEsLF0Kd2F2ZV8yX2FsbCA8LSBkZl9uZXR3b3JrX2FsbFsyLCxdCm5ldF9zb2NfYXJyYXlfYWxsIDwtIGFycmF5KGRhdGEgPSBjKHdhdmVfMV9hbGwsIHdhdmVfMl9hbGwpLCBkaW0gPSBjKGRpbSh3YXZlXzFfYWxsKSwgMikpCgojd3JpdGVfcmRzKG5ldF9zb2NfYXJyYXlfYWxsLCAiZGF0YXNldHNfZmluYWwvbmV0X3NvY19hcnJheV9hbGxfMS5yZHMiKQojd3JpdGVfcmRzKGRmX25ldHdvcmtfYWxsLCAiZGF0YXNldHNfZmluYWwvZGZfbmV0d29ya19hbGxfMS5yZHMiKQojd3JpdGVfcmRzKGRmX3NvY19hbGwsICJkYXRhc2V0c19maW5hbC9kZl9zb2NfYWxsLnJkcyIpCiN3cml0ZV9yZHModGVzdF9hbGwsICJkYXRhc2V0c19maW5hbC90aGVfd2hvbGVfc2hlYmFuZ19hbGwucmRzIikKI3dyaXRlX3Jkcyh3YXZlXzFfYWxsLCAiZGF0YXNldHNfZmluYWwvd2F2ZV8xX2FsbF9hdXRob3JzLnJkcyIpCiN3cml0ZV9yZHMod2F2ZV8yX2FsbCwgImRhdGFzZXRzX2ZpbmFsL3dhdmVfMl9hbGxfYXV0aG9ycy5yZHMiKQpgYGAKCmBgYHtyIGZpcnN0IHRpZXN9CnRlc3RfZmlyc3QgPC0gZmNvbG5ldChkYXRhID0gc2Nob2xhcnMsCiAgICAgICAgICAgICAgICB1bml2ZXJzaXR5ID0gYygiUlUiLCAiVVUiLCAiVXZBIiwgIkVVUiIpLCAKICAgICAgICAgICAgICAgIGRpc2NpcGxpbmUgPSAic29jaW9sb2d5IiwKICAgICAgICAgICAgICAgIHdhdmVzID0gbGlzdChjKDIwMTUsIDIwMTgpLCBjKDIwMTksIDIwMjMpKSwKICAgICAgICAgICAgICAgIHR5cGUgPSBjKCJmaXJzdCIpKQpkZl9zb2NfZmlyc3QgPC0gdGVzdF9maXJzdCRkYXRhCmRmX25ldHdvcmtfZmlyc3QgPC0gdGVzdF9maXJzdCRuZXRzCmxlbmd0aChkZl9uZXR3b3JrX2ZpcnN0KQoKd2F2ZV8xX2ZpcnN0IDwtIGRmX25ldHdvcmtfZmlyc3RbMSwsXQp3YXZlXzJfZmlyc3QgPC0gZGZfbmV0d29ya19maXJzdFsyLCxdCm5ldF9zb2NfYXJyYXlfZmlyc3QgPC0gYXJyYXkoZGF0YSA9IGMod2F2ZV8xX2ZpcnN0LCB3YXZlXzJfZmlyc3QpLCBkaW0gPSBjKGRpbSh3YXZlXzFfZmlyc3QpLCAyKSkKCiN3cml0ZV9yZHMobmV0X3NvY19hcnJheV9maXJzdCwgImRhdGFzZXRzX2ZpbmFsL25ldF9zb2NfYXJyYXlfZmlyc3RfYXV0aC5yZHMiKQojd3JpdGVfcmRzKGRmX25ldHdvcmtfZmlyc3QsICJkYXRhc2V0c19maW5hbC9kZl9uZXR3b3JrX2ZpcnN0X2F1dGgucmRzIikKI3dyaXRlX3JkcyhkZl9zb2NfZmlyc3QsICJkYXRhc2V0c19maW5hbC9kZl9zb2NfZmlyc3RfYXV0aC5yZHMiKQojd3JpdGVfcmRzKHRlc3RfZmlyc3QsICJkYXRhc2V0c19maW5hbC90aGVfd2hvbGVfc2hlYmFuZ19maXJzdF9hdXRoLnJkcyIpCiN3cml0ZV9yZHMod2F2ZV8xX2ZpcnN0LCAiZGF0YXNldHNfZmluYWwvd2F2ZV8xX2ZpcnN0X2F1dGhvcnMucmRzIikKI3dyaXRlX3Jkcyh3YXZlXzJfZmlyc3QsICJkYXRhc2V0c19maW5hbC93YXZlXzJfZmlyc3RfYXV0aG9ycy5yZHMiKQpgYGAKCmBgYHtyIGxhc3QgdGllc30KdGVzdF9sYXN0IDwtIGZjb2xuZXQoZGF0YSA9IHNjaG9sYXJzLAogICAgICAgICAgICAgICAgdW5pdmVyc2l0eSA9IGMoIlJVIiwgIlVVIiwgIlV2QSIsICJFVVIiKSwgCiAgICAgICAgICAgICAgICBkaXNjaXBsaW5lID0gInNvY2lvbG9neSIsCiAgICAgICAgICAgICAgICB3YXZlcyA9IGxpc3QoYygyMDE1LCAyMDE4KSwgYygyMDE5LCAyMDIzKSksCiAgICAgICAgICAgICAgICB0eXBlID0gYygibGFzdCIpKQpkZl9zb2NfbGFzdCA8LSB0ZXN0X2xhc3QkZGF0YQpkZl9uZXR3b3JrX2xhc3QgPC0gdGVzdF9maXJzdCRuZXRzCmxlbmd0aChkZl9uZXR3b3JrX2xhc3QpCgp3YXZlXzFfbGFzdCA8LSBkZl9uZXR3b3JrX2xhc3RbMSwsXQp3YXZlXzJfbGFzdCA8LSBkZl9uZXR3b3JrX2xhc3RbMiwsXQpuZXRfc29jX2FycmF5X2xhc3QgPC0gYXJyYXkoZGF0YSA9IGMod2F2ZV8xX2xhc3QsIHdhdmVfMl9sYXN0KSwgZGltID0gYyhkaW0od2F2ZV8xX2xhc3QpLCAyKSkKCiN3cml0ZV9yZHMobmV0X3NvY19hcnJheV9sYXN0LCAiZGF0YXNldHNfZmluYWwvbmV0X3NvY19hcnJheV9sYXN0X2F1dGgucmRzIikKI3dyaXRlX3JkcyhkZl9uZXR3b3JrX2xhc3QsICJkYXRhc2V0c19maW5hbC9kZl9uZXR3b3JrX2xhc3RfYXV0aC5yZHMiKQojd3JpdGVfcmRzKGRmX3NvY19sYXN0LCAiZGF0YXNldHNfZmluYWwvZGZfc29jX2xhc3RfYXV0aC5yZHMiKQojd3JpdGVfcmRzKHRlc3RfbGFzdCwgImRhdGFzZXRzX2ZpbmFsL3RoZV93aG9sZV9zaGViYW5nX2xhc3RfYXV0aC5yZHMiKQojd3JpdGVfcmRzKHdhdmVfMV9sYXN0LCAiZGF0YXNldHNfZmluYWwvd2F2ZV8xX2xhc3RfYXV0aG9ycy5yZHMiKQojd3JpdGVfcmRzKHdhdmVfMl9sYXN0LCAiZGF0YXNldHNfZmluYWwvd2F2ZV8yX2xhc3RfYXV0aG9ycy5yZHMiKQpgYGAKCg==</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("full.and.final.data.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

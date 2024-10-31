@@ -1,0 +1,241 @@
+---
+title: "The Dataset"
+output: html_document
+date: "2024-10-16"
+---
+```{r setup packages, include=FALSE}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(XML)
+```
+
+```{r setup data, include=FALSE}
+load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
+scholars <- x
+rm(x)
+```
+
+# The Parameters and Variables (Some of them, at Least)
+
+\
+
+**[data]**: our scholars file\
+**university**: Character vector with names of universities. We have several universities in the Netherlands. See above for relevant names.\
+**discipline**: Character vector, either sociology or political science or both.\
+**waves**: a list of numeric vectors with start and end year of wave.\
+**type:**\
+**ties**
+- *first*: directed: first author sending to others\
+- *last*: directed: last author sending to others\
+- *all*: undirected: ties between all authors\
+**Output:** - a list\
+- *nets*: array of nomination networks.\
+- *data*: sample of data (scholars)\
+
+```{r function dataset, include = F, echo = F, message=FALSE, warning=F}
+#so this is all we are doin'
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+
+```
+
+# Look at the Data 
+
+Now we can use the data, that we have cleaned up a bit, to make a network-plot, and see what we're dealing with.\
+
+We'll start easy though, to get a base-level intuitive understanding of what the data look like -- and for that, we're using only the data of Radboud's sociology department in our first wave. 
+\
+
+## RU Sociology Graph 
+```{r matrix 1, fig.dim = c(8, 6)}
+#save the output of your function
+matrix_ru_soc <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "sociology", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+
+mrs_graph1 <- igraph::graph_from_adjacency_matrix(
+  matrix_ru_soc$nets[1,,], #for this example I take the first wave of data. (thus I select the array of networks and take the first matrix)
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL,
+  add.rownames = NULL
+)
+
+plot(mrs_graph1,
+  vertex.label= NA,
+  edge.width = 0.2,
+  edge.arrow.size =0.2)
+```
+
+Then make it a bit more complicated, and add a new discipline (political science), and another university. 
+
+## RU & UvT Sociology and Political Science Graph 
+
+```{r,  fig.dim = c(8, 6)}
+matrix_ru_socpol <- fcolnet(data = scholars, 
+                university = c("RU", "UvT"), 
+                discipline = c("sociology", "political science"), 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("all"))
+
+mrsp <- igraph::graph_from_adjacency_matrix(
+  matrix_ru_socpol$nets[2,,], #now, I take the second wave
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL
+)
+
+plot(mrsp,
+     vertex.label = NA,
+     vertex.size = .5,
+     edge.curved = 0.2, # curved edges is always a nice touch
+     edge.arrow.size = 0.1)
+```
+
+... and see if we can create some differentiations in the plot to see how different characteristics interact (discipline, university)
+
+```{r now some more,  fig.dim = c(8, 6)}
+#Let us find ego characteristics. 
+matrix_ru_socpol_df <- matrix_ru_socpol$data
+mrusp_df_ego <- do.call(rbind.data.frame, matrix_ru_socpol_df$demographics)
+
+plot(mrsp,
+  vertex.color = ifelse(mrusp_df_ego$discipline.24 == "sociology", "red", "blue"), #now, I can use actor attributes for plotting. 
+  vertex.label = NA,
+  edge.width = 0.2,
+  edge.arrow.size =0.2,
+  vertex.size = 5)
+```
+
+## My Four Departments -- Graph
+
+```{r}
+matrix_my_people <- fcolnet(data = scholars, 
+                university = c("RU", "UU", "UvA", "EUR"), 
+                discipline = "sociology",
+                waves = list(c(2015, 2019), c(2020, 2024)), 
+                type = c("first"))
+
+graph_my_people <- igraph::graph_from_adjacency_matrix(
+  matrix_ru_socpol$nets[1,,], #first wave
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL
+)
+
+plot(mrsp,
+     vertex.label = NA,
+     vertex.size = 10,
+     edge.curved = 0.2,
+     edge.arrow.size = 0.1)
+```
+... and add some ego-level characteristics in this graph!!
+
+```{r}
+matrix_my_people_df <- matrix_my_people$data
+df_ego_my_people <- do.call(rbind.data.frame, matrix_my_people_df$demographics)
+
+plot(graph_my_people,
+  vertex.color = ifelse(df_ego_my_people$Universiteit.24 == "UU", "red", "blue"), #now, I can use actor attributes for plotting. 
+  vertex.label = NA,
+  edge.width = 0.2,
+  edge.arrow.size =0.2,
+  vertex.size = 10)
+
+```
+
+```{r write df, include = F, echo = F}
+#write_rds(df_ego_my_people, "demographics_my_people.rds")
+```
+

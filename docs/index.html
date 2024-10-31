@@ -11,7 +11,7 @@
 
 <meta name="author" content="Hannah Groennou" />
 
-<meta name="date" content="2024-10-15" />
+<meta name="date" content="2024-10-31" />
 
 <title>Baby’s First Labjournal</title>
 
@@ -381,37 +381,22 @@ div.tocify {
       <a href="dataprep.final.html">The Data</a>
     </li>
     <li>
-      <a href="gender.final.html">Making Gender</a>
+      <a href="making.gender.html">Making Gender</a>
     </li>
     <li>
-      <a href="ethnicity.scraping.html">Making Ethnicity</a>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
     </li>
     <li>
-      <a href="describeyour.ideal.man.html">Prelim. Info(graphics)</a>
+      <a href="h.index.html">h-Index</a>
     </li>
     <li>
-      <a href="results.prelim.prelim.html">Some First Analysis</a>
+      <a href="full.and.final.data.html">Final Dataset</a>
     </li>
     <li>
-      <a href="network.statistics.html">Some Descriptives et al.</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    F*cking Around and Finding Out
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="Graphs1.html">Making Graphs and Taking Names</a>
+      <a href="all.descriptives.html">Descriptives</a>
     </li>
     <li>
-      <a href="dataprep.html">Never Gonna Prep You Up</a>
-    </li>
-    <li>
-      <a href="Wrangling_Some_Data.html">Scrapey Doo</a>
+      <a href="rsiena.analysis.html">Analysis</a>
     </li>
   </ul>
 </li>
@@ -440,11 +425,27 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Introduction</li>
-    <li class="dropdown-header">Theoretical Framework</li>
-    <li class="dropdown-header">Data and Methods</li>
-    <li class="dropdown-header">Analysis et al.</li>
-    <li class="dropdown-header">Conclusions</li>
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -476,7 +477,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Baby’s First Labjournal</h1>
 <h4 class="author">Hannah Groennou</h4>
-<h4 class="date">2024-10-15</h4>
+<h4 class="date">2024-10-31</h4>
 
 </div>
 
@@ -499,7 +500,7 @@ Welcome here, my people — the universe is yours, take it!</p>
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQmFieSdzIEZpcnN0IExhYmpvdXJuYWwiCmF1dGhvcjogIkhhbm5haCBHcm9lbm5vdSIKZGF0ZTogImByIFN5cy5EYXRlKClgIgpiaWJsaW9ncmFwaHk6IHJlZmVyZW5jZXMuYmliCm91dHB1dDogCiAgaHRtbF9kb2N1bWVudDoKICAgIHRoZW1lOiBwYXBlcgogICAgdG9jOiB5ZXMKICAgIHRvY19mbG9hdDoKICAgICAgY29sbGFwc2VkOiB0cnVlCmZvbnQtZmFtaWx5OiBUaW1lcyBOZXcgUm9tYW4KICAgICAgCi0tLQoKCmBgYHtyLCBpbnN0YWxsIHJlbW90ZWx5LCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9CiMgaW5zdGFsbC5wYWNrYWdlcygicmVtb3RlcyIpCiNyZW1vdGVzOjppbnN0YWxsX2dpdGh1Yigicmxlc3VyL2tsaXBweSIpCmxpYnJhcnkoa2xpcHB5KQpsaWJyYXJ5KGZvcm1hdFIpCmBgYCAKCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9CmxpYnJhcnkoa25pdHIpCgprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQpvcHRpb25zKHdpZHRoID0gMTAwKQpyZ2w6OnNldHVwS25pdHIoKQoKCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9CgpgYGAKCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQoja2xpcHB5OjprbGlwcHkoY29sb3IgPSAnZGFya3JlZCcpCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykKYGBgCgoKCgotLS0tCgo6Ojo6IHsuY29sdW1uc30KOjo6IHsuY29sdW1uIHdpZHRoPSI1MCUifQoKIyBNeSBMYWIgSm91cm5hbApMYXN0IGNvbXBpbGVkIG9uIGByIGZvcm1hdChTeXMudGltZSgpLCAnJUIsICVZJylgICAKCkhlbGxvIFdvcmxkIQpcCldlbGNvbWUgaGVyZSwgbXkgcGVvcGxlIC0tLSB0aGUgdW5pdmVyc2UgaXMgeW91cnMsIHRha2UgaXQhCgoKOjo6Cgo6Ojogey5jb2x1bW4gd2lkdGg9IjUwJSJ9CgoKIVtdKGltYWdlcy9jb3Zlci5qcGcpCgoKOjo6Cjo6OjoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQmFieSdzIEZpcnN0IExhYmpvdXJuYWwiCmF1dGhvcjogIkhhbm5haCBHcm9lbm5vdSIKZGF0ZTogImByIFN5cy5EYXRlKClgIgpiaWJsaW9ncmFwaHk6IHJlZmVyZW5jZXMuYmliCm91dHB1dDogCiAgaHRtbF9kb2N1bWVudDoKICAgIHRoZW1lOiBwYXBlcgogICAgdG9jOiB5ZXMKICAgIHRvY19mbG9hdDoKICAgICAgY29sbGFwc2VkOiB0cnVlCiAgICAgIAotLS0KCgpgYGB7ciwgaW5zdGFsbCByZW1vdGVseSwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQojIGluc3RhbGwucGFja2FnZXMoInJlbW90ZXMiKQojcmVtb3Rlczo6aW5zdGFsbF9naXRodWIoInJsZXN1ci9rbGlwcHkiKQpsaWJyYXJ5KGtsaXBweSkKbGlicmFyeShmb3JtYXRSKQpgYGAgCgpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQpsaWJyYXJ5KGtuaXRyKQoKa25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkKb3B0aW9ucyh3aWR0aCA9IDEwMCkKcmdsOjpzZXR1cEtuaXRyKCkKCgpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQoKYGBgCgpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9VFJVRX0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkKI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQoja2xpcHB5OjprbGlwcHkodG9vbHRpcF9tZXNzYWdlID0gJ0NsaWNrIHRvIGNvcHknLCB0b29sdGlwX3N1Y2Nlc3MgPSAnRG9uZScpCmBgYAoKCgoKLS0tLQoKOjo6OiB7LmNvbHVtbnN9Cjo6OiB7LmNvbHVtbiB3aWR0aD0iNTAlIn0KCiMgTXkgTGFiIEpvdXJuYWwKTGFzdCBjb21waWxlZCBvbiBgciBmb3JtYXQoU3lzLnRpbWUoKSwgJyVCLCAlWScpYCAgCgpIZWxsbyBXb3JsZCEKXApXZWxjb21lIGhlcmUsIG15IHBlb3BsZSAtLS0gdGhlIHVuaXZlcnNlIGlzIHlvdXJzLCB0YWtlIGl0IQoKCjo6OgoKOjo6IHsuY29sdW1uIHdpZHRoPSI1MCUifQoKCiFbXShpbWFnZXMvY292ZXIuanBnKQoKCjo6Ogo6Ojo6Cg==</div>
 
 
 </div>

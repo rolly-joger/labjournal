@@ -111,7 +111,7 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 
 ```{r mydata, message=F}
 library(readr)
-demographics_hannah <- read_csv("demographics_hannah.csv")
+demographics_hannah <- read_csv("demographics_hannah_final.csv")
 demographics_hannah <- as.data.frame(demographics_hannah)
 ```
 # Dependent Variable 

@@ -1,0 +1,212 @@
+---
+title: "full data"
+output: html_document
+date: "2024-10-17"
+---
+```{r packages}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+library(labelled)
+library(forcats)
+```
+
+```{r dataset}
+demographics_hannah <- read_csv("demographics_hannah_final.csv") #ey!
+load("/Users/hannah/Desktop/Season 7, Part 1/Social Networks/labjournal/scholars_20240924.rda")
+scholars <- x
+rm(x)
+```
+
+```{r fcolnet, include = F}
+fcolnet <- function(data = scholars, university = "RU", 
+                    discipline = "sociology", waves = list(c(2015,
+                                                             2018), c(2019, 2023)), type = c("first")) {
+  
+  # step 1
+  demographics <- do.call(rbind.data.frame, data$demographics)
+  demographics <- demographics %>%
+    mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+                                                                                                                 is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+                                                                                                                                                                          ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+                                                                                                                                                                                                                                                                                  is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+  
+  sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+                     university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+                     university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+  
+  demographics_soc <- demographics[sample, ]
+  scholars_sel <- lapply(scholars, "[", sample)
+  
+  # step 2
+  ids <- demographics_soc$au_id
+  nwaves <- length(waves)
+  nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+                                                                              ids))
+  dimnames(nets)
+  
+  # step 3
+  df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+                                                                                                                  function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+                                                                                                                                                                                 recursive = FALSE))
+  
+  df_works <- df_works[!duplicated(df_works), ]
+  
+  # step 4
+  if (type == "first") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        ego <- df_works_w$works_author[i][[1]]$au_id[1]
+        alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+        }
+      }
+    }
+  }
+  
+  if (type == "last") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+        alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+        }
+      }
+    }
+  }
+  
+  if (type == "all") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        egos <- df_works_w$works_author[i][[1]]$au_id
+        if (sum(ids %in% egos) > 0) {
+          nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+        }
+      }
+    }
+  }
+  output <- list()
+  output$data <- scholars_sel
+  output$nets <- nets
+  return(output)
+}
+
+```
+
+```{r user defined functions, include = F}
+GeodesicDistribution <- function(i, data, sims, period, groupName, varName, levls = c(1:5, Inf), cumulative = TRUE,
+    ...) {
+    x <- networkExtraction(i, data, sims, period, groupName, varName)
+    require(sna)
+    a <- sna::geodist(symmetrize(x))$gdist
+    if (cumulative) {
+        gdi <- sapply(levls, function(i) {
+            sum(a <= i)
+        })
+    } else {
+        gdi <- sapply(levls, function(i) {
+            sum(a == i)
+        })
+    }
+    names(gdi) <- as.character(levls)
+    gdi
+}
+
+# The following function is taken from the help page for sienaTest
+
+testall <- function(ans) {
+    for (i in which(ans$test)) {
+        sct <- score.Test(ans, i)
+        cat(ans$requestedEffects$effectName[i], "\n")
+        print(sct)
+    }
+    invisible(score.Test(ans))
+}
+```
+
+```{r all ties}
+test_all <- fcolnet(data = scholars,
+                university = c("RU", "UU", "UvA", "EUR"), 
+                discipline = "sociology",
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c("all"))
+df_soc_all <- test_all$data
+df_network_all <- test_all$nets
+length(df_network_all)
+
+wave_1_all <- df_network_all[1,,]
+wave_2_all <- df_network_all[2,,]
+net_soc_array_all <- array(data = c(wave_1_all, wave_2_all), dim = c(dim(wave_1_all), 2))
+
+#write_rds(net_soc_array_all, "datasets_final/net_soc_array_all_1.rds")
+#write_rds(df_network_all, "datasets_final/df_network_all_1.rds")
+#write_rds(df_soc_all, "datasets_final/df_soc_all.rds")
+#write_rds(test_all, "datasets_final/the_whole_shebang_all.rds")
+#write_rds(wave_1_all, "datasets_final/wave_1_all_authors.rds")
+#write_rds(wave_2_all, "datasets_final/wave_2_all_authors.rds")
+```
+
+```{r first ties}
+test_first <- fcolnet(data = scholars,
+                university = c("RU", "UU", "UvA", "EUR"), 
+                discipline = "sociology",
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c("first"))
+df_soc_first <- test_first$data
+df_network_first <- test_first$nets
+length(df_network_first)
+
+wave_1_first <- df_network_first[1,,]
+wave_2_first <- df_network_first[2,,]
+net_soc_array_first <- array(data = c(wave_1_first, wave_2_first), dim = c(dim(wave_1_first), 2))
+
+#write_rds(net_soc_array_first, "datasets_final/net_soc_array_first_auth.rds")
+#write_rds(df_network_first, "datasets_final/df_network_first_auth.rds")
+#write_rds(df_soc_first, "datasets_final/df_soc_first_auth.rds")
+#write_rds(test_first, "datasets_final/the_whole_shebang_first_auth.rds")
+#write_rds(wave_1_first, "datasets_final/wave_1_first_authors.rds")
+#write_rds(wave_2_first, "datasets_final/wave_2_first_authors.rds")
+```
+
+```{r last ties}
+test_last <- fcolnet(data = scholars,
+                university = c("RU", "UU", "UvA", "EUR"), 
+                discipline = "sociology",
+                waves = list(c(2015, 2018), c(2019, 2023)),
+                type = c("last"))
+df_soc_last <- test_last$data
+df_network_last <- test_first$nets
+length(df_network_last)
+
+wave_1_last <- df_network_last[1,,]
+wave_2_last <- df_network_last[2,,]
+net_soc_array_last <- array(data = c(wave_1_last, wave_2_last), dim = c(dim(wave_1_last), 2))
+
+#write_rds(net_soc_array_last, "datasets_final/net_soc_array_last_auth.rds")
+#write_rds(df_network_last, "datasets_final/df_network_last_auth.rds")
+#write_rds(df_soc_last, "datasets_final/df_soc_last_auth.rds")
+#write_rds(test_last, "datasets_final/the_whole_shebang_last_auth.rds")
+#write_rds(wave_1_last, "datasets_final/wave_1_last_authors.rds")
+#write_rds(wave_2_last, "datasets_final/wave_2_last_authors.rds")
+```
+

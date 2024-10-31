@@ -1,0 +1,1212 @@
+---
+title: "All Verbal Descriptives"
+output: html_document
+date: "2024-10-18"
+---
+# Ready All the Stuff
+
+... and empty workspace,
+```{r remove workspace}
+rm(list = ls())
+```
+... user defined functions,
+```{r user-defined functions, include=FALSE}
+
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+fMoran.I <- function(x, weight, scaled = FALSE, na.rm = FALSE, alternative = "two.sided", rowstandardize = TRUE) {
+  if (rowstandardize) {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop("'weight' must be a square matrix")
+    n <- length(x)
+    if (dim(weight)[1] != n)
+      stop("'weight' must have as many rows as observations in 'x'")
+    ei <- -1/(n - 1)
+    nas <- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x <- x[!nas]
+        n <- length(x)
+        weight <- weight[!nas, !nas]
+      } else {
+        warning("'x' has missing values: maybe you wanted to set na.rm = TRUE?")
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    ROWSUM <- rowSums(weight)
+    ROWSUM[ROWSUM == 0] <- 1
+    weight <- weight/ROWSUM
+    s <- sum(weight)
+    m <- mean(x)
+    y <- x - m
+    cv <- sum(weight * y %o% y)
+    v <- sum(y^2)
+    obs <- (n/s) * (cv/v)
+    if (scaled) {
+      i.max <- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs <- obs/i.max
+    }
+    S1 <- 0.5 * sum((weight + t(weight))^2)
+    S2 <- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq <- s^2
+    k <- (sum(y^4)/n)/(v/n)^2
+    sdi <- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
+    pv <- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == "two.sided")
+      pv <- if (obs <= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == "greater")
+      pv <- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  } else {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop("'weight' must be a square matrix")
+    n <- length(x)
+    if (dim(weight)[1] != n)
+      stop("'weight' must have as many rows as observations in 'x'")
+    ei <- -1/(n - 1)
+    nas <- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x <- x[!nas]
+        n <- length(x)
+        weight <- weight[!nas, !nas]
+      } else {
+        warning("'x' has missing values: maybe you wanted to set na.rm = TRUE?")
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    # ROWSUM <- rowSums(weight) ROWSUM[ROWSUM == 0] <- 1 weight <- weight/ROWSUM
+    s <- sum(weight)
+    m <- mean(x)
+    y <- x - m
+    cv <- sum(weight * y %o% y)
+    v <- sum(y^2)
+    obs <- (n/s) * (cv/v)
+    if (scaled) {
+      i.max <- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs <- obs/i.max
+    }
+    S1 <- 0.5 * sum((weight + t(weight))^2)
+    S2 <- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq <- s^2
+    k <- (sum(y^4)/n)/(v/n)^2
+    sdi <- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
+    pv <- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == "two.sided")
+      pv <- if (obs <= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == "greater")
+      pv <- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  }
+  
+  
+}
+
+
+
+```
+... packages, 
+```{r load packages, include=FALSE}
+packages <- c("tidyverse", 
+              "scholar", 
+              "RSiena", 
+              "RsienaTwoStep", 
+              "igraph",
+              "poweRlaw",
+              "ggraph",
+              "knitr")
+fpackage.check(packages)
+
+```
+... data.
+```{r datasets}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE)
+view(demographics_hannah)
+```
+
+----
+
+# Ego-Level Descriptives 
+
+## Intro
+
+Lets start with some simple descriptives about our data, such as the number of nodes, and some means of our variables of interest. 
+
+## Basics 
+
+### Distribution of People Per University
+
+```{r sample size, echo= F, message=F, results='asis'}
+kableExtra::kable(demographics_hannah %>%
+  select(perc_female) %>%
+  count(), caption = "number of observations")
+
+nr_uva <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  count()
+
+nr_eur <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  count()
+
+nr_uu <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  count()
+
+nr_ru <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  count()
+
+Universities <- c("UvA", "EUR", "UU", "RU")
+People <- c(nr_uva, nr_eur, nr_uu, nr_ru)
+nr_all_uni <- cbind(Universities, People)
+
+kableExtra::kable(nr_all_uni, caption = "People per University")
+```
+### Distribution of People Per University -- Visualised
+
+```{r people per uni 1 hist, message=F}
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+ggplot(aes(Universiteit1.24, fill = Universiteit1.24)) +
+  geom_bar() +
+  labs(
+    x = "University",
+    y = "Count",
+    fill = "University"
+  ) +
+  theme_bw()
+```
+
+... So we are dealing with 214 individuals, divided over 4 universities, of which the UvA has the largest faculty, and the RU the least sizeable. 
+
+## Race
+
+### Distribution of White/Non-White People Per University
+```{r,echo=FALSE, message=F}
+race_1 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+race_2 <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+race_3 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+race_4 <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+knitr::kable(
+  list(race_1, race_2, race_3, race_4),
+  caption = 'Race Distributions at the Universities (UvA, EUR, UU, RU)',
+  col.names = c("White (1) or Not (0)", "Frequency"),
+  booktabs = TRUE, valign = 't'
+)
+```
+### Distribution of White/Non-White People Per University -- Visualised
+```{r race per uni, message=F}
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+  ggplot(aes(white_or_not, fill = Universiteit1.24)) +
+  geom_bar(position = "dodge") +
+  labs(
+    x = "White-Passing (1), or Not",
+    y = "Count",
+    fill = "University"
+  ) +
+  theme_bw()
+```
+We can further investigate this by seeing how they are distributed per position. In other words, if these frequencies are equally distributed across all different position, and thus if there are equal distributions of men and women across lowere (PhD) positions, as there are across higher (Tenured Professor) positions. 
+
+### Race and Position 
+
+#### All Universities
+```{r race and position, message = F}
+#Across all universities
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+  ggplot(aes(white_or_not, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "Race across All Universities",
+    x = "Race (White (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+```
+
+#### Per University
+
+```{r, message = F, fig.show="hold", out.width="50%"}
+#Amsterdam(UvA)
+demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+ggplot(aes(white_or_not, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "UvA",
+    x = "Race (White (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+#Rotterdam (EUR)
+demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+ggplot(aes(white_or_not, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "EUR",
+    x = "Race (White (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+#Utrecht (UU)
+demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+ggplot(aes(white_or_not, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "UU",
+    x = "Race (White (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+# Nijmegen (RU)
+demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+ggplot(aes(white_or_not, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "RU",
+    x = "Race (White (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+```
+and, as we see, the race/ethnicity based demographics at the UvA and UU are more representative when compared to those at the EUR and RU. When we look at the distribution of ethnicity (the country one is born in), we see a similar image: 
+
+## Ethnicity
+
+### Distribution of Ethnicity per University 
+```{r, message = F, echo=FALSE, fig.show="hold", out.width="50%"}
+ethnicity_1 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+ethnicity_2 <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+ethnicity_3 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+ethnicity_4 <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+knitr::kable(
+  list(ethnicity_1, ethnicity_2, ethnicity_3, ethnicity_4),
+  caption = 'Ethnicity Distributions at the Universities (UvA, EUR, UU, RU)',
+  col.names = c("Dutch (1) or Not (0)", "Frequency"),
+  booktabs = TRUE, valign = 't'
+)
+```
+### Distribution of Ethnicity per University -- Visualised
+```{r eth all uni, message=F}
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+ ggplot(aes(born_in_binary, fill = Universiteit1.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    x = "Born In the Netherlands",
+    y = "Count",
+    fill = "University"
+  ) +
+theme_bw()
+
+```
+
+### Ethnicity and Position
+
+#### All Universities
+
+```{r eth and position, message = F}
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+  ggplot(aes(born_in_binary, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "Ethnicity Distribution across All Universities",
+    x = "Dutch (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+```
+
+#### Per University
+
+```{r ethn. per univ position, message = F, fig.show="hold", out.width="50%"}
+#Amsterdam(UvA)
+demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+ggplot(aes(born_in_binary, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "UvA",
+    x = "Dutch (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+#Rotterdam (EUR)
+demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+ggplot(aes(born_in_binary, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "EUR",
+    x = "Dutch (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+#Utrecht (UU)
+demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+ggplot(aes(born_in_binary, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "UU",
+    x = "Dutch (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+# Nijmegen (RU)
+demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+ggplot(aes(born_in_binary, fill = Functie.24)) +
+geom_bar(position = "dodge") +
+    labs(
+    title = "RU",
+    x = "Dutch (1) or Not (0)",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+```
+
+## Gender
+
+### Distribution of Gender per University 
+
+```{r,echo=FALSE, message=F}
+gender_1 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  select(gender_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+gender_2 <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  select(gender_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+gender_3 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  select(gender_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+gender_4 <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  select(gender_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+knitr::kable(
+  list(gender_1, gender_2, gender_3, gender_4),
+  caption = 'Gender Distributions at the Universities (UvA, EUR, UU, RU)',
+  col.names = c("Woman (1) or Man (0)", "Frequency"),
+  booktabs = TRUE, valign = 't'
+)
+```
+
+### Distribution of Gender per University 
+
+```{r, echo=F, message=F}
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+ ggplot(aes(gender_binary, fill = Universiteit1.24)) +
+  geom_bar(position = "dodge") +
+    labs(
+    x = "Gender",
+    y = "Count",
+    fill = "University"
+  ) +
+theme_bw()
+```
+
+... apparently, there are more women at these universities than there are men -- except for Utrecht University -- and there are an especially disproportionate amount at the UvA. Knowing this, we can further investigate this by seeing how they are distributed per position. In other words, if these frequencies are equally distributed across all different position, and thus if there are equal distributions of men and women across lowere (PhD) positions, as there are across higher (Tenured Professor) positions. 
+
+###Gender and Position
+
+#### All Universities 
+
+```{r gender pos all uni, message = F}
+demographics_hannah %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+  ggplot(aes(gender_binary, fill = Functie.24)) +
+  geom_bar(position = "dodge") +
+  labs(
+    x = "Gender",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+```
+
+#### Per University
+
+```{r, message = F, fig.show="hold", out.width="50%"}
+#Amsterdam(UvA)
+demographics_hannah %>%
+   mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  filter(Universiteit.24 == "UvA") %>%
+ ggplot(aes(gender_binary, fill = Functie.24)) +
+  geom_bar(position = "dodge") +
+    labs(
+    title = "UvA",
+    x = "Gender",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+#Rotterdam (EUR)
+demographics_hannah %>%
+   mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  filter(Universiteit.24 == "EUR") %>%
+   ggplot(aes(gender_binary, fill = Functie.24)) +
+  geom_bar(position = "dodge") +
+    labs(
+    title = "EUR",
+    x = "Gender",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+#Utrecht (UU)
+demographics_hannah %>%
+   mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  filter(Universiteit.24 == "UU") %>%
+   ggplot(aes(gender_binary, fill = Functie.24)) +
+  geom_bar(position = "dodge") +
+    labs(
+    title = "UU",
+    x = "Gender",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+
+# Nijmegen (RU)
+demographics_hannah %>%
+   mutate(gender_binary = if_else(perc_female >= .5, 1, 0)) %>%
+  filter(Universiteit.24 == "RU") %>%
+  ggplot(aes(gender_binary, fill = Functie.24)) +
+  geom_bar(position = "dodge") +
+    labs(
+    title = "RU",
+    x = "Gender",
+    y = "Count",
+    fill = "Position"
+  ) +
+theme_bw()
+```
+
+
+
+
+
+
+
+
+
+
+
+## h-Index
+
+### Calculations 
+```{r h-index}
+mean(demographics_hannah$h_index)
+
+# UVA 
+h_in_uva <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_uva <- mean(h_in_uva$h_index) %>%
+  round(2)
+mean_h_uva_race <- tapply(h_in_uva$h_index, h_in_uva$white_or_not, mean)
+mean_h_uva_ethn <- tapply(h_in_uva$h_index, h_in_uva$born_in_binary, mean)
+mean_h_uva_gender <- tapply(h_in_uva$h_index, h_in_uva$gender_binary, mean)
+
+# EUR
+h_in_eur <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_eur <- mean(h_in_eur$h_index) %>%
+  round(2)
+mean_h_eur_race <- tapply(h_in_eur$h_index, h_in_eur$white_or_not, mean)
+mean_h_eur_ethn <- tapply(h_in_eur$h_index, h_in_eur$born_in_binary, mean)
+mean_h_eur_gender <- tapply(h_in_eur$h_index, h_in_eur$gender_binary, mean)
+
+# UU
+h_in_uu <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_uu <- mean(h_in_uu$h_index) %>%
+  round(2)
+mean_h_uu_race <- tapply(h_in_uu$h_index, h_in_uu$white_or_not, mean)
+mean_h_uu_ethn <- tapply(h_in_uu$h_index, h_in_uu$born_in_binary, mean)
+mean_h_uu_gender <- tapply(h_in_uu$h_index, h_in_uu$gender_binary, mean)
+
+
+# RU
+h_in_ru <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_ru <- mean(h_in_ru$h_index) %>%
+  round(2)
+mean_h_ru_race <- tapply(h_in_ru$h_index, h_in_ru$white_or_not, mean)
+mean_h_ru_ethn <- tapply(h_in_ru$h_index, h_in_ru$born_in_binary, mean)
+mean_h_ru_gender <- tapply(h_in_ru$h_index, h_in_ru$gender_binary, mean)
+```
+```{r mean hind per uni}
+# Mean h-index per Uni.
+Universities <- c("UvA", "EUR", "UU", "RU")
+h_indx <- c(mean_h_uva, mean_h_eur, mean_h_uu, mean_h_ru)
+h_uni_df <- cbind(Universities, People, h_indx)
+
+kableExtra::kable(h_uni_df, caption = "Mean h-Index per University")
+
+```
+
+### More
+```{r h-index per uni race}
+# Mean h-index per white/not Uni.
+knitr::kable(
+  list(mean_h_uva_race, mean_h_eur_race, mean_h_uu_race, mean_h_ru_race),
+  caption = 'Mean h-Index White (1) and Non-White (0) People (UvA, EUR, UU, RU)',
+  col.names = c("White", "Mean h-Index"),
+  booktabs = TRUE, valign = 't'
+)
+
+# Mean h-index ethn per Uni.
+knitr::kable(
+  list(mean_h_uva_ethn, mean_h_eur_ethn, mean_h_uu_ethn, mean_h_ru_ethn),
+  caption = 'Mean h-Index Dutch (1) and Non-Dutch (0) People (UvA, EUR, UU, RU)',
+  col.names = c("Dutch", "h-Index"),
+  booktabs = TRUE, valign = 't'
+)
+
+# Mean h-index gender per Uni.
+knitr::kable(
+  list(mean_h_uva_gender, mean_h_eur_gender, mean_h_uu_gender, mean_h_ru_gender),
+  caption = 'Mean h-Index Men (0) and Women (1), (UvA, EUR, UU, RU)',
+  col.names = c("Woman", "h-Index"),
+  booktabs = TRUE, valign = 't'
+)
+```
+
+
+# Ego-Network Descriptives 
+
+## Basics 
+
+
+```{r, include = F, echo=F}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
+net_graph_w1 <- graph_from_adjacency_matrix(wave_1) #graph-object wave 1
+net_graph_w2 <- graph_from_adjacency_matrix(wave_2) #graph-object wave 2
+```
+
+### Wave 1
+
+```{r}
+# wave 1
+# number of vertices
+vcount(net_graph_w1) 
+
+# number of edges
+ecount(net_graph_w1)
+
+# dyad-census
+igraph::dyad_census(net_graph_w1)
+
+# triad-census
+igraph::triad_census(net_graph_w1)
+
+# edge density
+igraph::edge_density(net_graph_w1)
+```
+
+### Wave 2
+
+```{r}
+# wave 2
+# number of vertices
+vcount(net_graph_w2) 
+
+# number of edges
+ecount(net_graph_w2)
+
+# dyad-census
+igraph::dyad_census(net_graph_w2)
+
+# triad-census
+igraph::triad_census(net_graph_w2)
+
+# edge density
+igraph::edge_density(net_graph_w2)
+```
+
+
+
+## Less Basics 
+
+### Reciprocity
+```{r reciprocity w1 and 2}
+#reciprocity w1 
+reciprocity(net_graph_w1, ignore.loops = TRUE, mode = c("default", "ratio"))
+#reciprocity w2 
+reciprocity(net_graph_w2, ignore.loops = TRUE, mode = c("default", "ratio"))
+```
+
+### Degree Centrality {.tabset}
+
+#### Wave 1
+```{r degree centrality w1 and 2}
+#degree centrality w1 
+degree_w1 <- degree(net_graph_w1)
+degree_w1 <- as.data.frame(degree_w1)
+ggplot(degree_w1, aes(as.numeric(degree_w1), colour = as.numeric(degree_w1) )) +
+  geom_histogram(binwidth = .5) +
+  labs(
+    title = "Distribution Degrees Wave 1",
+    x = "Distribution of Degrees",
+    y = "Count"
+  ) +
+  ylim(0, 150) +
+  theme_bw()
+```
+
+#### Wave 2
+```{r degree centrality w2}
+#degree centrality w2 
+degree_w2 <- degree(net_graph_w1)
+degree_w2 <- as.data.frame(degree_w2)
+ggplot(degree_w2, aes(as.numeric(degree_w2), colour = as.numeric(degree_w2))) +
+  geom_histogram(binwidth = .5) +
+  labs(
+    title = "Distribution Degrees Wave 2",
+    x = "Distribution of Degrees",
+    y = "Count"
+  ) +
+  ylim(0, 150) +
+  theme_bw()
+
+#could also do -- degree centrality of white v. non-white people, or degree centrality of dutch v. non-dutch people 
+```
+
+### Betweenness Centrality {.tabset}
+
+#### Wave 1
+```{r betweenness centrality w1, message=F, warning=FALSE}
+betweenness_w1 <- igraph::betweenness(net_graph_w1, directed = T)
+betweenness_w1 <- as.data.frame(betweenness_w1)
+ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betweenness_w1))) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    title = "Distribution Betweenness Wave 1",
+    x = "Distribution of Betweenness",
+    y = "Count"
+  ) +
+  theme_bw()
+```
+
+#### Wave 2
+```{r betweenness centrality w2, message=F, warning=F}
+betweenness_w2 <- igraph::betweenness(net_graph_w2, directed = T)
+betweenness_w2 <- as.data.frame(betweenness_w2)
+ggplot(betweenness_w2, aes(as.numeric(betweenness_w2), colour = as.numeric(betweenness_w2))) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    title = "Distribution Betweenness Wave 2",
+    x = "Distribution of Betweenness",
+    y = "Count"
+  ) +
+  theme_bw()
+```
+
+
+### Clustering {.tabset}
+
+#### Wave 1 
+```{r clustering w1 and 2, message = F, warning=F}
+#clustering w1
+clustering_w1 <- igraph::transitivity(net_graph_w1, type = "local")
+clustering_w1 <- as.data.frame(clustering_w1)
+ggplot(clustering_w1, aes(as.numeric(clustering_w1), colour = as.numeric(clustering_w1))) +
+  geom_histogram(binwidth = .05) +
+  labs(
+    title = "Distribution Clustering Wave 1",
+    x = "Distribution of Clustering",
+    y = "Count"
+  ) +
+  theme_bw()
+```
+
+#### Wave 2
+```{r clustering w2}
+#clustering w2
+clustering_w2 <- igraph::transitivity(net_graph_w2, type = "local")
+clustering_w2 <- as.data.frame(clustering_w2)
+ggplot(clustering_w2, aes(as.numeric(clustering_w2), colour = as.numeric(clustering_w2))) +
+  geom_histogram(binwidth = .05) +
+  labs(
+    title = "Distribution Clustering Wave 2",
+    x = "Distribution of Clustering",
+    y = "Count"
+  ) +
+  theme_bw()
+```
+
+# Full Network Descriptives
+## Density 
+```{r density w1 and 2}
+#density w1
+density_w1 <- igraph::edge_density(net_graph_w1)
+density_w1
+#density w2 
+density_w2 <- igraph::edge_density(net_graph_w2)
+density_w2 #bigger!!!
+```
+
+## Average Path Length
+```{r path length  w1 and 2}
+#average path length w1
+mean((ego_size(net_graph_w1, order = 2, mode = "out") - 1)/vcount(net_graph_w1))
+#average path length w2
+mean((ego_size(net_graph_w2, order = 2, mode = "out") - 1)/vcount(net_graph_w2))
+```
+
+## Segregation / Morton's I
+```{r sna bane of my existence, include = F, echo = F}
+unloadNamespace("sna")
+require(sna)
+```
+
+```{r morton w1}
+#segregation/morton's i - wave 1 
+#are nodes who are close to each other more alike?
+geodistances_w1 <- geodist(wave_1, count.paths = TRUE)
+geodistances_w1 <- geodistances_w1$gdist
+diag(geodistances_w1) <- Inf
+# step 2: define a distance decay function.
+weights_w1 <- exp(-geodistances_w1)
+view(weights_w1) #weights for distance
+#moren
+snam1_w1 <- sna::nacf(wave_1, demographics_hannah$perc_female, type = "moran", neighborhood.type = "out", demean = TRUE)
+snam1_w1[2]
+#or, we look at what jochem's function yields
+moran_result_jochem_w1 <- fMoran.I(demographics_hannah$perc_female, scaled = FALSE, weight = weights_w1, na.rm = TRUE, rowstandardize = FALSE)
+moran_result_jochem_w1
+```
+... not that I know what any of this means ... if I am being honest -- what is the meaning of things like "observed' and 'expected'? Why do they differ so much? Does the 'large' difference (I do not know what the scale is, so also cannot assess size tbh) relate to the p-value in some way? Larger difference == larger P?
+```{r morton w2}
+#segregation/morton i  wave 2 
+geodistances_w2 <- geodist(wave_2, count.paths = TRUE)
+geodistances_w2 <- geodistances_w2$gdist
+diag(geodistances_w2) <- Inf
+weights_w2 <- exp(-geodistances_w2)
+# step 2: define a distance decay function
+weights_w2 <- exp(-geodistances_w2)
+view(weights_w2) #weights 3 distance
+#moren
+snam1_w2 <- sna::nacf(wave_2, demographics_hannah$perc_female, type = "moran", neighborhood.type = "out", demean = TRUE)
+snam1_w2[2] #lower
+moran_result_jochem_w2 <- fMoran.I(demographics_hannah$perc_female, scaled = FALSE, weight = weights_w2, na.rm = TRUE, rowstandardize = FALSE)
+moran_result_jochem_w2 #lower but more significant
+```
+... maybe I was right in the 'larger difference, larger p' -- cause we're dealing with a smaller difference, and a smaller (and, signficiant, suddenly) p. 
+# Visual Network Descriptives 
+## Networks for First Authors 
+```{r load all data, include = F, echo = F}
+unloadNamespace("sna")
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE)
+```
+### igraphs For Waves
+```{r the graphs from igraph, figures-side, fig.show="hold", out.width="50%"}
+#define the waves 
+wave_1 <- graph_from_adjacency_matrix(wave_1)
+wave_2 <- graph_from_adjacency_matrix(wave_2)
+plot(wave_1,
+     vertex.label = NA,
+     vertex.size = 7,
+     edge.curved = 0.2,
+     edge.arrow.size = 0.1,
+     main = "Network in Wave 1")
+plot(wave_2,
+     vertex.label = NA,
+     vertex.size = 7,
+     edge.curved = 0.2,
+     edge.arrow.size = 0.1,
+     main = "Network in Wave 2")
+```
+
+```{r no isolates figures-side, fig.show="hold", out.width="50%"}
+indegr_w1 <- igraph::degree(wave_1, mode = "in")
+indegr_w2 <- igraph::degree(wave_2, mode = "in")
+
+isolates_w1 <- V(wave_1)[degree(wave_1, mode = "all") == 0]
+
+noisolates_w1 <- delete_vertices(wave_1, isolates_w1)
+gsize(noisolates_w1)
+gorder(noisolates_w1)
+
+plot(noisolates_w1,
+     vertex.label = NA,
+     vertex.size = 10,
+     vertex.color = "blue",
+     vertex.frame.color = "black",
+     edge.curved = 0.2,
+     edge.arrow.size = 0.4,
+     edge.color = "gray",
+     edge.width = 0.3,
+     main = "Network at wave 1 without isolates",
+     sub = "89 edges, 75 vertices")
+
+
+isolates_w2 <- V(wave_2)[degree(wave_2, mode = "all") == 0]
+
+noisolates_w2 <- delete_vertices(wave_2, isolates_w2)
+gsize(noisolates_w2)
+gorder(noisolates_w2)
+
+plot(noisolates_w2,
+     vertex.label = NA,
+     vertex.size = 10,
+     vertex.color = "blue",
+     vertex.frame.color = "black",
+     edge.curved = 0.2,
+     edge.arrow.size = 0.4,
+     edge.color = "gray",
+     edge.width = 0.3,
+     main = "Network at wave 2 without isolates",
+     sub = "213 edges, 141 vertices")
+```
+
+### ggraphs for Waves
+#### h-Index
+```{r ggraph w1, figures-side, fig.show="hold", out.width="50%"}
+### wave 1
+
+indegr_w1 <- degree(wave_1, mode = "in")
+
+# assign h-index to scholar
+V(wave_1)$h_index <- demographics_hannah$h_index
+V(wave_1)$indegree <- indegr_w1
+
+#remove isolates
+noisolates_w1 <- delete_vertices(wave_1, V(wave_1)[degree(wave_1) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w1,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index)) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void() 
+       
+### wave 2
+
+indegr_w2 <- degree(wave_2, mode = "in")
+
+# assign h-index to scholar
+V(wave_2)$h_index <- demographics_hannah$h_index
+V(wave_2)$indegree <- indegr_w2
+
+#remove isolates
+noisolates_w2 <- delete_vertices(wave_2, V(wave_2)[degree(wave_2) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w2,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index)) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void()
+```
+
+#### White Passing
+```{r white-passing, figures-side, fig.show="hold", out.width="50%"}
+### wave 1
+# assign h-index to scholar
+V(wave_1)$white_or_not <- demographics_hannah$white_or_not
+V(wave_1)$h_index <- demographics_hannah$h_index
+V(wave_1)$indegree <- indegr_w1
+
+#remove isolates
+noisolates_w1 <- delete_vertices(wave_1, V(wave_1)[degree(wave_1) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w1,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(white_or_not))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void()
+
+indegr_w2 <- degree(wave_2, mode = "in")
+
+# assign h-index to scholar
+V(wave_2)$white_or_not <- demographics_hannah$white_or_not
+V(wave_2)$h_index <- demographics_hannah$h_index
+V(wave_2)$indegree <- indegr_w2
+
+#remove isolates
+noisolates_w2 <- delete_vertices(wave_2, V(wave_2)[degree(wave_2) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w2,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape =  
+                        as.factor(white_or_not))) +
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "lightblue", high = "blue") + 
+  theme_void() 
+```
+
+#### Born-In
+```{r ggraph born in w1, figures-side, fig.show="hold", out.width="50%", message=F}
+### wave 1
+# assign h-index to scholar
+V(wave_1)$born_in_binary <- demographics_hannah$born_in_binary
+V(wave_1)$h_index <- demographics_hannah$h_index
+V(wave_1)$indegree <- indegr_w1
+
+#remove isolates
+noisolates_w1 <- delete_vertices(wave_1, V(wave_1)[degree(wave_1) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w1,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(born_in_binary))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void() +
+  labs(title = "Network wave 1: no isolates, node size based on indegrees & colour based on H-index")
+
+### wave 2
+
+indegr_w2 <- degree(wave_2, mode = "in")
+
+# assign h-index to scholar
+V(wave_2)$born_in_binary <- demographics_hannah$born_in_binary
+V(wave_2)$h_index <- demographics_hannah$h_index
+V(wave_2)$indegree <- indegr_w2
+
+#remove isolates
+noisolates_w2 <- delete_vertices(wave_2, V(wave_2)[degree(wave_2) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w2,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(born_in_binary))) +
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void() +
+  guides(color = guide_legend(override.aes = list(size = 10))) 
+```
+
+#### Gender 
+
+```{r}
+### wave 1
+# assign h-index to scholar
+V(wave_1)$gender <- ifelse(demographics_hannah$perc_female >= .5, 1, 0)
+V(wave_1)$h_index <- demographics_hannah$h_index
+V(wave_1)$indegree <- indegr_w1
+V(wave_1)$Universiteit <- demographics_hannah$Universiteit.24
+
+
+#remove isolates
+noisolates_w1 <- delete_vertices(wave_1, V(wave_1)[degree(wave_1) == 0])
+
+#set size of plot
+options(repr.plot.width = 20, repr.plot.height = 20)
+
+#plot wave 1
+ggraph(noisolates_w1,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "lightblue", high = "blue") + 
+  theme_void()
+
+indegr_w2 <- degree(wave_2, mode = "in")
+
+# assign h-index to scholar
+V(wave_2)$white_or_not <- ifelse(demographics_hannah$perc_female >= .5, 1, 0)
+V(wave_2)$h_index <- demographics_hannah$h_index
+V(wave_2)$indegree <- indegr_w2
+V(wave_2)$Universiteit <- demographics_hannah$Universiteit.24
+
+#remove isolates
+noisolates_w2 <- delete_vertices(wave_2, V(wave_2)[degree(wave_2) == 0])
+
+#set size of plot
+options(repr.plot.width = 40, repr.plot.height = 40)
+
+#plot wave 1
+ggraph(noisolates_w2,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape =  
+                        as.factor(white_or_not))) +
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "lightblue", high = "blue") + 
+  theme_void() 
+
+#facet-wrapped per university 
+ggraph(noisolates_w2,
+       layout = "fr") +
+  geom_edge_link(color = "gray", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape =  
+                        as.factor(white_or_not))) +
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "lightblue", high = "blue") + 
+  theme_void() 
+
+```

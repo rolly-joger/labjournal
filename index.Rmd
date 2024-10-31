@@ -9,7 +9,6 @@ output:
     toc: yes
     toc_float:
       collapsed: true
-font-family: Times New Roman
       
 ---
 

@@ -1,0 +1,472 @@
+---
+title: "RSiena Analysis"
+output: html_document
+date: "2024-10-16"
+---
+# Get the Basics
+```{r packages, message = F, warning=F}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+library(labelled)
+library(forcats)
+```
+
+```{r dataset, include=F, warning=F, message=FALSE}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE)
+view(demographics_hannah)
+net_soc_array <- read_rds("datasets_final/net_soc_array_first_auth.rds")
+```
+
+```{r fcolnet, include = F, warning=F, message=F}
+fcolnet <- function(data = scholars, university = "RU", 
+                    discipline = "sociology", waves = list(c(2015,
+                                                             2018), c(2019, 2023)), type = c("first")) {
+  
+  # step 1
+  demographics <- do.call(rbind.data.frame, data$demographics)
+  demographics <- demographics %>%
+    mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+                                                                                                                 is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+                                                                                                                                                                          ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+                                                                                                                                                                                                                                                                                  is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+  
+  sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+                     university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+                     university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+  
+  demographics_soc <- demographics[sample, ]
+  scholars_sel <- lapply(scholars, "[", sample)
+  
+  # step 2
+  ids <- demographics_soc$au_id
+  nwaves <- length(waves)
+  nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+                                                                              ids))
+  dimnames(nets)
+  
+  # step 3
+  df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+                                                                                                                  function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+                                                                                                                                                                                 recursive = FALSE))
+  
+  df_works <- df_works[!duplicated(df_works), ]
+  
+  # step 4
+  if (type == "first") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        ego <- df_works_w$works_author[i][[1]]$au_id[1]
+        alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+        }
+      }
+    }
+  }
+  
+  if (type == "last") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+        alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+        }
+      }
+    }
+  }
+  
+  if (type == "all") {
+    for (j in 1:nwaves) {
+      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+      ]
+      for (i in 1:nrow(df_works_w)) {
+        egos <- df_works_w$works_author[i][[1]]$au_id
+        if (sum(ids %in% egos) > 0) {
+          nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+        }
+      }
+    }
+  }
+  output <- list()
+  output$data <- scholars_sel
+  output$nets <- nets
+  return(output)
+}
+
+```
+
+```{r user defined functions, include = F, message=F, warning=F}
+GeodesicDistribution <- function(i, data, sims, period, groupName, varName, levls = c(1:5, Inf), cumulative = TRUE,
+    ...) {
+    x <- networkExtraction(i, data, sims, period, groupName, varName)
+    require(sna)
+    a <- sna::geodist(symmetrize(x))$gdist
+    if (cumulative) {
+        gdi <- sapply(levls, function(i) {
+            sum(a <= i)
+        })
+    } else {
+        gdi <- sapply(levls, function(i) {
+            sum(a == i)
+        })
+    }
+    names(gdi) <- as.character(levls)
+    gdi
+}
+
+# The following function is taken from the help page for sienaTest
+
+testall <- function(ans) {
+    for (i in which(ans$test)) {
+        sct <- score.Test(ans, i)
+        cat(ans$requestedEffects$effectName[i], "\n")
+        print(sct)
+    }
+    invisible(score.Test(ans))
+}
+```
+
+# Variables 
+
+```{r variables definition}
+#dependent variable 
+net <- sienaDependent(net_soc_array)
+
+#independent variable 
+hoogleraar_covar <-  coCovar(demographics_hannah$hoogleraar)
+functie_covar <- coCovar(demographics_hannah$functie)
+gender_covar <- coCovar(demographics_hannah$perc_female)
+country_covar <- coCovar(demographics_hannah$born_in_binary)
+white_pass_covar <- coCovar(demographics_hannah$white_or_not)
+h_index_covar <- coCovar(demographics_hannah$h_index)
+```
+
+# Get Effect Structure 
+
+```{r good data}
+the_data <- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, functie_covar, h_index_covar)
+myeff_1 <- getEffects(the_data)
+myeff_1
+```
+
+```{r where to put it, include=F, echo=F}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+print01Report(the_data, modelname = "./results/prelimsh*t")  
+```
+# Models - Parameter Effects {.tabset}
+## M1: Race
+
+### Making the Model
+```{r}
+myeff_1 <- getEffects(the_data)
+view(myeff_1)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, inpopX, interaction1 ="white_pass_covar")
+```
+
+### Results
+```{r results alogoritm, echo = F}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects 
+```
+
+```{r, include = F, echo = F}
+#mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevans = mod_1_effects, returnDeps=TRUE)
+#?siena07
+# ans_M2_2
+```
+
+## M2: Ethnicity
+
+```{r model 2}
+myeff_2 <- getEffects(the_data)
+myeff_2 <- includeEffects(myeff_2, sameX, interaction1 = "country_covar")
+myeff_2 <- includeEffects(myeff_2, egoX, altX, interaction1 = "country_covar")
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_2_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_2, returnDeps = TRUE)
+mod_2_effects
+#write_rds(mod_2_effects, "mod_2_effecs_conv_1.rds")
+```
+
+
+## M3: Gender
+
+```{r gender model}
+myeff_3 <- getEffects(the_data)
+myeff_3 <- includeEffects(myeff_3, sameX, interaction1 = "gender_covar")
+myeff_3 <- includeEffects(myeff_3, egoX, altX, interaction1 = "gender_covar")
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_3_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_3, returnDeps = TRUE)
+mod_3_effects
+#write_rds(mod_3_effects, "mod_3_effecs_conv_1.rds")
+```
+
+
+
+## M4: Gender and Race
+```{r fourthmodel, include = T}
+myeff_4 <- includeEffects(myeff_1, sameX, interaction1 = "gender_covar")
+myeff_4 <- includeEffects(myeff_4, egoX, altX, interaction1 = "gender_covar")
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_4_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_4, returnDeps = TRUE)
+mod_4_effects
+#write_rds(mod_4_effects, "mod_4_effecs_conv_1.rds")
+```
+## M5: Gender and Ethnicity
+
+```{r fifththmodel, include = T}
+myeff_5 <- includeEffects(myeff_2, sameX, interaction1 = "gender_covar")
+myeff_5 <- includeEffects(myeff_5, egoX, altX, interaction1 = "gender_covar")
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_5_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_5, returnDeps = TRUE)
+mod_5_effects
+#write_rds(mod_5_effects, "mod_5_effecs_conv_1.rds")
+```
+
+# GOF -- Parameter Models {.tabset}
+
+## M1
+
+### Create Effects
+```{r GOF functions Model 1, message = F, warning=F}
+model_1_effects <- read_rds("mod_1_effects_conv_1.rds")
+gofi0_1 <- sienaGOF(model_1_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_1 <- sienaGOF(model_1_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_1 <- sienaGOF(model_1_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects
+```{r GOF Graphs Model 1}
+plot(gofi0_1, main = "")
+plot(gofo0_1, main = "")
+plot(gof0.gd_1, main = "") #so these don't work, we need to adjust! (like, with other models? so look at 4)
+```
+
+## Model 4
+
+### Create Effects
+```{r GOF functions Model 4}
+model_4_effects <- read_rds("mod_4_effecs_conv_1.rds")
+gofi0_4 <- sienaGOF(model_4_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_4 <- sienaGOF(model_4_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_4 <- sienaGOF(model_4_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects
+```{r GOF Graphs Model 4}
+plot(gofi0_4, main = "") # still a tragedy bb
+plot(gofo0_4, main = "") #horrible
+plot(gof0.gd_4, main = "") #bad (aka: need structural effects)
+```
+
+## Model 5
+
+### Create Effects
+```{r GOF functions Model 5}
+model_5_effects <- read_rds("mod_5_effecs_conv_1.rds")
+gofi0_5 <- sienaGOF(model_5_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_5 <- sienaGOF(model_5_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_5 <- sienaGOF(model_5_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects 
+
+```{r GOF Graphs Model 5}
+plot(gofi0_5, main = "") # still a tragedy bb
+plot(gofo0_5, main = "") #horrible
+plot(gof0.gd_5, main = "") #bad (aka: need structural effects)
+```
+
+# Models With Structrural Effects {.tabset}
+
+## Race
+
+```{r strctrl white passing}
+myeff_1 <- getEffects(the_data)
+#view(myeff_1)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, transTies)
+
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects # 
+#write_rds(mod_1_effects, "mod_1_structural_eff_incl_pt2.rds")
+
+```
+
+## Ethnicity
+
+```{r strctrl ethnicity}
+myeff_2 <- getEffects(the_data)
+#view(myeff_2)
+myeff_2 <- includeEffects(myeff_2, sameX, interaction1 = "country_covar")
+myeff_2 <- includeEffects(myeff_2, egoX, altX, interaction1 ="country_covar")
+myeff_2 <- includeEffects(myeff_2, transTrip)
+myeff_2 <- includeEffects(myeff_2, transTies)
+
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_2_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_2, returnDeps = TRUE)
+mod_2_effects # 
+#write_rds(mod_2_effects, "mod_2_structural_eff_incl.rds")
+```
+
+## Gender 
+
+```{r strctrl gender}
+myeff_3 <- getEffects(the_data)
+#view(myeff_1)
+myeff_3 <- includeEffects(myeff_3, sameX, interaction1 = "gender_covar")
+myeff_3 <- includeEffects(myeff_3, egoX, altX, interaction1 ="gender_covar")
+myeff_3 <- includeEffects(myeff_3, transTrip)
+myeff_3 <- includeEffects(myeff_3, transTies)
+
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_3_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_3, returnDeps = TRUE)
+mod_3_effects # 
+#write_rds(mod_3_effects, "mod_3_structural_eff_incl.rds")
+
+```
+
+## Race/Gender
+```{r strctrl race gender}
+myeff_4 <- includeEffects(myeff_1, sameX, interaction1 = "gender_covar")
+myeff_4 <- includeEffects(myeff_4, egoX, altX, interaction1 ="gender_covar")
+
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_4_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_4, returnDeps = TRUE)
+mod_4_effects # 
+#write_rds(mod_4_effects, "mod_4_structural_eff_incl.rds")
+
+```
+
+## Ethnicity/Gender
+
+```{r strctrl ethnicity gender}
+myeff_5 <- includeEffects(myeff_2, sameX, interaction1 = "gender_covar")
+myeff_5 <- includeEffects(myeff_5, egoX, altX, interaction1 ="gender_covar")
+
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_5_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_5, returnDeps = TRUE)
+mod_5_effects # 
+#write_rds(mod_5_effects, "mod_5_structural_eff_incl.rds")
+
+```
+
+# GOF Structural Effects {.tabset}
+## M1
+### Create Effects
+```{r GOF functions Model 1 str, message = F, warning=F}
+model_1_effects <- read_rds("mod_1_structural_eff_incl_pt2.rds")
+gofi0_1 <- sienaGOF(model_1_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_1 <- sienaGOF(model_1_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_1 <- sienaGOF(model_1_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects
+```{r GOF Graphs Model 1 str}
+plot(gofi0_1, main = "")
+plot(gofo0_1, main = "")
+plot(gof0.gd_1, main = "") #so these don't work, we need to adjust! (like, with other models? so look at 4)
+```
+
+## Model 2
+
+### Create Effects
+```{r GOF functions Model 2 str}
+model_2_effects <- read_rds("mod_2_structural_eff_incl.rds")
+gofi0_2 <- sienaGOF(model_2_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_2 <- sienaGOF(model_2_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_2 <- sienaGOF(model_2_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects
+```{r GOF Graphs Model 2 str}
+plot(gofi0_2, main = "") # still a tragedy bb
+plot(gofo0_2, main = "") #horrible
+plot(gof0.gd_2, main = "") #bad (aka: need structural effects)
+```
+
+
+## Model 3
+
+### Create Effects
+```{r GOF functions Model 3 str}
+model_3_effects <- read_rds("mod_3_structural_eff_incl.rds")
+gofi0_3 <- sienaGOF(model_3_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_3 <- sienaGOF(model_3_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_3 <- sienaGOF(model_3_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects
+```{r GOF Graphs Model 3 str}
+plot(gofi0_3, main = "") # still a tragedy bb
+plot(gofo0_3, main = "") #horrible
+plot(gof0.gd_3, main = "") #bad (aka: need structural effects)
+```
+
+## Model 4
+
+### Create Effects
+```{r GOF functions Model 4 str}
+model_4_effects <- read_rds("mod_4_structural_eff_incl.rds")
+gofi0_4 <- sienaGOF(model_4_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_4 <- sienaGOF(model_4_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_4 <- sienaGOF(model_4_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects
+```{r GOF Graphs Model 4 str}
+plot(gofi0_4, main = "") # still a tragedy bb
+plot(gofo0_4, main = "") #horrible
+plot(gof0.gd_4, main = "") #bad (aka: need structural effects)
+```
+
+## Model 5
+
+### Create Effects
+```{r GOF functions Model 5 str}
+model_5_effects <- read_rds("mod_5_structural_eff_incl.rds")
+gofi0_5 <- sienaGOF(model_5_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+gofo0_5 <- sienaGOF(model_5_effects, OutdegreeDistribution, verbose = FALSE, join = TRUE, levls = c(0:10, 15, 20),
+    varName = "net")
+gof0.gd_5 <- sienaGOF(model_5_effects, GeodesicDistribution, cumulative = FALSE, verbose = FALSE, join = TRUE, varName = "net")
+```
+
+### Describe Effects 
+
+```{r GOF Graphs Model 5 str}
+plot(gofi0_5, main = "") # still a tragedy bb
+plot(gofo0_5, main = "") #horrible
+plot(gof0.gd_5, main = "") #bad (aka: need structural effects)
+```

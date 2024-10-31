@@ -1,0 +1,196 @@
+---
+title: "Making Race and Ethnicity"
+output: html_document
+date: "2024-10-16"
+---
+ 
+```{r packages, include = F}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+```
+```{r setup, include=FALSE}
+demographics_hannah <- read_csv("demographics_hannah.csv")
+```
+
+# Data Transformation -- Ethnicity 
+
+Gender was easy, ethnicity, however, is going to be a little more difficult. Not only because we live in a world that has been subject to some intensive globalisation -- which has spread last names beyond the scope of their origin, thus leading them to be less strongly associated with ethnicity -- but also because it is such a sensitive subject. How are we going to characterise the groups? Are we goign to be looking at white, and non-white people? Are we going to scrape images of them and assess whether their skin colour is white enough -- or not? Or, are we going to assess them based on their last name, something that is quite difficult in countries with populations descendent from former slaves.\
+\
+Sadly enough, we do not have enough time and space (and know-how, on a webscraping level) to fully and adequately deal with this. As such, we try several different ways, and find out if we can discover one that would be most useful to our research -- starting with one's last name
+
+## Last Names 
+
+Theoretically, one of the easiest ways to determine one's ethnicity, would be to find out where they come from. And the best -- well, quickest -- way to find out where they come from is by using their last name.\
+Now, we've already created a variable containing each person's last name in our [names] dataset, and we can enter each of these names into the CBS *namenbank* to find out its origin. While this is easier said than done, we do know how to start: by trying to remember how webscraping worked again. 
+
+### Webscraping -- a tutorial
+
+Let's follow one of Jochem's tutorials: 
+
+```{r polstaff}
+#staff leiden political science
+lpol_staff <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1")
+#extract specific info
+lpol_staff <- lpol_staff %>%
+  html_nodes("body") %>%
+  html_nodes(xpath = "//a") %>%
+  html_text()
+head(lpol_staff) #this seems useless
+view(lpol_staff) #this is a lot 
+
+#we can also get More from scraping 
+lpol_staff_names <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") %>%
+  html_element("section.tab.active") %>%
+  html_elements("ul.table-list") %>%
+  html_elements("li") %>%
+  html_elements("a") %>%
+  html_elements("div") %>%
+  html_elements("strong") %>%
+  html_text()
+
+lpol_staff_functions <- read_html("https://www.universiteitleiden.nl/en/social-behavioural-sciences/political-science/staff#tab-1") %>%
+  html_element("section.tab.active") %>%
+  html_elements("ul.table-list") %>%
+  html_elements("li") %>%
+  html_elements("a") %>%
+  html_elements("div") %>%
+  html_elements("span") %>%
+  html_text()
+```
+
+### Webscraping: Following the Tutorial
+
+Since we are dealing with a website that has a specific webpage for each name, we start by inspecting the location of the origin of the name using the first individual in the dataset who'se name came up as 'not-western' when manually entering last names into the search engine: **Arat**
+
+```{r}
+arat <- rvest::read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Arat&nfd_naam=Arat&info=analyse+en+verklaring&operator=eq&taal=") %>%
+  html_nodes("body") %>%
+  html_text()
+head(arat) #so, we get a big string full of words, let's see if we can find a standardised way to extract the country of origin
+
+#we'll be using stringr -- with much difficulty 
+arat <- as.data.frame(arat)  #is it the structure of my data?
+arat <- str_extract_all(arat, boundary("word")) #what if we seperate 
+substring(arat, "De", "\\.") #nope
+str_detect(arat, "Turkije") #dus ik kan hier iets mee: ik kan zeggen, 
+#voor elk land ooit dat wel, maar kijke of dit land in deze string staat,
+#en als er een true teruggegeven wordt, note dan het land 
+```
+
+
+So that was a masterclass in how *not* to succeed, let me see if I can do it differently:
+
+```{r better}
+arat <- rvest::read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Bilecen&nfd_naam=Bilecen&info=analyse+en+verklaring&operator=eq&taal=")  %>% #take a look at the website, and see if you can find a more precise text extraction
+  html_nodes("body") %>%
+  html_elements("div") %>%
+  html_elements("p") %>%
+  html_text() #ok that works-ish
+groennou <- rvest::read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=Sivak&nfd_naam=Sivak&info=analyse+en+verklaring&operator=eq&taal=")  %>%
+  html_nodes("body") %>%
+  html_elements("div") %>%
+  html_elements("p") %>%
+  html_text() #but it does not work for a non-western/dutch name 
+
+
+name_ethnicity <- function(names = "names element") { 
+
+names$name_origin[i] <- names$read_html("https://www.cbgfamilienamen.nl/nfb/detail_naam.php?gba_naam=",
+                                  name$last_name[i],
+                                  "&nfd_naam=",
+                                  name$last_name[i],
+                                  "&info=analyse+en+verklaring&operator=eq&taal=") %>%  
+                                  html_nodes("body") %>%
+                                  html_elements("div") %>%
+                                  html_elements("p") %>%
+                                  html_text() #and neither does this, apparently
+}
+```
+
+... ok, so that is also a no... Maybe we'll get further with RSelenium/Java things? 
+
+### Webscraping -- RSelenium ftw?
+
+In other words, let's get our laptop do make some clicks on websites -- using RSelenium.\
+\
+First, we load our libraries 
+
+```{r}
+#so, this is like try 15 -- but, I've figured out how to do this now 
+#install.packages("seleniumPipes") #use pipes in RSelenium
+library(seleniumPipes) 
+library(RSelenium) #RSelenium to use the webdriver
+library(selenium) #selenium if RSelenium is giving me errors I cannot deal with 
+library(httr)
+library(curl)
+library(tidyverse)
+```
+
+Then we try to get RSelenium / Selenium started: I figured it out, finally, after several attempts. The main thing that solved it for me was to install docker, run a r-selenium firefox image, and run my webscraping on the hub/port the container is also running on. 
+```{r selenium tries}
+#selenium_server_available(4444L) #check if my port is available 
+#get_server_status(4444L) #check the status of the port 
+#sessionInfo() -- use this if I want to know what the sesion looks like 
+
+#then we do an initial test with a search engine: 
+#url <- "https://www.ecosia.org" #assign webadress to object 'url'
+#remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444L, browserName = "firefox") #assign attributes to remote driver/remDr
+#remDr$open() #open the webpage 
+
+#then open the Selenium Grid Console, so I can see what I'm doing 
+
+#remDr$navigate(url) #navigate to the previously assigned url
+#remDr$findElement(using = "css", value = "div.search-form__search-field")$highlightElement() #highlight the search bar 
+#remDr$findElement(using = "css", value = "div.search-form__search-field")$clickElement() #click on the search bar
+
+# ok, so we now know how it works, then we can go to the cbgfamilienamenbank
+
+#url <- "https://www.cbgfamilienamen.nl" #url 
+#remDr$navigate(url) #navigate to website 
+#remDr$findElement(using = "css", value = "input")$highlightElement() #highlight search bar 
+#remDr$findElement(using = "css", value = "input")$sendKeysToElement(list("Ou", key = "enter")) #enter a name into search bar (when making function, the string the content of my df/vector/list)
+
+#new page has a navigation bar, we want to click on. the 'analyse en verklaring' element=
+#remDr$findElement("link text", "analyse en verklaring")$highlightElement() #highlight
+#remDr$findElement("link text", "analyse en verklaring")$clickElement() #gotten to the right page 
+#remDr$findElement(using = "id", value = "href")$getElementText() #ok so that's now what I want, I need to furhter figure out how to achieve what I want using this. 
+```
+This -- the webscraping using RSelenium -- is still a work in progress. I need to do several other things before I can automate this:
+\
+I. First I have to find a way to extract the text beneath "kenmerken";\
+II. Then I'll have to assign each 'kenmerken' string with a name/id;\
+III. Then I'll have to rbind it into a dataframe;\
+IV. Then I'll have to make a list, and give each author a tibble consisting of the string split up in all its individual elements;\
+V. Then I'll apply "is_country" to each element;\
+VI. If "if_country" is true, then we print the name of the country;\
+VII. And then we have to see if we can clean something up
+
+# Manual
+
+So, that did not work -- and would honestly take up too much time to fully carry out, which is a waste of time in a class focussed on *data analysis*, and not webscraping. As such, I will therefore acquire these data by 'scraping' them by hand -- which essentially means that I will look up each individual in de data, and find out what their score is on the variable that I want to create.\
+\
+This 'variable' is another difficult aspect, because how do you quantify whether someone would belong to a marginalised identity-group -- and how do you conceptualise this group. I believe that the best way to do this is by taking a two pronged approach: country of birth, and 'whiteness'.\
+**Country of Birth** would indicate whether someone was born in the Netherlands or not, and would allow me to see if there are any differences in the ways collaboration-networks of ego's not born in the Netherlands (substantially) differ from those who are. *However*, country of birth does not fully cover what I want to capture here, and might instead give a skewed image due to the dimensionality of the concept. The Netherlands has a rather sizeable proportion of people with a Morrocan background, for example, but many of them are born in the Netherlands -- and would thus be excluded if one measured ethnicity by country of birth. Therefore, I will add in another measure: white-passing. My intention with this variale is to see if an individual is white-passing, and whether this leads to any structural differences in networks of white-passing, and non-white passing people. **White Passing** is of course, a highly subjective variable, but since I am coding and collecting this variable by hand, I believe that the measurement will be as close to what I intend to measure as possible. Whether and individual is *white passing* will be assessed based on a picture of theirs I can find on the internet -- and if such an image cannot be found, I will code their score as 'missing'. 
+
+# The Data 
+
+The "country of birth" data was gathered using the place of birth found on people's PhD theses, information found on their CV's and personal websites, and even in several cases by looking at their LinkedIn pages. Alltogether it yielded the following dataset:\
+
+```{r, message = F}
+library(readr)
+demographics <- read_rds("gender_demographics.rds")
+head(demographics[,c(1, 23:25)])
+```

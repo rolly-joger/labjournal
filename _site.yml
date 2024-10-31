@@ -29,23 +29,17 @@ navbar:
       - text: "The Data"
         href: dataprep.final.html
       - text: "Making Gender"
-        href: gender.final.html
+        href: making.gender.html
       - text: "Making Ethnicity"
-        href: ethnicity.scraping.html
-      - text: "Prelim. Info(graphics)"
-        href: describeyour.ideal.man.html
-      - text: "Some First Analysis"
-        href: results.prelim.prelim.html
-      - text: "Some Descriptives et al."
-        href: network.statistics.html
-    - text: "F*cking Around and Finding Out"
-      menu:
-      - text: "Making Graphs and Taking Names"
-        href: Graphs1.html
-      - text: "Never Gonna Prep You Up"
-        href: dataprep.html
-      - text: "Scrapey Doo"
-        href: Wrangling_Some_Data.html
+        href: making.ethnicity.html
+      - text: "h-Index" 
+        href: h.index.html 
+      - text: "Final Dataset"
+        href: full.and.final.data.html
+      - text: "Descriptives"
+        href: all.descriptives.html
+      - text: "Analysis"
+        href: rsiena.analysis.html
     - text: "First Drafts"
       menu:
       - text: "Introduction First Draft"
@@ -57,14 +51,19 @@ navbar:
     - text: "Final 'Paper'"
       menu:
       - text: "Introduction"
-        href:
+        href: final.intro.html
       - text: "Theoretical Framework"
-        href:
-      - text: "Data and Methods"
-        href:
-      - text: "Analysis et al."
-        href:
+        href: final.tk.html
+      - text: "Data and Methods, Data"
+        href: final.datamethods.html
+      - text: "Data and Methods, Descriptives"
+        href: final.descriptives.for.paper.html
+      - text: "Analysis et al. - Descriptive"
+        href: descriptive.rsq.answer.html
+      - text: "Analysis et al. - RSiena"
+        href: explanatory.rsq.answer.html
       - text: "Conclusions"
+        href: final.concl.disc.html
 
 
 

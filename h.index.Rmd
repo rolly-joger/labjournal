@@ -1,0 +1,112 @@
+---
+title: "h-Index"
+output: html_document
+date: "2024-10-16"
+---
+
+```{r packages}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(xml2)
+library(rvest)
+library(xml2)
+library(XML)
+```
+
+```{r data}
+demographics_hannah <- read_rds("gender_demographics.rds")
+view(demographics_hannah)
+```
+
+```{r more things}
+# Add h-index and i10-index columns to df_ego
+demographics_hannah <- demographics_hannah %>%
+  mutate(h_index = NA_real_, i10_index = NA_real_)
+
+# Get H-index and i10-index 
+get_openalex_metrics <- function(openalex_id) {
+  url <- paste0("https://api.openalex.org/authors/", openalex_id)
+  author_data <- tryCatch({
+    jsonlite::fromJSON(url)
+  }, error = function(e) {
+    message(paste("Error fetching data for OpenAlex ID:", openalex_id))
+    return(NULL)
+  })
+  
+  if (!is.null(author_data)) {
+    h_index <- author_data$summary_stats$h_index
+    i10_index <- author_data$summary_stats$i10_index
+    works_count <- author_data$works_count
+    cited_by_count <- author_data$cited_by_count
+    return(list(h_index = h_index, i10_index = i10_index, works_count = works_count, cited_by_count = cited_by_count))
+  } else {
+    return(list(h_index = NA, i10_index = NA, works_count = NA, cited_by_count = NA))
+  }
+}
+
+# Loop for each scholar 
+for (i in 1:nrow(demographics_hannah)) {
+  openalex_id <- demographics_hannah$au_id[i]  # assuming au_id is the OpenAlex ID in df_ego
+  metrics <- get_openalex_metrics(openalex_id)
+  demographics_hannah$h_index[i] <- metrics$h_index
+  demographics_hannah$i10_index[i] <- metrics$i10_index
+  demographics_hannah$works_count[i] <- metrics$works_count
+  demographics_hannah$cited_by_count[i] <- metrics$cited_by_count
+}
+```
+
+```{r more even more updated}
+# View updated df_ego with h-index and i10-index
+View(demographics_hannah)
+```
+
+# Career Age 
+
+#```{r career age Koen}
+df_career_age <- df_works %>%
+  unnest(author) %>% # unnesting the tibble from the tibble
+  filter(au_id %in% df_ego$au_id == TRUE) %>% # authors in df_works should match authors in df_ego
+  group_by(au_id) %>%
+  mutate(min_year_pub = min(publication_year, na.rm = TRUE), # initial calculation of minimum year
+         count_pub = n()) %>%  # count number of publications
+  mutate(first_year_pub = ifelse(count_pub == 1, min_year_pub, # if number of publications is 1, score is min_year_pub
+                                 {
+                                   filter_year = publication_year[publication_year != min_year_pub] # filter minimum year
+                                   mean_pubyear = mean(filter_year, na.rm = TRUE) # calculate mean without min score
+                                   valid_year = min(filter_year[filter_year >= (mean_pubyear - 25)], na.rm = TRUE) # minimum year -> range mean-25
+                                   valid_year # if number of publications is not 1, than score minimum year with first year removed within range mean-25
+                                 })) %>% 
+  
+  # this line corrects for the warning of returning infinites that for some reason were not filtered through the first ifelse command
+  mutate(first_year_pub = ifelse(is.infinite(first_year_pub), min_year_pub, first_year_pub)) %>% #adjusting infinite scores to minimum year
+  
+  select(au_id, first_year_pub) %>% # selecting variables
+  distinct(au_id, first_year_pub, .keep_all = TRUE) # making sure only distinct authors are in data frame
+
+
+
+## Add Interaction for h-Index
+
+```{r interaction}
+demographics_hannah <- demographics_hannah %>%
+  mutate(
+    int_h_race = h_index*white_or_not
+  ) %>%
+  mutate(
+    int_h_eth = h_index*born_in_binary
+  )
+```
+
+# Save the File 
+```{r write}
+write_csv(demographics_hannah, "demographics_hannah_final.csv")
+```

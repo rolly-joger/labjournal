@@ -43,3 +43,5 @@
 # Personal folder
 /local/
 
+datasets_final/wave_1_all_authors.rds
+*.rds
