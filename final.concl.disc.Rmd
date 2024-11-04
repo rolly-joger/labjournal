@@ -22,7 +22,7 @@ Further research on the topic could benefit from taking a similar approach, to a
 
 Altogether, this paper thus found that while networks are indeed segregated – both when it comes to race, as well as when it comes to ethnicity – and demonstrated the importance of relationships when it comes to investigating inequality. As such, concluding that to truly understand differences, what they are and how they are performed, relationships are of utmost importance.
 
-## References
+# References
 
 Molina, N. (2018). Understanding race as a relational concept. *Modern American History*, *1*(1), 101-105.
 

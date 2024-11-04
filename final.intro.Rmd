@@ -27,7 +27,7 @@ This paper will continue by giving a short overview of the literature on collabo
 
 Using webscraped data on the employees of the Sociology departments of four Dutch universities, the hypotheses posed in the literature overview will be assessed using a two-pronged approach of both descriptive and explanatory analysis. For the descriptive analysis, the `igraph` package will be used to estimate network characteristics. The subsequent explanatory analysis will employ the `RSiena` package for longitudinal network analysis (Snijders et al., 2024)
 
-## References
+# References
 
 Abbasi, A., Chung, K. S. K., & Hossain, L. (2012). Egocentric analysis of co-authorship network structure, position and performance. *Information Processing & Management*, *48*(4), 671-679.
 

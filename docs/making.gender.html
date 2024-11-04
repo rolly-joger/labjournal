@@ -427,16 +427,13 @@ div.tocify {
       <a href="final.tk.html">Theoretical Framework</a>
     </li>
     <li>
-      <a href="final.datamethods.html">Data and Methods, Data</a>
+      <a href="final.datamethods.html">Data and Methods</a>
     </li>
     <li>
-      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+      <a href="final.descriptives.for.paper.html">Descriptive Analysis</a>
     </li>
     <li>
-      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
-    </li>
-    <li>
-      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+      <a href="explanatory.rsq.answer.html">RSiena Analysis</a>
     </li>
     <li>
       <a href="final.concl.disc.html">Conclusions</a>
@@ -540,88 +537,248 @@ GenderizeR api, to assess the gender of all first names.</p>
 ## To suppress this message use:
 ## suppressPackageStartupMessages(library(genderizeR))</code></pre>
 <pre class="r"><code>#only small chunks of names work, large one&#39;s don&#39;t 
-gendered_names_1 &lt;- genderizeAPI(names$first_name[c(1:10)], country = NULL, ssl.verifypeer = T ) #we can only ask for 100 names a day, so we&#39;re doing the first 100</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(1:10)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_2 &lt;- genderizeAPI(names$first_name[c(11:20)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(11:20)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_3 &lt;- genderizeAPI(names$first_name[c(21:30)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(21:30)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_4 &lt;- genderizeAPI(names$first_name[c(31:40)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(31:40)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_5 &lt;- genderizeAPI(names$first_name[c(41:50)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(41:50)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_6 &lt;- genderizeAPI(names$first_name[c(51:60)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(51:60)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_7 &lt;- genderizeAPI(names$first_name[c(61:70)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(61:70)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_8 &lt;- genderizeAPI(names$first_name[c(71:80)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(71:80)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_9 &lt;- genderizeAPI(names$first_name[c(81:90)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(81:90)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>gendered_names_10 &lt;- genderizeAPI(names$first_name[c(91:100)], country = NULL, ssl.verifypeer = T )</code></pre>
-<pre><code>## 
-##  Client error: (429) Too Many Requests (RFC 6585)
-##  Request limit reached</code></pre>
-<pre><code>## Warning in genderizeAPI(names$first_name[c(91:100)], country = NULL, ssl.verifypeer = T): You have
-## used all available requests in this subscription plan.</code></pre>
-<pre class="r"><code>#let&#39;s look at the names and see if we can find some edge-cases: aka names that might not be 
+gendered_names_1 &lt;- genderizeAPI(names$first_name[c(1:10)], country = NULL, ssl.verifypeer = T ) #we can only ask for 100 names a day, so we&#39;re doing the first 100
+gendered_names_2 &lt;- genderizeAPI(names$first_name[c(11:20)], country = NULL, ssl.verifypeer = T )
+gendered_names_3 &lt;- genderizeAPI(names$first_name[c(21:30)], country = NULL, ssl.verifypeer = T )
+gendered_names_4 &lt;- genderizeAPI(names$first_name[c(31:40)], country = NULL, ssl.verifypeer = T )
+gendered_names_5 &lt;- genderizeAPI(names$first_name[c(41:50)], country = NULL, ssl.verifypeer = T )
+gendered_names_6 &lt;- genderizeAPI(names$first_name[c(51:60)], country = NULL, ssl.verifypeer = T )
+gendered_names_7 &lt;- genderizeAPI(names$first_name[c(61:70)], country = NULL, ssl.verifypeer = T )
+gendered_names_8 &lt;- genderizeAPI(names$first_name[c(71:80)], country = NULL, ssl.verifypeer = T )
+gendered_names_9 &lt;- genderizeAPI(names$first_name[c(81:90)], country = NULL, ssl.verifypeer = T )
+gendered_names_10 &lt;- genderizeAPI(names$first_name[c(91:100)], country = NULL, ssl.verifypeer = T )
+
+#let&#39;s look at the names and see if we can find some edge-cases: aka names that might not be 
 #decidedly male or female, so we can check them, and change them by hand if necessary
 gendered_names_1</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##      count      name gender probability
+##      &lt;int&gt;    &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:  24160       Ece female        0.96
+##  2: 144026    Marcel   male        0.98
+##  3:     16 Weverthon   male        1.00
+##  4:   2745    Vardan   male        1.00
+##  5: 589293      Anne female        0.99
+##  6: 434587   Vincent   male        0.99
+##  7: 127123    Tobias   male        1.00
+##  8:    167     Rense   male        0.95
+##  9:  29745   Marleen female        1.00
+## 10: 483014     Lucas   male        0.99
+## 
+## $limitLeft
+## [1] 90
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_2 #edgecase: antonie</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##       count      name gender probability
+##       &lt;int&gt;    &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:  925951 Christian   male        0.99
+##  2:  600856     Paula female        0.99
+##  3:  581103       Eva female        0.99
+##  4:  125453  Matthias   male        1.00
+##  5:    1784   Antonie   male        0.55
+##  6: 3489607     David   male        1.00
+##  7:  112412       Lea female        0.98
+##  8:    5526   Mathijs   male        1.00
+##  9: 1342963     Marco   male        1.00
+## 10:  112844     Tanja female        0.99
+## 
+## $limitLeft
+## [1] 80
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_3 #edgecase: deni</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##       count     name gender probability
+##       &lt;int&gt;   &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:   18005    Ineke female        1.00
+##  2: 2315697      Ana female        0.92
+##  3:    5505     Luuk   male        0.99
+##  4:    9292     Deni   male        0.65
+##  5:   10368 Christof   male        1.00
+##  6:  578080      Amy female        0.99
+##  7:  198519    Amina female        0.96
+##  8:   19683   Kasper   male        0.99
+##  9:     383   Jiamin female        0.82
+## 10:  210690  Paulina female        0.99
+## 
+## $limitLeft
+## [1] 70
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_4</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##     count       name gender probability
+##     &lt;int&gt;     &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+## 1:  30319     Wojtek   male        1.00
+## 2: 589293       Anne female        0.99
+## 3:  69224     Werner   male        1.00
+## 4:  11016      Stijn   male        0.99
+## 5:  71557    Philipp   male        1.00
+## 6:   1598 Jan-Willem   male        1.00
+## 7:  15492    Sanjana female        0.99
+## 8: 116243        Jos   male        0.97
+## 9:   5699       Tali female        0.82
+## 
+## $limitLeft
+## [1] 60
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_5</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##       count     name gender probability
+##       &lt;int&gt;   &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:  196245      Kim female        0.75
+##  2:  679228    Frank   male        1.00
+##  3:  334469 Isabelle female        0.99
+##  4:     629      Cok   male        0.75
+##  5:   73492   Jeroen   male        1.00
+##  6: 1257153    Kevin   male        1.00
+##  7:  477930     Nick   male        0.99
+##  8:   41716    Sofie female        0.99
+##  9:  311164   Ronald   male        1.00
+## 10:  181197    Katia female        0.99
+## 
+## $limitLeft
+## [1] 50
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_6</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##      count       name gender probability
+##      &lt;int&gt;     &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:   1364      Hidde   male        0.99
+##  2:   1535    Lonneke female        1.00
+##  3:   1998 Lieselotte female        0.99
+##  4: 362047        Rob   male        1.00
+##  5: 112532    Maurice   male        0.99
+##  6:  14973      Nella female        0.99
+##  7:  49384     Saskia female        0.99
+##  8:   3705   Margriet female        0.99
+##  9:  10915      Remco   male        1.00
+## 10:  43994        Bas   male        0.52
+## 
+## $limitLeft
+## [1] 40
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_7</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##       count    name gender probability
+##       &lt;int&gt;  &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:  239382  Judith female        1.00
+##  2:     399 Gerbert   male        0.98
+##  3:   21182    Roza female        0.95
+##  4: 2530843 Michael   male        1.00
+##  5:    8264    Peer   male        0.98
+##  6:   58418   Niels   male        1.00
+##  7:    3001  Jochem   male        0.99
+##  8:  204435   Ellen female        1.00
+##  9: 1378167    Mark   male        1.00
+## 10:   36597 Maarten   male        1.00
+## 
+## $limitLeft
+## [1] 30
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_8</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##      count    name gender probability
+##      &lt;int&gt;  &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:   1293 Carlijn female        1.00
+##  2: 362047     Rob   male        1.00
+##  3: 742960 Mustafa   male        0.99
+##  4:  56349    Inge female        0.98
+##  5:    949 Thijmen   male        0.99
+##  6: 509812  Rachel female        1.00
+##  7:  55010     Nik   male        0.87
+##  8:  10635   Renae female        1.00
+##  9:  21136  Maikel   male        0.99
+## 10:  52411   Carly female        0.99
+## 
+## $limitLeft
+## [1] 20
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_9</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##       count   name gender probability
+##       &lt;int&gt; &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1:  589293   Anne female        0.99
+##  2:   58968 Katrin female        0.99
+##  3:   24882  Klara female        0.99
+##  4:    3549 Marlou female        0.91
+##  5: 1467183   Sara female        0.98
+##  6:    8129  Janos   male        0.99
+##  7:     176 Jansje female        0.98
+##  8:    3699  Elize female        0.97
+##  9:    1152 Tijmen   male        1.00
+## 10:  211198   Carl   male        1.00
+## 
+## $limitLeft
+## [1] 10
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <pre class="r"><code>gendered_names_10</code></pre>
-<pre><code>## .Primitive(&quot;return&quot;)</code></pre>
+<pre><code>## $response
+##       count    name gender probability
+##       &lt;int&gt;  &lt;char&gt; &lt;char&gt;       &lt;num&gt;
+##  1: 1470730    Paul   male        1.00
+##  2:    7130   Malou female        0.93
+##  3:  144026  Marcel   male        0.98
+##  4:     633  Josien female        0.97
+##  5:    1293 Carlijn female        1.00
+##  6:   61086 Evelyne female        0.99
+##  7:    4423  Nienke female        1.00
+##  8:   18322   Thijs   male        1.00
+##  9: 3489607   David   male        1.00
+## 10: 1283097   Sarah female        0.99
+## 
+## $limitLeft
+## [1] 0
+## 
+## $limit
+## [1] 100
+## 
+## $limitReset
+## numeric(0)</code></pre>
 <p>The thing with GenderizeR, however, is that one is – as previously
 noted – limited to a 100 names a day, at least, in the free version.
 Paying for the possiblity to assess the gender of more names was

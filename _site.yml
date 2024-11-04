@@ -54,13 +54,11 @@ navbar:
         href: final.intro.html
       - text: "Theoretical Framework"
         href: final.tk.html
-      - text: "Data and Methods, Data"
+      - text: "Data and Methods"
         href: final.datamethods.html
-      - text: "Data and Methods, Descriptives"
+      - text: "Descriptive Analysis"
         href: final.descriptives.for.paper.html
-      - text: "Analysis et al. - Descriptive"
-        href: descriptive.rsq.answer.html
-      - text: "Analysis et al. - RSiena"
+      - text: "RSiena Analysis"
         href: explanatory.rsq.answer.html
       - text: "Conclusions"
         href: final.concl.disc.html
