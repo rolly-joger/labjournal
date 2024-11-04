@@ -317,14 +317,6 @@ The triad census, furthermore indicates which triads are present in the network 
 igraph::triad_census(net_graph_w1)
 ```
 
-Understanding the meaning of these numbers ,can be a bit easier if we see the numbers distributed on a histogram:
-
-```{r}
-hist(igraph::triad_census(net_graph_w1),
-     main = "Triad Census Wave 1",
-     xlab = "Triad Number")
-```
-
 The general density of this graph is 0.00195, which is quite low -- however, one has to also take into account that we are dealing with data observed in 2022, and that we are using those data to retrospectively assess a networks three years earlier. Mostly, we will be missing PhDs, and other people who are not working at their universities anymore, and have started working either somewhere outside of our sample, or have stopped working in academia altogether.\
 
 ```{r}
@@ -355,14 +347,6 @@ The triad census, furthermore indicates which triadic configurations are present
 
 ```{r}
 igraph::triad_census(net_graph_w2)
-```
-
-Similarly to the previous wave, these numbers can be a bit easier to understand when put into a histogram:
-
-```{r}
-hist(igraph::triad_census(net_graph_w2),
-     main = "Triad Census Wave 2",
-     xlab = "Triad Number")
 ```
 
 The general density of this graph is 0.0047, which means it has almost tripled in the time between waves – however, one has to still take into account that this might just be because these measures are much more accurate than those for the first wave. Regardless, we do thus see an evolved network.
