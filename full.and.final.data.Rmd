@@ -195,7 +195,7 @@ test_last <- fcolnet(data = scholars,
                 waves = list(c(2015, 2018), c(2019, 2023)),
                 type = c("last"))
 df_soc_last <- test_last$data
-df_network_last <- test_first$nets
+df_network_last <- test_last$nets
 length(df_network_last)
 
 wave_1_last <- df_network_last[1,,]

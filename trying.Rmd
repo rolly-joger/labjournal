@@ -1,0 +1,109 @@
+---
+title: "Analysis -- Explanatory"
+output: html_document
+date: "2024-10-24"
+---
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+ eval = F
+)
+```
+# Get the Basics
+
+For the analysis of the explanatory research question, we are working with 'RSiena', or – more specifically – 'RSienaTwoStep', though TwoStep is just an extension of RSiena, and as such, we will be referring to the main package being used here as 'RSiena'.\
+   'SIENA (Simulation Investigation for Empirical Network Analysis) is a statistical tool de- veloped for the analysis of longitudinal network data, collected in a network panel study with two or more ‘waves’ of observations.' RSiena is a Siena package, that thus enables one to employ llongtitudinal network data to estimate network models, based on estimated network evolution. This network evolution is based on what are called 'minsteps'. Ministeps are founded on the RSiena being an actor-based model, which in its estimation of a network at t2, from the data at t1, estimates ties an actor can maintain, create, or dissolve. These 'decisions' are called ministeps – and are 'probabilistic, and made sequentially'. Which means that only one actor in a network can make a ministep at a time. Based on the parameters given in the model specifications, RSiena 'takes' the data from a network at T1, and uses these parameters as rules dictating the ways in which ministeps are made. Since ministeps are based on likelihood, and parameters are as well, RSiena results ought to be interpreted as loglikelihood estimates. In the estimation of the model, "[t]he statistical procedures utilize a large number of repeated simulations of the network evolution from each wave to the next. They estimate and test the parameters producing a probabilistic network evolution that ‘could have’ brought these observations to follow one another." To evaluate the goodness of fit of the estimated model, results can be compared with the observed second-wave network data, and using a **ttest????** the fit can be estimated.
+
+As previously explained, this analysis will consist of two parts – one estimating the role of race, the other estimating the role of ethnicity. Each of these two parts will be built up out of six different models. Not all of these models will be discussed equally as extensively, but they will all be included and briefly commented on, since their evolution is important in understanding them.
+
+We will be using the following packages ...
+
+```{r packages, message = F, warning=F}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(forcats)
+```
+
+... user defined functions ...
+
+```{r user defined functions, message=F, warning=F}
+testall <- function(ans) {
+    for (i in which(ans$test)) {
+        sct <- score.Test(ans, i)
+        cat(ans$requestedEffects$effectName[i], "\n")
+        print(sct)
+    }
+    invisible(score.Test(ans))
+}
+```
+
+... and data.
+
+```{r dataset, warning=F, message=FALSE}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds") #matrix for wave 1 (from ... to ...)
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds") #matrix for wave 2 (from ... to ... )
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE) #demographic characteristics of actors in matrix
+net_soc_array <- read_rds("datasets_final/net_soc_array_first_auth.rds") #the array of it all
+```
+
+## Define the Variables
+
+First we have to define the variables, and transform them into RSiena-sanctioned shapes. These shapes are a respective sienaDependent object containing the matrices for each wave, an application of the and 'coCovar' function to all of our independent variables, to make them continuous covariance variables.
+
+```{r variables definition}
+#dependent variable 
+net <- sienaDependent(net_soc_array)
+
+#independent variable 
+gender_covar <- coCovar(demographics_hannah$perc_female)
+country_covar <- coCovar(demographics_hannah$born_in_binary)
+white_pass_covar <- coCovar(demographics_hannah$white_or_not)
+h_index_covar <- coCovar(demographics_hannah$h_index)
+interaction_race_covar <- coCovar(demographics_hannah$int_h_race)
+interaction_ethnicity_covar <- coCovar(demographics_hannah$int_h_eth)
+```
+
+# Get Effect Structure
+
+With these variables, we create the Siena-data object which will be used in the algorithms which will create our models, and create our first effect object – which will tell us which possible effects we can add to our models.
+
+```{r good data}
+the_data <- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, h_index_covar, interaction_race_covar, interaction_ethnicity_covar)
+myeff_1 <- getEffects(the_data)
+view(myeff_1)
+```
+
+# Models for Race {.tabset}
+
+## Model 1: Empty Model
+
+First, we estimate our baseline model – to see how our model is estimated without any other restraint than rate and density. We do this in order to always have something to compare our future models with, a base-line to see if something can be estimate with just these parameters.
+
+```{r where to put it, include=F, echo=F}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+print01Report(the_data, modelname = "./results/m1_race")
+```
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+```
+
+```{r results alogoritm, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects 
+#write_rds(mod_1_effects, "models/m1_race_empty.rds")
+```
+
+```{r results load object}
+print(read_rds("models/m1_race_empty.rds"))

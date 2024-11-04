@@ -1,29 +1,450 @@
 ---
 title: "Data and Methods"
-output: html_document
+output: 
+  html_document:
+    code_folding: hide
 date: "2024-10-23"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Ready All the Stuff
+
+... and empty workspace,
+
+```{r remove workspace}
+rm(list = ls())
 ```
 
-## R Markdown
+... user defined functions,
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r user-defined functions, include=FALSE}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
 
-```{r cars}
-summary(cars)
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+fMoran.I <- function(x, weight, scaled = FALSE, na.rm = FALSE, alternative = "two.sided", rowstandardize = TRUE) {
+  if (rowstandardize) {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop("'weight' must be a square matrix")
+    n <- length(x)
+    if (dim(weight)[1] != n)
+      stop("'weight' must have as many rows as observations in 'x'")
+    ei <- -1/(n - 1)
+    nas <- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x <- x[!nas]
+        n <- length(x)
+        weight <- weight[!nas, !nas]
+      } else {
+        warning("'x' has missing values: maybe you wanted to set na.rm = TRUE?")
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    ROWSUM <- rowSums(weight)
+    ROWSUM[ROWSUM == 0] <- 1
+    weight <- weight/ROWSUM
+    s <- sum(weight)
+    m <- mean(x)
+    y <- x - m
+    cv <- sum(weight * y %o% y)
+    v <- sum(y^2)
+    obs <- (n/s) * (cv/v)
+    if (scaled) {
+      i.max <- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs <- obs/i.max
+    }
+    S1 <- 0.5 * sum((weight + t(weight))^2)
+    S2 <- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq <- s^2
+    k <- (sum(y^4)/n)/(v/n)^2
+    sdi <- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
+    pv <- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == "two.sided")
+      pv <- if (obs <= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == "greater")
+      pv <- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  } else {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop("'weight' must be a square matrix")
+    n <- length(x)
+    if (dim(weight)[1] != n)
+      stop("'weight' must have as many rows as observations in 'x'")
+    ei <- -1/(n - 1)
+    nas <- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x <- x[!nas]
+        n <- length(x)
+        weight <- weight[!nas, !nas]
+      } else {
+        warning("'x' has missing values: maybe you wanted to set na.rm = TRUE?")
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    # ROWSUM <- rowSums(weight) ROWSUM[ROWSUM == 0] <- 1 weight <- weight/ROWSUM
+    s <- sum(weight)
+    m <- mean(x)
+    y <- x - m
+    cv <- sum(weight * y %o% y)
+    v <- sum(y^2)
+    obs <- (n/s) * (cv/v)
+    if (scaled) {
+      i.max <- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs <- obs/i.max
+    }
+    S1 <- 0.5 * sum((weight + t(weight))^2)
+    S2 <- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq <- s^2
+    k <- (sum(y^4)/n)/(v/n)^2
+    sdi <- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
+    pv <- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == "two.sided")
+      pv <- if (obs <= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == "greater")
+      pv <- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  }
+  
+  
+}
+
+
+
 ```
 
-## Including Plots
+... packages,
 
-You can also embed plots, for example:
+```{r load packages, include=FALSE}
+packages <- c("tidyverse", 
+              "scholar", 
+              "RSiena", 
+              "RsienaTwoStep", 
+              "igraph",
+              "poweRlaw",
+              "ggraph",
+              "knitr")
+fpackage.check(packages)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+... and the data.
+
+```{r datasets}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE)
+view(demographics_hannah)
+```
+
+# Sample
+
+The data for this paper, which have been collected by webscraping OpenAlex and hand-collecting publicly available data, span from 2015 to 2023. They have been divided into two waves, with the first one ranging from 2015 to 2018, and the second ranging from 2019 to 2023. They concern the sociology departments of four Dutch universities – the Universiteit van Amsterdam (UvA), Erasmus University Rotterdam (EUR), Utrecht University (UU), and Radboud University (RU). Altogether, this yielded a dataset with 214 different actors.
+
+# Variables
+
+## Dependent Variable
+
+The dependent variable of this dataset, represents the collaborations between different academics, or co-authorships. It has been webscraped from OpenAlex, using the `rvest` and `XML` packages. The dependent variable, which is represent by an adjacency matrix, indicates whether two actors, or authors, have worked together on one of their papers in specified wave. Each dyad – combination of authors – is scored on whether they have collaborated (1), or not (0), during the period represented by the data – in this case the first or second wave. In this paper, ties are characterised as directional, which means that they are sent by an actor, and received by an actor. This results in each actor having both `outdegrees`, as well as `indegrees`. Outdegrees refer to the 'sent' ties, which indicate having been the first author on a paper. Indegrees, on the other hand, refer to 'received' ties, and indicate having collaborated on a paper, but *not* being the first author. The resulting adjacency matrix can take on the shape of a network, which will indicate the collaboration patters between the academics who worked in the aforementioned four universities between 2015 and 2023.
+
+## Independent Variable
+
+The independent variable has been created by hand. In order to be able to measure *both* ethnicity and race, another approach than automatic webscraping had to be taken – since the effort necessary to obtain both was too extensive for the scope of this paper. As such, I collected both variables – ethnicity and race – by hand.
+
+Race was collected by looking up each of the authors in the data, and assessing whether – if I were to pass them on the street – I would say they were white or not. There are a collection of problems related to unconscious bias and other issues tied to this approach, but in this case it seemed the least offensive and easiest way to go out of all other options.After the race of each person (that is, whether they were white, or not) had been assessed, they would get a corresponding score. "White" people were given a **1**, and people of colour were scored a **0**, resulting in a binary variable.
+
+Ethnicity was also collected by hand, but the method was somewhat more eclectic. For each author, the first step was to find their doctoral thesis, and see what their place of birth was. Their ethnicity was thereafter determined by assessing whether this place of birth was in the Netherlands (making them Dutch), or whether it was not. However, sometimes doctoral theses were incredibly difficult to obtain, or did not exist, because the person in question was still working on their PhD. In both cases, similar subsequent steps were undertaken. The first one was to look up their Curriculum Vitae (CV), since some people display their city or country of birth on there. If this was the case, they were again assessed accordingly. If there was no country of birth on their CV, the next step was twofold: seeing what the location of their earliest available place of education was (some people, for example, display their high schools on their LinkedIn pages) and cross-referencing the country this was located in with either the languages spoken by the person in question – as indicated on their CV – or, if this was not available, by their last name. In cases where none of the aforementioned information was available, a person was simply scored as "NA".\
+
+Similarly to race, ethnicity was also scored as a binary variable. As such, it was thus transformed from its original format – country of birth – into a binary variable assessing whether an individual was Dutch (1) or not (0).
+
+## Control and Interaction Variable(s)
+
+The last demographic variable included in this paper, is that of prestige, which, following Pike (2010) is operationalised as an author's Hirschmann Index, or *h-Index*. The *h-Index* was first proposed by Jorge Hirsch as a way to measure relative quality of academic works (Pike, 2010). It is determined by taking the number of paper's an author has written, and the citation score of each of these works. The h-index is then such that, for this set of papers, "ranked in decreasing order of the number of citations that they received, [it] is the (unique) highest number of papers that received *h* or more citations" (Egghe, 2006, p. 8). If, for example, an author had published 70 papers, and if 17 of those had 17 or more citations, their *h-index* would be 17 -- but only if this was not the case for any number *higher* than 17. As such, the h-index therefore attempts to assess the quality of an author's body of work. Because it might be possible that an author has published one paper with 12,000 citations -- but that none of their other papers have achieved any more than 10. Compare them to an author who's most cited paper does not come near those 12000 citations, but who does have 60 papers that have been cited 60 times or more. The h-index allows one to compare these authors, and assess that the second might publish more (consistently) qualitative articles than the first.
+
+Employing it as a measure of prestige is a frequent occurrence in social network analysis, and is easily accessible and obtained from the internet. In this case, it was obtained through a function that webscraped OpenAlex, as made by Lucan Bovens, and represented in a continuous variable.
+
+# Ethical Considerations
+
+Since the data that is being used for this paper have been collected using webscraping, it is important to note the ethical considerations that come with these methods. While the Radboud Committee Social Science's Ethical Decision Tree indicates that there is no need for approval from an ethical committee, since the data used here are publicly available data, some more considerations are involved that problematise this status, and are – at minimum – useful to keep in mind. One of the main problems with these data, of course, is that they were collected, and not found and readily available in the format they are used in here. Especially in the cases of the information on race and ethnicity, which took several hours to collect. While these data are indeed available online, and have been obtained through open-access platforms, combining them into one dataset -- and subsequently drawing conclusions from these combinations is a further step. It is important to remember that race and ethnicity concern sensitive data and ought to be treated as such. The data have, therefore, been anonimised as far as possible -- with neither the names, nor any other identifying ID markers being made available or public on the replication website.
+
+# Methods
+
+In order to assess the segregation of collaboration networks based on race and ethnicity, a two-pronged strategy is taken. First, several descriptives will be assessed, in order to answer the descriptive research question, on the segregation when it comes to degrees and prestige in collaboration networks. Subsequently, these findings will form the argumentative basis for the second part of the analysis, where the explanatory research question will be answered, that deals with the effects of homophily on collaboration, and the interaction between race and prestige on the same. While the descriptive research questions will be assessed using `igraph` functions, and t-tests, the explanatory questions will be answered using Stochastic Actor Based Models, with the `RSiena` Package (Snijders et al., 2024).
+
+## Descriptive
+
+For the descriptive analyses, where differences between ethnicity and race are compared, the first part of the analysis revolves around creating visual networks. Using these networks, some of the more visible and broader patterns with respect to the the research questions will become visible. Subsequently, a few of the more basic descriptives of the networks will be discussed, such as the number of edges and vertices, and the dyad and triad census. This will be done to give a better overview of the overall structure of the network, and will allow for better assessment of the overall configuration we are dealing with, and a better background for understanding the network.\
+\
+Having established these baseline-descriptives, the first two hypotheses will be tested. First, Hypothesis 1a and b will be discussed, by first assessing the overall evolution in degree of the network, and then by comparing the difference in degree between white people and poc, with that of Dutch and non-Dutch people. Due to the structure of our data, we will assess both waves, to further see whether – and how – any change has occured. Subsequently, this will be followed up by a comparison on the difference in mean h-Index in a similar way.
+
+## Explanatory
+
+### RSiena
+
+For the analysis of the explanatory research question, we are working with `RSiena` or – more specifically – `RSienaTwoStep`, though TwoStep is just an extension of RSiena, and as such, we will be referring to the main package being used here as 'RSiena'. (Snijders et al., 2024; Tolsma, 2024)\
+"SIENA (Simulation Investigation for Empirical Network Analysis) is a statistical tool developed for the analysis of longitudinal network data, collected in a network panel study with two or more ‘waves’ of observations." (Ripley et al., 2024, p. 9). RSiena is a Siena package, that thus enables one to use longtitudinal network data to estimate network models, based on estimated network evolution. This network evolution is based on what are called 'minsteps'. Ministeps are founded on the RSiena being an actor-based model, which in its estimation of a network at t2, from the data at t1, estimates ties an actor can maintain, create, or dissolve. These decisions are called ministeps – and are probabilistic, and can only be made by one actor at a time. Based on the parameters given in the model specifications, RSiena employs the data from a network at t1, and uses these parameters as constraints for the likelihood of a ministep . Since ministeps are based on likelihood, and parameters are as well, RSiena results ought to be interpreted as loglikelihood estimates (Ripley et al., 2024).
+
+To evaluate the goodness of fit of the estimated model, results can be compared with the observed second-wave network data, and evaluated according to how well they are in line with each other (Ripley et al., 2024).\
+
+### Models
+
+To best assess the questions and subsequent answers, two main models will be estimated for the effect of race, and two for the effect of ethnicity. There will furthermore be two additional models, an empty model, and a model containing only structural effects.
+
+The first model, or the empty model, includes only the most basic network effects which are automatically included in `RSiena`'s network statistics: rate, reciprocity, and degree. From this model, the second model which includes only structural network effects will be built.
+
+In this second model, two additional structural effects are added: `transTrip`, and `inPopSqrt`. Transtrip estimates whether actors prefer to create a tie with someone tied to one of their friends – in other words, it estimates whether friends of friends become friends. InPopSqrt assesses popularity by estimating how many ties an actor receives – as indicated by Ripley et al. (2024), this effect has been chosen over `inPop`, since it more accurately represents the effect.
+
+The third model will be estimated for both race and ethnicity, and assesses how these demographical characteristics affect the ties – and likelihood to create them – of both the actor sending, but also the actor receiving the tie.
+
+The fourth and final model, which will again be estimated for both race and ethnicity, will add an interaction effect between prestige and either race or ethnicity to the model – estimating whether the effect of a person's *h*-index on the likelihood of forming a new tie differs between different ethnic and racial groups.
+
+# Descriptives of the Data
+
+## Population Universities
+
+The sociologists across the four universities included in the sample, come down to a total of 214 actors.\
+
+```{r sample size, echo= F, message=F, results='asis'}
+kableExtra::kable(demographics_hannah %>%
+  select(perc_female) %>%
+  count(), caption = "number of observations")
+```
+
+These 214 people are divided relatively unevenly across the four universities, with the UvA having the largest number of people, and RU the fewest.
+
+```{r}
+nr_uva <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  count()
+
+nr_eur <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  count()
+
+nr_uu <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  count()
+
+nr_ru <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  count()
+
+Universities <- c("UvA", "EUR", "UU", "RU")
+People <- c(nr_uva, nr_eur, nr_uu, nr_ru)
+nr_all_uni <- cbind(Universities, People)
+
+kableExtra::kable(nr_all_uni, caption = "People per University")
+```
+
+As also displayed in the following histogram, which especially demonstrates the rather large difference between the UvA -- and the EUR -- and the smaller departments at the RU and the UU.
+
+```{r people per uni 1 hist, message=F}
+demographics_hannah %>%
+  filter(Universiteit1.24 == "UvA" | Universiteit1.24 == "EUR" | Universiteit1.24 == "UU" | Universiteit1.24 == "RU") %>%
+ggplot(aes(Universiteit1.24, fill = Universiteit1.24)) +
+  geom_bar() +
+  labs(
+    x = "University",
+    y = "Count",
+    fill = "University"
+  ) +
+  theme_bw()
+```
+
+## Race
+
+```{r,echo=FALSE, message=F}
+race_1 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+race_2 <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+race_3 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+race_4 <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  select(white_or_not) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+```
+
+Within each of these universities, race distributions are rather similar -- with the UvA having the most even distribution, and both EUR and RU having the smalles proportion of PoC.
+
+```{r}
+knitr::kable(
+  list(race_1, race_2, race_3, race_4),
+  caption = 'Race Distributions at the Universities (UvA, EUR, UU, RU)',
+  col.names = c("White (1) or Not (0)", "Frequency"),
+  booktabs = TRUE, valign = 't'
+)
+```
+
+## Ethnicity
+
+```{r, message = F, echo=FALSE, fig.show="hold", out.width="50%"}
+ethnicity_1 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+ethnicity_2 <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+ethnicity_3 <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+
+ethnicity_4 <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  select(born_in_binary) %>%
+  table() %>%
+  prop.table() %>%
+  round(2)
+```
+
+Ethnicity is slightly more evenly distributed within universities, compared to race. Especially at the UvA, where there are almost as many non-Dutch people as there are Dutch people. Radboud University, similarly to ethnicity, has the least evenly distributed demography when it comes to ethnicity -- with only 22% of the staff being from outside of the Netherlands.
+
+```{r}
+knitr::kable(
+  list(ethnicity_1, ethnicity_2, ethnicity_3, ethnicity_4),
+  caption = 'Ethnicity Distributions at the Universities (UvA, EUR, UU, RU)',
+  col.names = c("Dutch (1) or Not (0)", "Frequency"),
+  booktabs = TRUE, valign = 't'
+)
+```
+
+## h-Index
+
+Finally, looking at the distribution of the *h*-index, it appears that the average *h*-index across the sample is around 12.
+
+```{r h-index}
+mean(demographics_hannah$h_index)
+```
+
+Splitting the *h*-index up between universities, an interesting pattern emerges. Because three of the universities hover around a score of 11, with UU being an outlier of 15.5.
+
+```{r, echo = F, include = F, results = F, message=F, warning=F}
+# UVA 
+h_in_uva <- demographics_hannah %>%
+  filter(Universiteit.24 == "UvA") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_uva <- mean(h_in_uva$h_index) %>%
+  round(2)
+mean_h_uva_race <- tapply(h_in_uva$h_index, h_in_uva$white_or_not, mean)
+mean_h_uva_ethn <- tapply(h_in_uva$h_index, h_in_uva$born_in_binary, mean)
+mean_h_uva_gender <- tapply(h_in_uva$h_index, h_in_uva$gender_binary, mean)
+
+# EUR
+h_in_eur <- demographics_hannah %>%
+  filter(Universiteit.24 == "EUR") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_eur <- mean(h_in_eur$h_index) %>%
+  round(2)
+mean_h_eur_race <- tapply(h_in_eur$h_index, h_in_eur$white_or_not, mean)
+mean_h_eur_ethn <- tapply(h_in_eur$h_index, h_in_eur$born_in_binary, mean)
+mean_h_eur_gender <- tapply(h_in_eur$h_index, h_in_eur$gender_binary, mean)
+
+# UU
+h_in_uu <- demographics_hannah %>%
+  filter(Universiteit.24 == "UU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_uu <- mean(h_in_uu$h_index) %>%
+  round(2)
+mean_h_uu_race <- tapply(h_in_uu$h_index, h_in_uu$white_or_not, mean)
+mean_h_uu_ethn <- tapply(h_in_uu$h_index, h_in_uu$born_in_binary, mean)
+mean_h_uu_gender <- tapply(h_in_uu$h_index, h_in_uu$gender_binary, mean)
+
+
+# RU
+h_in_ru <- demographics_hannah %>%
+  filter(Universiteit.24 == "RU") %>%
+  mutate(gender_binary = if_else(perc_female >= .5, 1, 0))
+
+mean_h_ru <- mean(h_in_ru$h_index) %>%
+  round(2)
+mean_h_ru_race <- tapply(h_in_ru$h_index, h_in_ru$white_or_not, mean)
+mean_h_ru_ethn <- tapply(h_in_ru$h_index, h_in_ru$born_in_binary, mean)
+mean_h_ru_gender <- tapply(h_in_ru$h_index, h_in_ru$gender_binary, mean)
+```
+
+```{r mean hind per uni}
+# Mean h-index per Uni.
+Universities <- c("UvA", "EUR", "UU", "RU")
+h_indx <- c(mean_h_uva, mean_h_eur, mean_h_uu, mean_h_ru)
+h_uni_df <- cbind(Universities, h_indx)
+
+kableExtra::kable(h_uni_df, caption = "Mean h-Index per University")
+
+```
+
+# References
+
+Egghe, Leo (2006) An improvement of the h-index: the g-index. In: ISSI Newsletter, 2(1). p. 8-9
+
+Pike, T. W. (2010). Collaboration networks and scientific impact among behavioral ecologists. *Behavioral Ecology*, *21*(2), 431-435.
+
+Ripley, R. M., Snijders, T. A., Boda, Z., Vörös, A., & Preciado, P. (2011). Manual for RSIENA. University of Oxford, Department of Statistics, Nuffield College, 1, 2011.
+
+Snijders TA, Ripley RM, Boitmanis K, Steglich C, Niezink NM, Amati V, Schoenenberger F (2024). “Siena - Simulation Investigation for Empirical Network Analysis.” R package version 1.4.7, [https://www.stats.ox.ac.uk/\~snijders/siena/](https://www.stats.ox.ac.uk/~snijders/siena/.)
+
+Tolsma J (2024). *RsienaTwoStep: Simulate Network Evolution Allowing Two Tie Changes Simultaneously*. R package version 1.0, <https://jochemtolsma.github.io/RsienaTwoStep/,> <https://github.com/JochemTolsma/RsienaTwoStep>.

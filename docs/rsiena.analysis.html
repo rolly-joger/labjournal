@@ -363,11 +363,14 @@ div.tocify {
     <li>
       <a href="week6.html">Week 6</a>
     </li>
+    <li>
+      <a href="week7.html">Week 7</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dataprepping For the Apocalypse
+    Dataprep
      
     <span class="caret"></span>
   </a>
@@ -389,9 +392,6 @@ div.tocify {
     </li>
     <li>
       <a href="all.descriptives.html">Descriptives</a>
-    </li>
-    <li>
-      <a href="rsiena.analysis.html">Analysis</a>
     </li>
   </ul>
 </li>
@@ -515,10 +515,6 @@ Structure</h1>
 <pre class="r"><code>the_data &lt;- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, functie_covar, h_index_covar)
 myeff_1 &lt;- getEffects(the_data)
 myeff_1</code></pre>
-<pre><code>##   effectName               include fix   test  initialValue parm
-## 1 basic rate parameter net TRUE    FALSE FALSE    2.13235   0   
-## 2 outdegree (density)      TRUE    FALSE FALSE   -1.68897   0   
-## 3 reciprocity              TRUE    FALSE FALSE    0.00000   0</code></pre>
 </div>
 <div id="models---parameter-effects" class="section level1 tabset"
 number="4">
@@ -531,188 +527,53 @@ Parameter Effects</h1>
 Model</h3>
 <pre class="r"><code>myeff_1 &lt;- getEffects(the_data)
 view(myeff_1)
-myeff_1 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;white_pass_covar&quot;)</code></pre>
-<pre><code>##   effectName            include fix   test  initialValue parm
-## 1 same white_pass_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_1 &lt;- includeEffects(myeff_1, egoX, altX, interaction1 =&quot;white_pass_covar&quot;)</code></pre>
-<pre><code>##   effectName             include fix   test  initialValue parm
-## 1 white_pass_covar alter TRUE    FALSE FALSE          0   0   
-## 2 white_pass_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_1 &lt;- includeEffects(myeff_1, inpopX, interaction1 =&quot;white_pass_covar&quot;)</code></pre>
-<pre><code>## There is no effect with short name inpopX, 
-## and with interaction1 = &lt;white_pass_covar&gt;, interaction2 = &lt;&gt;, and type = &lt;eval&gt;, 
-## for dependent variable net .
-## See effectsDocumentation() for this effects object.</code></pre>
+myeff_1 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;white_pass_covar&quot;)
+myeff_1 &lt;- includeEffects(myeff_1, egoX, altX, interaction1 =&quot;white_pass_covar&quot;)
+myeff_1 &lt;- includeEffects(myeff_1, inpopX, interaction1 =&quot;white_pass_covar&quot;)</code></pre>
 </div>
 <div id="results" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Results</h3>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                                  Estimate   Standard   Convergence 
-##                                               Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter          2.6475  ( 0.3265   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density)    -3.0625  ( 0.1678   )   -0.0487   
-##   2. eval reciprocity             2.8939  ( 0.2606   )   -0.0071   
-##   3. eval white_pass_covar alter  1.9335  ( 0.6574   )   -0.0420   
-##   4. eval white_pass_covar ego    0.4188  ( 0.3958   )   -0.0234   
-##   5. eval same white_pass_covar  -0.2126  ( 0.2043   )   -0.0638   
-## 
-## Overall maximum convergence ratio:    0.0662 
-## 
-## 
-## Total of 2680 iteration steps.</code></pre>
 </div>
 </div>
 <div id="m2-ethnicity" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> M2: Ethnicity</h2>
 <pre class="r"><code>myeff_2 &lt;- getEffects(the_data)
-myeff_2 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;country_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 same country_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_2 &lt;- includeEffects(myeff_2, egoX, altX, interaction1 = &quot;country_covar&quot;)</code></pre>
-<pre><code>##   effectName          include fix   test  initialValue parm
-## 1 country_covar alter TRUE    FALSE FALSE          0   0   
-## 2 country_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_2_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_2, returnDeps = TRUE)
-mod_2_effects</code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                               Estimate   Standard   Convergence 
-##                                            Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter       2.6280  ( 0.3233   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density) -3.2663  ( 0.1283   )    0.0564   
-##   2. eval reciprocity          2.9163  ( 0.2817   )    0.0157   
-##   3. eval country_covar alter  0.8578  ( 0.1883   )   -0.0757   
-##   4. eval country_covar ego   -0.1961  ( 0.2059   )   -0.0281   
-##   5. eval same country_covar   0.1560  ( 0.1575   )    0.0205   
-## 
-## Overall maximum convergence ratio:    0.1191 
-## 
-## 
-## Total of 2331 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_2_effects, &quot;mod_2_effecs_conv_1.rds&quot;)</code></pre>
+myeff_2 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;country_covar&quot;)
+myeff_2 &lt;- includeEffects(myeff_2, egoX, altX, interaction1 = &quot;country_covar&quot;)
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_2_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_2, returnDeps = TRUE)
+mod_2_effects
+#write_rds(mod_2_effects, &quot;mod_2_effecs_conv_1.rds&quot;)</code></pre>
 </div>
 <div id="m3-gender" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> M3: Gender</h2>
 <pre class="r"><code>myeff_3 &lt;- getEffects(the_data)
-myeff_3 &lt;- includeEffects(myeff_3, sameX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName        include fix   test  initialValue parm
-## 1 same gender_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_3 &lt;- includeEffects(myeff_3, egoX, altX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 gender_covar alter TRUE    FALSE FALSE          0   0   
-## 2 gender_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_3_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_3, returnDeps = TRUE)
-mod_3_effects</code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                               Estimate   Standard   Convergence 
-##                                            Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter       2.5878  ( 0.2959   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density) -3.2768  ( 0.1190   )    0.1026   
-##   2. eval reciprocity          2.9584  ( 0.2573   )    0.0302   
-##   3. eval gender_covar alter  -0.3979  ( 0.1386   )    0.0061   
-##   4. eval gender_covar ego     0.5383  ( 0.1948   )   -0.0218   
-##   5. eval same gender_covar    0.4149  ( 0.1412   )    0.0240   
-## 
-## Overall maximum convergence ratio:    0.1187 
-## 
-## 
-## Total of 2420 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_3_effects, &quot;mod_3_effecs_conv_1.rds&quot;)</code></pre>
+myeff_3 &lt;- includeEffects(myeff_3, sameX, interaction1 = &quot;gender_covar&quot;)
+myeff_3 &lt;- includeEffects(myeff_3, egoX, altX, interaction1 = &quot;gender_covar&quot;)
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_3_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_3, returnDeps = TRUE)
+mod_3_effects
+#write_rds(mod_3_effects, &quot;mod_3_effecs_conv_1.rds&quot;)</code></pre>
 </div>
 <div id="m4-gender-and-race" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> M4: Gender and
 Race</h2>
-<pre class="r"><code>myeff_4 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName        include fix   test  initialValue parm
-## 1 same gender_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_4 &lt;- includeEffects(myeff_4, egoX, altX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 gender_covar alter TRUE    FALSE FALSE          0   0   
-## 2 gender_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_4_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_4, returnDeps = TRUE)
-mod_4_effects</code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                                  Estimate   Standard   Convergence 
-##                                               Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter          2.6203  ( 0.3231   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density)    -3.1281  ( 0.1847   )    0.0269   
-##   2. eval reciprocity             2.9512  ( 0.2661   )    0.0421   
-##   3. eval white_pass_covar alter  2.0531  ( 0.6382   )   -0.0439   
-##   4. eval white_pass_covar ego    0.8509  ( 0.4759   )   -0.0259   
-##   5. eval same white_pass_covar  -0.4635  ( 0.2436   )   -0.0030   
-##   6. eval gender_covar alter     -0.3031  ( 0.1459   )    0.0042   
-##   7. eval gender_covar ego        0.6350  ( 0.2241   )   -0.0353   
-##   8. eval same gender_covar       0.5034  ( 0.1430   )    0.0232   
-## 
-## Overall maximum convergence ratio:    0.0897 
-## 
-## 
-## Total of 2604 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_4_effects, &quot;mod_4_effecs_conv_1.rds&quot;)</code></pre>
+<pre class="r"><code>myeff_4 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;gender_covar&quot;)
+myeff_4 &lt;- includeEffects(myeff_4, egoX, altX, interaction1 = &quot;gender_covar&quot;)
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_4_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_4, returnDeps = TRUE)
+mod_4_effects
+#write_rds(mod_4_effects, &quot;mod_4_effecs_conv_1.rds&quot;)</code></pre>
 </div>
 <div id="m5-gender-and-ethnicity" class="section level2" number="4.5">
 <h2><span class="header-section-number">4.5</span> M5: Gender and
 Ethnicity</h2>
-<pre class="r"><code>myeff_5 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName        include fix   test  initialValue parm
-## 1 same gender_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_5 &lt;- includeEffects(myeff_5, egoX, altX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 gender_covar alter TRUE    FALSE FALSE          0   0   
-## 2 gender_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_5_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_5, returnDeps = TRUE)
-mod_5_effects</code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                               Estimate   Standard   Convergence 
-##                                            Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter       2.6378  ( 0.3117   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density) -3.4271  ( 0.1560   )   -0.0749   
-##   2. eval reciprocity          2.9834  ( 0.2711   )    0.0272   
-##   3. eval country_covar alter  0.8191  ( 0.1925   )   -0.0448   
-##   4. eval country_covar ego   -0.0709  ( 0.2724   )    0.0099   
-##   5. eval same country_covar   0.0842  ( 0.1779   )   -0.0367   
-##   6. eval gender_covar alter  -0.2716  ( 0.1358   )    0.0011   
-##   7. eval gender_covar ego     0.5594  ( 0.2160   )    0.0587   
-##   8. eval same gender_covar    0.3856  ( 0.1357   )   -0.0694   
-## 
-## Overall maximum convergence ratio:    0.1311 
-## 
-## 
-## Total of 2517 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_5_effects, &quot;mod_5_effecs_conv_1.rds&quot;)</code></pre>
+<pre class="r"><code>myeff_5 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;gender_covar&quot;)
+myeff_5 &lt;- includeEffects(myeff_5, egoX, altX, interaction1 = &quot;gender_covar&quot;)
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_5_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_5, returnDeps = TRUE)
+mod_5_effects
+#write_rds(mod_5_effects, &quot;mod_5_effecs_conv_1.rds&quot;)</code></pre>
 </div>
 </div>
 <div id="gof-parameter-models" class="section level1 tabset" number="5">
@@ -731,14 +592,9 @@ gof0.gd_1 &lt;- sienaGOF(model_1_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects" class="section level3" number="5.1.2">
 <h3><span class="header-section-number">5.1.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_1, main = &quot;&quot;)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%201-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_1, main = &quot;&quot;)</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 8 9 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%201-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_1, main = &quot;&quot;) #so these don&#39;t work, we need to adjust! (like, with other models? so look at 4)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%201-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_1, main = &quot;&quot;)
+plot(gofo0_1, main = &quot;&quot;)
+plot(gof0.gd_1, main = &quot;&quot;) #so these don&#39;t work, we need to adjust! (like, with other models? so look at 4)</code></pre>
 </div>
 </div>
 <div id="model-4" class="section level2" number="5.2">
@@ -754,14 +610,9 @@ gof0.gd_4 &lt;- sienaGOF(model_4_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-1" class="section level3" number="5.2.2">
 <h3><span class="header-section-number">5.2.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_4, main = &quot;&quot;) # still a tragedy bb</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%204-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_4, main = &quot;&quot;) #horrible</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 7 8 9 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%204-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_4, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%204-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_4, main = &quot;&quot;) # still a tragedy bb
+plot(gofo0_4, main = &quot;&quot;) #horrible
+plot(gof0.gd_4, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
 </div>
 </div>
 <div id="model-5" class="section level2" number="5.3">
@@ -777,14 +628,9 @@ gof0.gd_5 &lt;- sienaGOF(model_5_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-2" class="section level3" number="5.3.2">
 <h3><span class="header-section-number">5.3.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_5, main = &quot;&quot;) # still a tragedy bb</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%205-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_5, main = &quot;&quot;) #horrible</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 7 8 9 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%205-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_5, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%205-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_5, main = &quot;&quot;) # still a tragedy bb
+plot(gofo0_5, main = &quot;&quot;) #horrible
+plot(gof0.gd_5, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
 </div>
 </div>
 </div>
@@ -796,211 +642,63 @@ With Structrural Effects</h1>
 <h2><span class="header-section-number">6.1</span> Race</h2>
 <pre class="r"><code>myeff_1 &lt;- getEffects(the_data)
 #view(myeff_1)
-myeff_1 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;white_pass_covar&quot;)</code></pre>
-<pre><code>##   effectName            include fix   test  initialValue parm
-## 1 same white_pass_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_1 &lt;- includeEffects(myeff_1, egoX, altX, interaction1 =&quot;white_pass_covar&quot;)</code></pre>
-<pre><code>##   effectName             include fix   test  initialValue parm
-## 1 white_pass_covar alter TRUE    FALSE FALSE          0   0   
-## 2 white_pass_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_1 &lt;- includeEffects(myeff_1, transTrip)</code></pre>
-<pre><code>##   effectName          include fix   test  initialValue parm
-## 1 transitive triplets TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_1 &lt;- includeEffects(myeff_1, transTies)</code></pre>
-<pre><code>##   effectName      include fix   test  initialValue parm
-## 1 transitive ties TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_1_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects # </code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                                  Estimate   Standard   Convergence 
-##                                               Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter          3.3513  ( 0.4727   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density)    -3.4244  ( 0.1937   )    0.0814   
-##   2. eval reciprocity             2.1998  ( 0.3048   )    0.0817   
-##   3. eval transitive triplets     0.4290  ( 0.4605   )    0.0906   
-##   4. eval transitive ties         2.3058  ( 0.5697   )    0.0642   
-##   5. eval white_pass_covar alter  1.8081  ( 0.6443   )    0.0470   
-##   6. eval white_pass_covar ego    0.3080  ( 0.4178   )   -0.0873   
-##   7. eval same white_pass_covar  -0.2230  ( 0.2243   )    0.0156   
-## 
-## Overall maximum convergence ratio:    0.1737 
-## 
-## 
-## Total of 2261 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_1_effects, &quot;mod_1_structural_eff_incl_pt2.rds&quot;)</code></pre>
+myeff_1 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;white_pass_covar&quot;)
+myeff_1 &lt;- includeEffects(myeff_1, egoX, altX, interaction1 =&quot;white_pass_covar&quot;)
+myeff_1 &lt;- includeEffects(myeff_1, transTrip)
+myeff_1 &lt;- includeEffects(myeff_1, transTies)
+
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_1_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects # 
+#write_rds(mod_1_effects, &quot;mod_1_structural_eff_incl_pt2.rds&quot;)</code></pre>
 </div>
 <div id="ethnicity" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Ethnicity</h2>
 <pre class="r"><code>myeff_2 &lt;- getEffects(the_data)
 #view(myeff_2)
-myeff_2 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;country_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 same country_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_2 &lt;- includeEffects(myeff_2, egoX, altX, interaction1 =&quot;country_covar&quot;)</code></pre>
-<pre><code>##   effectName          include fix   test  initialValue parm
-## 1 country_covar alter TRUE    FALSE FALSE          0   0   
-## 2 country_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_2 &lt;- includeEffects(myeff_2, transTrip)</code></pre>
-<pre><code>##   effectName          include fix   test  initialValue parm
-## 1 transitive triplets TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_2 &lt;- includeEffects(myeff_2, transTies)</code></pre>
-<pre><code>##   effectName      include fix   test  initialValue parm
-## 1 transitive ties TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_2_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_2, returnDeps = TRUE)
-mod_2_effects # </code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                               Estimate   Standard   Convergence 
-##                                            Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter       3.3558  ( 0.4757   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density) -3.6466  ( 0.1509   )   -0.0633   
-##   2. eval reciprocity          2.2264  ( 0.2954   )    0.0313   
-##   3. eval transitive triplets  0.5113  ( 0.4541   )    0.0798   
-##   4. eval transitive ties      2.2059  ( 0.5415   )    0.0219   
-##   5. eval country_covar alter  0.7981  ( 0.1986   )    0.0591   
-##   6. eval country_covar ego   -0.2682  ( 0.2565   )    0.0056   
-##   7. eval same country_covar   0.1287  ( 0.1778   )   -0.0030   
-## 
-## Overall maximum convergence ratio:    0.2250 
-## 
-## 
-## Total of 2556 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_2_effects, &quot;mod_2_structural_eff_incl.rds&quot;)</code></pre>
+myeff_2 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;country_covar&quot;)
+myeff_2 &lt;- includeEffects(myeff_2, egoX, altX, interaction1 =&quot;country_covar&quot;)
+myeff_2 &lt;- includeEffects(myeff_2, transTrip)
+myeff_2 &lt;- includeEffects(myeff_2, transTies)
+
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_2_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_2, returnDeps = TRUE)
+mod_2_effects # 
+#write_rds(mod_2_effects, &quot;mod_2_structural_eff_incl.rds&quot;)</code></pre>
 </div>
 <div id="gender" class="section level2" number="6.3">
 <h2><span class="header-section-number">6.3</span> Gender</h2>
 <pre class="r"><code>myeff_3 &lt;- getEffects(the_data)
 #view(myeff_1)
-myeff_3 &lt;- includeEffects(myeff_3, sameX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName        include fix   test  initialValue parm
-## 1 same gender_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_3 &lt;- includeEffects(myeff_3, egoX, altX, interaction1 =&quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 gender_covar alter TRUE    FALSE FALSE          0   0   
-## 2 gender_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_3 &lt;- includeEffects(myeff_3, transTrip)</code></pre>
-<pre><code>##   effectName          include fix   test  initialValue parm
-## 1 transitive triplets TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_3 &lt;- includeEffects(myeff_3, transTies)</code></pre>
-<pre><code>##   effectName      include fix   test  initialValue parm
-## 1 transitive ties TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_3_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_3, returnDeps = TRUE)
-mod_3_effects # </code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                               Estimate   Standard   Convergence 
-##                                            Error      t-ratio   
-## 
-## Rate parameters: 
-##   0       Rate parameter       3.2603  ( 0.4463   )             
-## 
-## Other parameters: 
-##   1. eval outdegree (density) -3.6743  ( 0.1445   )    0.0330   
-##   2. eval reciprocity          2.2833  ( 0.2925   )    0.0278   
-##   3. eval transitive triplets  0.5290  ( 0.4134   )    0.1250   
-##   4. eval transitive ties      2.3021  ( 0.5049   )    0.0306   
-##   5. eval gender_covar alter  -0.2618  ( 0.1428   )   -0.0070   
-##   6. eval gender_covar ego     0.6461  ( 0.2192   )    0.0455   
-##   7. eval same gender_covar    0.4093  ( 0.1487   )    0.0111   
-## 
-## Overall maximum convergence ratio:    0.2644 
-## 
-## 
-## Total of 2121 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_3_effects, &quot;mod_3_structural_eff_incl.rds&quot;)</code></pre>
+myeff_3 &lt;- includeEffects(myeff_3, sameX, interaction1 = &quot;gender_covar&quot;)
+myeff_3 &lt;- includeEffects(myeff_3, egoX, altX, interaction1 =&quot;gender_covar&quot;)
+myeff_3 &lt;- includeEffects(myeff_3, transTrip)
+myeff_3 &lt;- includeEffects(myeff_3, transTies)
+
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_3_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_3, returnDeps = TRUE)
+mod_3_effects # 
+#write_rds(mod_3_effects, &quot;mod_3_structural_eff_incl.rds&quot;)</code></pre>
 </div>
 <div id="racegender" class="section level2" number="6.4">
 <h2><span class="header-section-number">6.4</span> Race/Gender</h2>
-<pre class="r"><code>myeff_4 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName        include fix   test  initialValue parm
-## 1 same gender_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_4 &lt;- includeEffects(myeff_4, egoX, altX, interaction1 =&quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 gender_covar alter TRUE    FALSE FALSE          0   0   
-## 2 gender_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_4_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_4, returnDeps = TRUE)
-mod_4_effects # </code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                                   Estimate   Standard   Convergence 
-##                                                Error      t-ratio   
-## 
-## Rate parameters: 
-##   0        Rate parameter          3.2666  ( 0.4497   )             
-## 
-## Other parameters: 
-##    1. eval outdegree (density)    -3.5241  ( 0.2057   )   -0.0167   
-##    2. eval reciprocity             2.3011  ( 0.3087   )    0.0277   
-##    3. eval transitive triplets     0.4674  ( 0.4277   )    0.0888   
-##    4. eval transitive ties         2.3171  ( 0.5603   )    0.0448   
-##    5. eval white_pass_covar alter  1.9630  ( 0.6916   )    0.0265   
-##    6. eval white_pass_covar ego    0.7588  ( 0.4351   )    0.0134   
-##    7. eval same white_pass_covar  -0.4533  ( 0.2480   )    0.0093   
-##    8. eval gender_covar alter     -0.1867  ( 0.1516   )   -0.0781   
-##    9. eval gender_covar ego        0.7334  ( 0.2315   )    0.0458   
-##   10. eval same gender_covar       0.4945  ( 0.1556   )   -0.0010   
-## 
-## Overall maximum convergence ratio:    0.2084 
-## 
-## 
-## Total of 2466 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_4_effects, &quot;mod_4_structural_eff_incl.rds&quot;)</code></pre>
+<pre class="r"><code>myeff_4 &lt;- includeEffects(myeff_1, sameX, interaction1 = &quot;gender_covar&quot;)
+myeff_4 &lt;- includeEffects(myeff_4, egoX, altX, interaction1 =&quot;gender_covar&quot;)
+
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_4_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_4, returnDeps = TRUE)
+mod_4_effects # 
+#write_rds(mod_4_effects, &quot;mod_4_structural_eff_incl.rds&quot;)</code></pre>
 </div>
 <div id="ethnicitygender" class="section level2" number="6.5">
 <h2><span class="header-section-number">6.5</span> Ethnicity/Gender</h2>
-<pre class="r"><code>myeff_5 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName        include fix   test  initialValue parm
-## 1 same gender_covar TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myeff_5 &lt;- includeEffects(myeff_5, egoX, altX, interaction1 =&quot;gender_covar&quot;)</code></pre>
-<pre><code>##   effectName         include fix   test  initialValue parm
-## 1 gender_covar alter TRUE    FALSE FALSE          0   0   
-## 2 gender_covar ego   TRUE    FALSE FALSE          0   0</code></pre>
-<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)</code></pre>
-<pre><code>## If you use this algorithm object, siena07 will create/use an output file preliminary.txt .</code></pre>
-<pre class="r"><code>mod_5_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_5, returnDeps = TRUE)
-mod_5_effects # </code></pre>
-<pre><code>## Estimates, standard errors and convergence t-ratios
-## 
-##                                Estimate   Standard   Convergence 
-##                                             Error      t-ratio   
-## 
-## Rate parameters: 
-##   0        Rate parameter       3.2502  ( 0.4355   )             
-## 
-## Other parameters: 
-##    1. eval outdegree (density) -3.7848  ( 0.1710   )   -0.0033   
-##    2. eval reciprocity          2.3388  ( 0.3471   )    0.0694   
-##    3. eval transitive triplets  0.5568  ( 0.4569   )    0.1072   
-##    4. eval transitive ties      2.1918  ( 0.5461   )    0.0644   
-##    5. eval country_covar alter  0.7650  ( 0.1991   )    0.0395   
-##    6. eval country_covar ego   -0.1330  ( 0.2601   )    0.0339   
-##    7. eval same country_covar   0.0603  ( 0.1923   )    0.0469   
-##    8. eval gender_covar alter  -0.1486  ( 0.1508   )    0.0706   
-##    9. eval gender_covar ego     0.6078  ( 0.2237   )    0.0099   
-##   10. eval same gender_covar    0.3677  ( 0.1530   )    0.0639   
-## 
-## Overall maximum convergence ratio:    0.2043 
-## 
-## 
-## Total of 2926 iteration steps.</code></pre>
-<pre class="r"><code>#write_rds(mod_5_effects, &quot;mod_5_structural_eff_incl.rds&quot;)</code></pre>
+<pre class="r"><code>myeff_5 &lt;- includeEffects(myeff_2, sameX, interaction1 = &quot;gender_covar&quot;)
+myeff_5 &lt;- includeEffects(myeff_5, egoX, altX, interaction1 =&quot;gender_covar&quot;)
+
+myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_5_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_5, returnDeps = TRUE)
+mod_5_effects # 
+#write_rds(mod_5_effects, &quot;mod_5_structural_eff_incl.rds&quot;)</code></pre>
 </div>
 </div>
 <div id="gof-structural-effects" class="section level1 tabset"
@@ -1020,14 +718,9 @@ gof0.gd_1 &lt;- sienaGOF(model_1_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-3" class="section level3" number="7.1.2">
 <h3><span class="header-section-number">7.1.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_1, main = &quot;&quot;)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%201%20str-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_1, main = &quot;&quot;)</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%201%20str-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_1, main = &quot;&quot;) #so these don&#39;t work, we need to adjust! (like, with other models? so look at 4)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%201%20str-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_1, main = &quot;&quot;)
+plot(gofo0_1, main = &quot;&quot;)
+plot(gof0.gd_1, main = &quot;&quot;) #so these don&#39;t work, we need to adjust! (like, with other models? so look at 4)</code></pre>
 </div>
 </div>
 <div id="model-2" class="section level2" number="7.2">
@@ -1043,14 +736,9 @@ gof0.gd_2 &lt;- sienaGOF(model_2_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-4" class="section level3" number="7.2.2">
 <h3><span class="header-section-number">7.2.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_2, main = &quot;&quot;) # still a tragedy bb</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%202%20str-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_2, main = &quot;&quot;) #horrible</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%202%20str-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_2, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%202%20str-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_2, main = &quot;&quot;) # still a tragedy bb
+plot(gofo0_2, main = &quot;&quot;) #horrible
+plot(gof0.gd_2, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
 </div>
 </div>
 <div id="model-3" class="section level2" number="7.3">
@@ -1066,14 +754,9 @@ gof0.gd_3 &lt;- sienaGOF(model_3_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-5" class="section level3" number="7.3.2">
 <h3><span class="header-section-number">7.3.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_3, main = &quot;&quot;) # still a tragedy bb</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%203%20str-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_3, main = &quot;&quot;) #horrible</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%203%20str-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_3, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%203%20str-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_3, main = &quot;&quot;) # still a tragedy bb
+plot(gofo0_3, main = &quot;&quot;) #horrible
+plot(gof0.gd_3, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
 </div>
 </div>
 <div id="model-4-1" class="section level2" number="7.4">
@@ -1089,14 +772,9 @@ gof0.gd_4 &lt;- sienaGOF(model_4_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-6" class="section level3" number="7.4.2">
 <h3><span class="header-section-number">7.4.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_4, main = &quot;&quot;) # still a tragedy bb</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%204%20str-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_4, main = &quot;&quot;) #horrible</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%204%20str-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_4, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%204%20str-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_4, main = &quot;&quot;) # still a tragedy bb
+plot(gofo0_4, main = &quot;&quot;) #horrible
+plot(gof0.gd_4, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
 </div>
 </div>
 <div id="model-5-1" class="section level2" number="7.5">
@@ -1112,19 +790,14 @@ gof0.gd_5 &lt;- sienaGOF(model_5_effects, GeodesicDistribution, cumulative = FAL
 <div id="describe-effects-7" class="section level3" number="7.5.2">
 <h3><span class="header-section-number">7.5.2</span> Describe
 Effects</h3>
-<pre class="r"><code>plot(gofi0_5, main = &quot;&quot;) # still a tragedy bb</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%205%20str-1.png" width="672" /></p>
-<pre class="r"><code>plot(gofo0_5, main = &quot;&quot;) #horrible</code></pre>
-<pre><code>## Note: some statistics are not plotted because their variance is 0.
-## This holds for the statistics: 9 10 15 20.</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%205%20str-2.png" width="672" /></p>
-<pre class="r"><code>plot(gof0.gd_5, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
-<p><img src="rsiena.analysis_files/figure-html/GOF%20Graphs%20Model%205%20str-3.png" width="672" /></p>
+<pre class="r"><code>plot(gofi0_5, main = &quot;&quot;) # still a tragedy bb
+plot(gofo0_5, main = &quot;&quot;) #horrible
+plot(gof0.gd_5, main = &quot;&quot;) #bad (aka: need structural effects)</code></pre>
 </div>
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUlNpZW5hIEFuYWx5c2lzIgpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQKZGF0ZTogIjIwMjQtMTAtMTYiCi0tLQojIEdldCB0aGUgQmFzaWNzCmBgYHtyIHBhY2thZ2VzLCBtZXNzYWdlID0gRiwgd2FybmluZz1GfQpyZXF1aXJlKHRpZHl2ZXJzZSkKcmVxdWlyZShpZ3JhcGgpCnJlcXVpcmUoc2hpbnkpCnJlcXVpcmUoUlNpZW5hKQpyZXF1aXJlKHJtZGZvcm1hdHMpCnJlcXVpcmUocHJldHR5ZG9jKQpyZXF1aXJlKGhyYnJ0aGVtZXMpCnJlcXVpcmUodGludCkKcmVxdWlyZSh0dWZ0ZSkKcmVxdWlyZShwc3ljaCkKbGlicmFyeShkYXRhLnRhYmxlKSAgCmxpYnJhcnkoeG1sMikKbGlicmFyeShydmVzdCkKbGlicmFyeSh4bWwyKQpsaWJyYXJ5KFhNTCkKbGlicmFyeShsYWJlbGxlZCkKbGlicmFyeShmb3JjYXRzKQpgYGAKCmBgYHtyIGRhdGFzZXQsIGluY2x1ZGU9Riwgd2FybmluZz1GLCBtZXNzYWdlPUZBTFNFfQp3YXZlXzEgPC0gcmVhZF9yZHMoImRhdGFzZXRzX2ZpbmFsL3dhdmVfMV9maXJzdF9hdXRob3JzLnJkcyIpCndhdmVfMiA8LSByZWFkX3JkcygiZGF0YXNldHNfZmluYWwvd2F2ZV8yX2ZpcnN0X2F1dGhvcnMucmRzIikKZGVtb2dyYXBoaWNzX2hhbm5haCA8LSByZWFkX2NzdigiZGVtb2dyYXBoaWNzX2hhbm5haF9maW5hbC5jc3YiLCBzaG93X2NvbF90eXBlcyA9IEZBTFNFKQp2aWV3KGRlbW9ncmFwaGljc19oYW5uYWgpCm5ldF9zb2NfYXJyYXkgPC0gcmVhZF9yZHMoImRhdGFzZXRzX2ZpbmFsL25ldF9zb2NfYXJyYXlfZmlyc3RfYXV0aC5yZHMiKQpgYGAKCmBgYHtyIGZjb2xuZXQsIGluY2x1ZGUgPSBGLCB3YXJuaW5nPUYsIG1lc3NhZ2U9Rn0KZmNvbG5ldCA8LSBmdW5jdGlvbihkYXRhID0gc2Nob2xhcnMsIHVuaXZlcnNpdHkgPSAiUlUiLCAKICAgICAgICAgICAgICAgICAgICBkaXNjaXBsaW5lID0gInNvY2lvbG9neSIsIHdhdmVzID0gbGlzdChjKDIwMTUsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAyMDE4KSwgYygyMDE5LCAyMDIzKSksIHR5cGUgPSBjKCJmaXJzdCIpKSB7CiAgCiAgIyBzdGVwIDEKICBkZW1vZ3JhcGhpY3MgPC0gZG8uY2FsbChyYmluZC5kYXRhLmZyYW1lLCBkYXRhJGRlbW9ncmFwaGljcykKICBkZW1vZ3JhcGhpY3MgPC0gZGVtb2dyYXBoaWNzICU+JQogICAgbXV0YXRlKFVuaXZlcnNpdGVpdDEuMjIgPSByZXBsYWNlKFVuaXZlcnNpdGVpdDEuMjIsIGlzLm5hKFVuaXZlcnNpdGVpdDEuMjIpLCAiIiksIFVuaXZlcnNpdGVpdDIuMjIgPSByZXBsYWNlKFVuaXZlcnNpdGVpdDIuMjIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaXMubmEoVW5pdmVyc2l0ZWl0Mi4yMiksICIiKSwgVW5pdmVyc2l0ZWl0MS4yNCA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0MS4yNCwgaXMubmEoVW5pdmVyc2l0ZWl0MS4yNCksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIiIpLCBVbml2ZXJzaXRlaXQyLjI0ID0gcmVwbGFjZShVbml2ZXJzaXRlaXQyLjI0LCBpcy5uYShVbml2ZXJzaXRlaXQyLjI0KSwgIiIpLCBkaXNjaXBsaW5lLjIyID0gcmVwbGFjZShkaXNjaXBsaW5lLjIyLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaXMubmEoZGlzY2lwbGluZS4yMiksICIiKSwgZGlzY2lwbGluZS4yNCA9IHJlcGxhY2UoZGlzY2lwbGluZS4yNCwgaXMubmEoZGlzY2lwbGluZS4yNCksICIiKSkKICAKICBzYW1wbGUgPC0gd2hpY2goKGRlbW9ncmFwaGljcyRVbml2ZXJzaXRlaXQxLjIyICVpbiUgdW5pdmVyc2l0eSB8IGRlbW9ncmFwaGljcyRVbml2ZXJzaXRlaXQyLjIyICVpbiUKICAgICAgICAgICAgICAgICAgICAgdW5pdmVyc2l0eSB8IGRlbW9ncmFwaGljcyRVbml2ZXJzaXRlaXQxLjI0ICVpbiUgdW5pdmVyc2l0eSB8IGRlbW9ncmFwaGljcyRVbml2ZXJzaXRlaXQyLjI0ICVpbiUKICAgICAgICAgICAgICAgICAgICAgdW5pdmVyc2l0eSkgJiAoZGVtb2dyYXBoaWNzJGRpc2NpcGxpbmUuMjIgJWluJSBkaXNjaXBsaW5lIHwgZGVtb2dyYXBoaWNzJGRpc2NpcGxpbmUuMjQgJWluJSBkaXNjaXBsaW5lKSkKICAKICBkZW1vZ3JhcGhpY3Nfc29jIDwtIGRlbW9ncmFwaGljc1tzYW1wbGUsIF0KICBzY2hvbGFyc19zZWwgPC0gbGFwcGx5KHNjaG9sYXJzLCAiWyIsIHNhbXBsZSkKICAKICAjIHN0ZXAgMgogIGlkcyA8LSBkZW1vZ3JhcGhpY3Nfc29jJGF1X2lkCiAgbndhdmVzIDwtIGxlbmd0aCh3YXZlcykKICBuZXRzIDwtIGFycmF5KDAsIGRpbSA9IGMobndhdmVzLCBsZW5ndGgoaWRzKSwgbGVuZ3RoKGlkcykpLCBkaW1uYW1lcyA9IGxpc3Qod2F2ZSA9IDE6bndhdmVzLCBpZHMsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlkcykpCiAgZGltbmFtZXMobmV0cykKICAKICAjIHN0ZXAgMwogIGRmX3dvcmtzIDwtIHRpYmJsZSh3b3Jrc19pZCA9IHVubGlzdChsYXBwbHkoc2Nob2xhcnNfc2VsJHdvcmssIGZ1bmN0aW9uKGwpIGwkaWQpKSwgd29ya3NfYXV0aG9yID0gdW5saXN0KGxhcHBseShzY2hvbGFyc19zZWwkd29yaywKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZnVuY3Rpb24obCkgbCRhdXRob3IpLCByZWN1cnNpdmUgPSBGQUxTRSksIHdvcmtzX3llYXIgPSB1bmxpc3QobGFwcGx5KHNjaG9sYXJzX3NlbCR3b3JrLCBmdW5jdGlvbihsKSBsJHB1YmxpY2F0aW9uX3llYXIpLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZWN1cnNpdmUgPSBGQUxTRSkpCiAgCiAgZGZfd29ya3MgPC0gZGZfd29ya3NbIWR1cGxpY2F0ZWQoZGZfd29ya3MpLCBdCiAgCiAgIyBzdGVwIDQKICBpZiAodHlwZSA9PSAiZmlyc3QiKSB7CiAgICBmb3IgKGogaW4gMTpud2F2ZXMpIHsKICAgICAgZGZfd29ya3NfdyA8LSBkZl93b3Jrc1tkZl93b3JrcyR3b3Jrc195ZWFyID49IHdhdmVzW1tqXV1bMV0gJiBkZl93b3JrcyR3b3Jrc195ZWFyIDw9IHdhdmVzW1tqXV1bMl0sCiAgICAgIF0KICAgICAgZm9yIChpIGluIDE6bnJvdyhkZl93b3Jrc193KSkgewogICAgICAgIGVnbyA8LSBkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkWzFdCiAgICAgICAgYWx0ZXJzIDwtIGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWRbLTFdCiAgICAgICAgaWYgKHN1bShpZHMgJWluJSBlZ28pID4gMCAmIHN1bShpZHMgJWluJSBhbHRlcnMpID4gMCkgewogICAgICAgICAgbmV0c1tqLCB3aGljaChpZHMgJWluJSBlZ28pLCB3aGljaChpZHMgJWluJSBhbHRlcnMpXSA8LSAxCiAgICAgICAgfQogICAgICB9CiAgICB9CiAgfQogIAogIGlmICh0eXBlID09ICJsYXN0IikgewogICAgZm9yIChqIGluIDE6bndhdmVzKSB7CiAgICAgIGRmX3dvcmtzX3cgPC0gZGZfd29ya3NbZGZfd29ya3Mkd29ya3NfeWVhciA+PSB3YXZlc1tbal1dWzFdICYgZGZfd29ya3Mkd29ya3NfeWVhciA8PSB3YXZlc1tbal1dWzJdLAogICAgICBdCiAgICAgIGZvciAoaSBpbiAxOm5yb3coZGZfd29ya3NfdykpIHsKICAgICAgICBlZ28gPC0gcmV2KGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWQpWzFdCiAgICAgICAgYWx0ZXJzIDwtIHJldihkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkKVstMV0KICAgICAgICBpZiAoc3VtKGlkcyAlaW4lIGVnbykgPiAwICYgc3VtKGlkcyAlaW4lIGFsdGVycykgPiAwKSB7CiAgICAgICAgICBuZXRzW2osIHdoaWNoKGlkcyAlaW4lIGVnbyksIHdoaWNoKGlkcyAlaW4lIGFsdGVycyldIDwtIDEKICAgICAgICB9CiAgICAgIH0KICAgIH0KICB9CiAgCiAgaWYgKHR5cGUgPT0gImFsbCIpIHsKICAgIGZvciAoaiBpbiAxOm53YXZlcykgewogICAgICBkZl93b3Jrc193IDwtIGRmX3dvcmtzW2RmX3dvcmtzJHdvcmtzX3llYXIgPj0gd2F2ZXNbW2pdXVsxXSAmIGRmX3dvcmtzJHdvcmtzX3llYXIgPD0gd2F2ZXNbW2pdXVsyXSwKICAgICAgXQogICAgICBmb3IgKGkgaW4gMTpucm93KGRmX3dvcmtzX3cpKSB7CiAgICAgICAgZWdvcyA8LSBkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkCiAgICAgICAgaWYgKHN1bShpZHMgJWluJSBlZ29zKSA+IDApIHsKICAgICAgICAgIG5ldHNbaiwgd2hpY2goaWRzICVpbiUgZWdvcyksIHdoaWNoKGlkcyAlaW4lIGVnb3MpXSA8LSAxCiAgICAgICAgfQogICAgICB9CiAgICB9CiAgfQogIG91dHB1dCA8LSBsaXN0KCkKICBvdXRwdXQkZGF0YSA8LSBzY2hvbGFyc19zZWwKICBvdXRwdXQkbmV0cyA8LSBuZXRzCiAgcmV0dXJuKG91dHB1dCkKfQoKYGBgCgpgYGB7ciB1c2VyIGRlZmluZWQgZnVuY3Rpb25zLCBpbmNsdWRlID0gRiwgbWVzc2FnZT1GLCB3YXJuaW5nPUZ9Ckdlb2Rlc2ljRGlzdHJpYnV0aW9uIDwtIGZ1bmN0aW9uKGksIGRhdGEsIHNpbXMsIHBlcmlvZCwgZ3JvdXBOYW1lLCB2YXJOYW1lLCBsZXZscyA9IGMoMTo1LCBJbmYpLCBjdW11bGF0aXZlID0gVFJVRSwKICAgIC4uLikgewogICAgeCA8LSBuZXR3b3JrRXh0cmFjdGlvbihpLCBkYXRhLCBzaW1zLCBwZXJpb2QsIGdyb3VwTmFtZSwgdmFyTmFtZSkKICAgIHJlcXVpcmUoc25hKQogICAgYSA8LSBzbmE6Omdlb2Rpc3Qoc3ltbWV0cml6ZSh4KSkkZ2Rpc3QKICAgIGlmIChjdW11bGF0aXZlKSB7CiAgICAgICAgZ2RpIDwtIHNhcHBseShsZXZscywgZnVuY3Rpb24oaSkgewogICAgICAgICAgICBzdW0oYSA8PSBpKQogICAgICAgIH0pCiAgICB9IGVsc2UgewogICAgICAgIGdkaSA8LSBzYXBwbHkobGV2bHMsIGZ1bmN0aW9uKGkpIHsKICAgICAgICAgICAgc3VtKGEgPT0gaSkKICAgICAgICB9KQogICAgfQogICAgbmFtZXMoZ2RpKSA8LSBhcy5jaGFyYWN0ZXIobGV2bHMpCiAgICBnZGkKfQoKIyBUaGUgZm9sbG93aW5nIGZ1bmN0aW9uIGlzIHRha2VuIGZyb20gdGhlIGhlbHAgcGFnZSBmb3Igc2llbmFUZXN0Cgp0ZXN0YWxsIDwtIGZ1bmN0aW9uKGFucykgewogICAgZm9yIChpIGluIHdoaWNoKGFucyR0ZXN0KSkgewogICAgICAgIHNjdCA8LSBzY29yZS5UZXN0KGFucywgaSkKICAgICAgICBjYXQoYW5zJHJlcXVlc3RlZEVmZmVjdHMkZWZmZWN0TmFtZVtpXSwgIlxuIikKICAgICAgICBwcmludChzY3QpCiAgICB9CiAgICBpbnZpc2libGUoc2NvcmUuVGVzdChhbnMpKQp9CmBgYAoKIyBWYXJpYWJsZXMgCgpgYGB7ciB2YXJpYWJsZXMgZGVmaW5pdGlvbn0KI2RlcGVuZGVudCB2YXJpYWJsZSAKbmV0IDwtIHNpZW5hRGVwZW5kZW50KG5ldF9zb2NfYXJyYXkpCgojaW5kZXBlbmRlbnQgdmFyaWFibGUgCmhvb2dsZXJhYXJfY292YXIgPC0gIGNvQ292YXIoZGVtb2dyYXBoaWNzX2hhbm5haCRob29nbGVyYWFyKQpmdW5jdGllX2NvdmFyIDwtIGNvQ292YXIoZGVtb2dyYXBoaWNzX2hhbm5haCRmdW5jdGllKQpnZW5kZXJfY292YXIgPC0gY29Db3ZhcihkZW1vZ3JhcGhpY3NfaGFubmFoJHBlcmNfZmVtYWxlKQpjb3VudHJ5X2NvdmFyIDwtIGNvQ292YXIoZGVtb2dyYXBoaWNzX2hhbm5haCRib3JuX2luX2JpbmFyeSkKd2hpdGVfcGFzc19jb3ZhciA8LSBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkd2hpdGVfb3Jfbm90KQpoX2luZGV4X2NvdmFyIDwtIGNvQ292YXIoZGVtb2dyYXBoaWNzX2hhbm5haCRoX2luZGV4KQpgYGAKCiMgR2V0IEVmZmVjdCBTdHJ1Y3R1cmUgCgpgYGB7ciBnb29kIGRhdGF9CnRoZV9kYXRhIDwtIHNpZW5hRGF0YUNyZWF0ZShuZXQsIHdoaXRlX3Bhc3NfY292YXIsIGNvdW50cnlfY292YXIsIGdlbmRlcl9jb3ZhciwgZnVuY3RpZV9jb3ZhciwgaF9pbmRleF9jb3ZhcikKbXllZmZfMSA8LSBnZXRFZmZlY3RzKHRoZV9kYXRhKQpteWVmZl8xCmBgYAoKYGBge3Igd2hlcmUgdG8gcHV0IGl0LCBpbmNsdWRlPUYsIGVjaG89Rn0KaWZlbHNlKCFkaXIuZXhpc3RzKCJyZXN1bHRzIiksIGRpci5jcmVhdGUoInJlc3VsdHMiKSwgRkFMU0UpCnByaW50MDFSZXBvcnQodGhlX2RhdGEsIG1vZGVsbmFtZSA9ICIuL3Jlc3VsdHMvcHJlbGltc2gqdCIpICAKYGBgCiMgTW9kZWxzIC0gUGFyYW1ldGVyIEVmZmVjdHMgey50YWJzZXR9CiMjIE0xOiBSYWNlCgojIyMgTWFraW5nIHRoZSBNb2RlbApgYGB7cn0KbXllZmZfMSA8LSBnZXRFZmZlY3RzKHRoZV9kYXRhKQp2aWV3KG15ZWZmXzEpCm15ZWZmXzEgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJ3aGl0ZV9wYXNzX2NvdmFyIikKbXllZmZfMSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCBlZ29YLCBhbHRYLCBpbnRlcmFjdGlvbjEgPSJ3aGl0ZV9wYXNzX2NvdmFyIikKbXllZmZfMSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCBpbnBvcFgsIGludGVyYWN0aW9uMSA9IndoaXRlX3Bhc3NfY292YXIiKQpgYGAKCiMjIyBSZXN1bHRzCmBgYHtyIHJlc3VsdHMgYWxvZ29yaXRtLCBlY2hvID0gRn0KbXlBbGdvcml0aG0gPC0gc2llbmFBbGdvcml0aG1DcmVhdGUocHJvam5hbWUgPSAicHJlbGltaW5hcnkiKQptb2RfMV9lZmZlY3RzIDwtIHNpZW5hMDcobXlBbGdvcml0aG0sIGRhdGEgPSB0aGVfZGF0YSwgZWZmZWN0cyA9IG15ZWZmXzEsIHJldHVybkRlcHMgPSBUUlVFKQptb2RfMV9lZmZlY3RzIApgYGAKCmBgYHtyLCBpbmNsdWRlID0gRiwgZWNobyA9IEZ9CiNtb2RfMV9lZmZlY3RzIDwtIHNpZW5hMDcobXlBbGdvcml0aG0sIGRhdGEgPSB0aGVfZGF0YSwgZWZmZWN0cyA9IG15ZWZmXzEsIHByZXZhbnMgPSBtb2RfMV9lZmZlY3RzLCByZXR1cm5EZXBzPVRSVUUpCiM/c2llbmEwNwojIGFuc19NMl8yCmBgYAoKIyMgTTI6IEV0aG5pY2l0eQoKYGBge3IgbW9kZWwgMn0KbXllZmZfMiA8LSBnZXRFZmZlY3RzKHRoZV9kYXRhKQpteWVmZl8yIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIHNhbWVYLCBpbnRlcmFjdGlvbjEgPSAiY291bnRyeV9jb3ZhciIpCm15ZWZmXzIgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMiwgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0gImNvdW50cnlfY292YXIiKQpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF8yX2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfMiwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF8yX2VmZmVjdHMKI3dyaXRlX3Jkcyhtb2RfMl9lZmZlY3RzLCAibW9kXzJfZWZmZWNzX2NvbnZfMS5yZHMiKQpgYGAKCgojIyBNMzogR2VuZGVyCgpgYGB7ciBnZW5kZXIgbW9kZWx9Cm15ZWZmXzMgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKbXllZmZfMyA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8zLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15ZWZmXzMgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMywgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzNfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl8zLCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzNfZWZmZWN0cwojd3JpdGVfcmRzKG1vZF8zX2VmZmVjdHMsICJtb2RfM19lZmZlY3NfY29udl8xLnJkcyIpCmBgYAoKCgojIyBNNDogR2VuZGVyIGFuZCBSYWNlCmBgYHtyIGZvdXJ0aG1vZGVsLCBpbmNsdWRlID0gVH0KbXllZmZfNCA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15ZWZmXzQgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfNCwgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzRfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl80LCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzRfZWZmZWN0cwojd3JpdGVfcmRzKG1vZF80X2VmZmVjdHMsICJtb2RfNF9lZmZlY3NfY29udl8xLnJkcyIpCmBgYAojIyBNNTogR2VuZGVyIGFuZCBFdGhuaWNpdHkKCmBgYHtyIGZpZnRodGhtb2RlbCwgaW5jbHVkZSA9IFR9Cm15ZWZmXzUgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMiwgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteWVmZl81IDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzUsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF81X2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfNSwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF81X2VmZmVjdHMKI3dyaXRlX3Jkcyhtb2RfNV9lZmZlY3RzLCAibW9kXzVfZWZmZWNzX2NvbnZfMS5yZHMiKQpgYGAKCiMgR09GIC0tIFBhcmFtZXRlciBNb2RlbHMgey50YWJzZXR9CgojIyBNMQoKIyMjIENyZWF0ZSBFZmZlY3RzCmBgYHtyIEdPRiBmdW5jdGlvbnMgTW9kZWwgMSwgbWVzc2FnZSA9IEYsIHdhcm5pbmc9Rn0KbW9kZWxfMV9lZmZlY3RzIDwtIHJlYWRfcmRzKCJtb2RfMV9lZmZlY3RzX2NvbnZfMS5yZHMiKQpnb2ZpMF8xIDwtIHNpZW5hR09GKG1vZGVsXzFfZWZmZWN0cywgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKZ29mbzBfMSA8LSBzaWVuYUdPRihtb2RlbF8xX2VmZmVjdHMsIE91dGRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgbGV2bHMgPSBjKDA6MTAsIDE1LCAyMCksCiAgICB2YXJOYW1lID0gIm5ldCIpCmdvZjAuZ2RfMSA8LSBzaWVuYUdPRihtb2RlbF8xX2VmZmVjdHMsIEdlb2Rlc2ljRGlzdHJpYnV0aW9uLCBjdW11bGF0aXZlID0gRkFMU0UsIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKYGBgCgojIyMgRGVzY3JpYmUgRWZmZWN0cwpgYGB7ciBHT0YgR3JhcGhzIE1vZGVsIDF9CnBsb3QoZ29maTBfMSwgbWFpbiA9ICIiKQpwbG90KGdvZm8wXzEsIG1haW4gPSAiIikKcGxvdChnb2YwLmdkXzEsIG1haW4gPSAiIikgI3NvIHRoZXNlIGRvbid0IHdvcmssIHdlIG5lZWQgdG8gYWRqdXN0ISAobGlrZSwgd2l0aCBvdGhlciBtb2RlbHM/IHNvIGxvb2sgYXQgNCkKYGBgCgojIyBNb2RlbCA0CgojIyMgQ3JlYXRlIEVmZmVjdHMKYGBge3IgR09GIGZ1bmN0aW9ucyBNb2RlbCA0fQptb2RlbF80X2VmZmVjdHMgPC0gcmVhZF9yZHMoIm1vZF80X2VmZmVjc19jb252XzEucmRzIikKZ29maTBfNCA8LSBzaWVuYUdPRihtb2RlbF80X2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzQgPC0gc2llbmFHT0YobW9kZWxfNF9lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzQgPC0gc2llbmFHT0YobW9kZWxfNF9lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMKYGBge3IgR09GIEdyYXBocyBNb2RlbCA0fQpwbG90KGdvZmkwXzQsIG1haW4gPSAiIikgIyBzdGlsbCBhIHRyYWdlZHkgYmIKcGxvdChnb2ZvMF80LCBtYWluID0gIiIpICNob3JyaWJsZQpwbG90KGdvZjAuZ2RfNCwgbWFpbiA9ICIiKSAjYmFkIChha2E6IG5lZWQgc3RydWN0dXJhbCBlZmZlY3RzKQpgYGAKCiMjIE1vZGVsIDUKCiMjIyBDcmVhdGUgRWZmZWN0cwpgYGB7ciBHT0YgZnVuY3Rpb25zIE1vZGVsIDV9Cm1vZGVsXzVfZWZmZWN0cyA8LSByZWFkX3JkcygibW9kXzVfZWZmZWNzX2NvbnZfMS5yZHMiKQpnb2ZpMF81IDwtIHNpZW5hR09GKG1vZGVsXzVfZWZmZWN0cywgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKZ29mbzBfNSA8LSBzaWVuYUdPRihtb2RlbF81X2VmZmVjdHMsIE91dGRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgbGV2bHMgPSBjKDA6MTAsIDE1LCAyMCksCiAgICB2YXJOYW1lID0gIm5ldCIpCmdvZjAuZ2RfNSA8LSBzaWVuYUdPRihtb2RlbF81X2VmZmVjdHMsIEdlb2Rlc2ljRGlzdHJpYnV0aW9uLCBjdW11bGF0aXZlID0gRkFMU0UsIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKYGBgCgojIyMgRGVzY3JpYmUgRWZmZWN0cyAKCmBgYHtyIEdPRiBHcmFwaHMgTW9kZWwgNX0KcGxvdChnb2ZpMF81LCBtYWluID0gIiIpICMgc3RpbGwgYSB0cmFnZWR5IGJiCnBsb3QoZ29mbzBfNSwgbWFpbiA9ICIiKSAjaG9ycmlibGUKcGxvdChnb2YwLmdkXzUsIG1haW4gPSAiIikgI2JhZCAoYWthOiBuZWVkIHN0cnVjdHVyYWwgZWZmZWN0cykKYGBgCgojIE1vZGVscyBXaXRoIFN0cnVjdHJ1cmFsIEVmZmVjdHMgey50YWJzZXR9CgojIyBSYWNlCgpgYGB7ciBzdHJjdHJsIHdoaXRlIHBhc3Npbmd9Cm15ZWZmXzEgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKI3ZpZXcobXllZmZfMSkKbXllZmZfMSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gIndoaXRlX3Bhc3NfY292YXIiKQpteWVmZl8xIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzEsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9IndoaXRlX3Bhc3NfY292YXIiKQpteWVmZl8xIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzEsIHRyYW5zVHJpcCkKbXllZmZfMSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCB0cmFuc1RpZXMpCgpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF8xX2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfMSwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF8xX2VmZmVjdHMgIyAKI3dyaXRlX3Jkcyhtb2RfMV9lZmZlY3RzLCAibW9kXzFfc3RydWN0dXJhbF9lZmZfaW5jbF9wdDIucmRzIikKCmBgYAoKIyMgRXRobmljaXR5CgpgYGB7ciBzdHJjdHJsIGV0aG5pY2l0eX0KbXllZmZfMiA8LSBnZXRFZmZlY3RzKHRoZV9kYXRhKQojdmlldyhteWVmZl8yKQpteWVmZl8yIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIHNhbWVYLCBpbnRlcmFjdGlvbjEgPSAiY291bnRyeV9jb3ZhciIpCm15ZWZmXzIgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMiwgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0iY291bnRyeV9jb3ZhciIpCm15ZWZmXzIgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMiwgdHJhbnNUcmlwKQpteWVmZl8yIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIHRyYW5zVGllcykKCm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzJfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl8yLCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzJfZWZmZWN0cyAjIAojd3JpdGVfcmRzKG1vZF8yX2VmZmVjdHMsICJtb2RfMl9zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCmBgYAoKIyMgR2VuZGVyIAoKYGBge3Igc3RyY3RybCBnZW5kZXJ9Cm15ZWZmXzMgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKI3ZpZXcobXllZmZfMSkKbXllZmZfMyA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8zLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15ZWZmXzMgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMywgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0iZ2VuZGVyX2NvdmFyIikKbXllZmZfMyA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8zLCB0cmFuc1RyaXApCm15ZWZmXzMgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMywgdHJhbnNUaWVzKQoKbXlBbGdvcml0aG0gPC0gc2llbmFBbGdvcml0aG1DcmVhdGUocHJvam5hbWUgPSAicHJlbGltaW5hcnkiKQptb2RfM19lZmZlY3RzIDwtIHNpZW5hMDcobXlBbGdvcml0aG0sIGRhdGEgPSB0aGVfZGF0YSwgZWZmZWN0cyA9IG15ZWZmXzMsIHJldHVybkRlcHMgPSBUUlVFKQptb2RfM19lZmZlY3RzICMgCiN3cml0ZV9yZHMobW9kXzNfZWZmZWN0cywgIm1vZF8zX3N0cnVjdHVyYWxfZWZmX2luY2wucmRzIikKCmBgYAoKIyMgUmFjZS9HZW5kZXIKYGBge3Igc3RyY3RybCByYWNlIGdlbmRlcn0KbXllZmZfNCA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15ZWZmXzQgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfNCwgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0iZ2VuZGVyX2NvdmFyIikKCm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzRfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl80LCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzRfZWZmZWN0cyAjIAojd3JpdGVfcmRzKG1vZF80X2VmZmVjdHMsICJtb2RfNF9zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCgpgYGAKCiMjIEV0aG5pY2l0eS9HZW5kZXIKCmBgYHtyIHN0cmN0cmwgZXRobmljaXR5IGdlbmRlcn0KbXllZmZfNSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8yLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImdlbmRlcl9jb3ZhciIpCm15ZWZmXzUgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfNSwgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0iZ2VuZGVyX2NvdmFyIikKCm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzVfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl81LCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzVfZWZmZWN0cyAjIAojd3JpdGVfcmRzKG1vZF81X2VmZmVjdHMsICJtb2RfNV9zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCgpgYGAKCiMgR09GIFN0cnVjdHVyYWwgRWZmZWN0cyB7LnRhYnNldH0KIyMgTTEKIyMjIENyZWF0ZSBFZmZlY3RzCmBgYHtyIEdPRiBmdW5jdGlvbnMgTW9kZWwgMSBzdHIsIG1lc3NhZ2UgPSBGLCB3YXJuaW5nPUZ9Cm1vZGVsXzFfZWZmZWN0cyA8LSByZWFkX3JkcygibW9kXzFfc3RydWN0dXJhbF9lZmZfaW5jbF9wdDIucmRzIikKZ29maTBfMSA8LSBzaWVuYUdPRihtb2RlbF8xX2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzEgPC0gc2llbmFHT0YobW9kZWxfMV9lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzEgPC0gc2llbmFHT0YobW9kZWxfMV9lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMKYGBge3IgR09GIEdyYXBocyBNb2RlbCAxIHN0cn0KcGxvdChnb2ZpMF8xLCBtYWluID0gIiIpCnBsb3QoZ29mbzBfMSwgbWFpbiA9ICIiKQpwbG90KGdvZjAuZ2RfMSwgbWFpbiA9ICIiKSAjc28gdGhlc2UgZG9uJ3Qgd29yaywgd2UgbmVlZCB0byBhZGp1c3QhIChsaWtlLCB3aXRoIG90aGVyIG1vZGVscz8gc28gbG9vayBhdCA0KQpgYGAKCiMjIE1vZGVsIDIKCiMjIyBDcmVhdGUgRWZmZWN0cwpgYGB7ciBHT0YgZnVuY3Rpb25zIE1vZGVsIDIgc3RyfQptb2RlbF8yX2VmZmVjdHMgPC0gcmVhZF9yZHMoIm1vZF8yX3N0cnVjdHVyYWxfZWZmX2luY2wucmRzIikKZ29maTBfMiA8LSBzaWVuYUdPRihtb2RlbF8yX2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzIgPC0gc2llbmFHT0YobW9kZWxfMl9lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzIgPC0gc2llbmFHT0YobW9kZWxfMl9lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMKYGBge3IgR09GIEdyYXBocyBNb2RlbCAyIHN0cn0KcGxvdChnb2ZpMF8yLCBtYWluID0gIiIpICMgc3RpbGwgYSB0cmFnZWR5IGJiCnBsb3QoZ29mbzBfMiwgbWFpbiA9ICIiKSAjaG9ycmlibGUKcGxvdChnb2YwLmdkXzIsIG1haW4gPSAiIikgI2JhZCAoYWthOiBuZWVkIHN0cnVjdHVyYWwgZWZmZWN0cykKYGBgCgoKIyMgTW9kZWwgMwoKIyMjIENyZWF0ZSBFZmZlY3RzCmBgYHtyIEdPRiBmdW5jdGlvbnMgTW9kZWwgMyBzdHJ9Cm1vZGVsXzNfZWZmZWN0cyA8LSByZWFkX3JkcygibW9kXzNfc3RydWN0dXJhbF9lZmZfaW5jbC5yZHMiKQpnb2ZpMF8zIDwtIHNpZW5hR09GKG1vZGVsXzNfZWZmZWN0cywgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKZ29mbzBfMyA8LSBzaWVuYUdPRihtb2RlbF8zX2VmZmVjdHMsIE91dGRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgbGV2bHMgPSBjKDA6MTAsIDE1LCAyMCksCiAgICB2YXJOYW1lID0gIm5ldCIpCmdvZjAuZ2RfMyA8LSBzaWVuYUdPRihtb2RlbF8zX2VmZmVjdHMsIEdlb2Rlc2ljRGlzdHJpYnV0aW9uLCBjdW11bGF0aXZlID0gRkFMU0UsIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKYGBgCgojIyMgRGVzY3JpYmUgRWZmZWN0cwpgYGB7ciBHT0YgR3JhcGhzIE1vZGVsIDMgc3RyfQpwbG90KGdvZmkwXzMsIG1haW4gPSAiIikgIyBzdGlsbCBhIHRyYWdlZHkgYmIKcGxvdChnb2ZvMF8zLCBtYWluID0gIiIpICNob3JyaWJsZQpwbG90KGdvZjAuZ2RfMywgbWFpbiA9ICIiKSAjYmFkIChha2E6IG5lZWQgc3RydWN0dXJhbCBlZmZlY3RzKQpgYGAKCiMjIE1vZGVsIDQKCiMjIyBDcmVhdGUgRWZmZWN0cwpgYGB7ciBHT0YgZnVuY3Rpb25zIE1vZGVsIDQgc3RyfQptb2RlbF80X2VmZmVjdHMgPC0gcmVhZF9yZHMoIm1vZF80X3N0cnVjdHVyYWxfZWZmX2luY2wucmRzIikKZ29maTBfNCA8LSBzaWVuYUdPRihtb2RlbF80X2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzQgPC0gc2llbmFHT0YobW9kZWxfNF9lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzQgPC0gc2llbmFHT0YobW9kZWxfNF9lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMKYGBge3IgR09GIEdyYXBocyBNb2RlbCA0IHN0cn0KcGxvdChnb2ZpMF80LCBtYWluID0gIiIpICMgc3RpbGwgYSB0cmFnZWR5IGJiCnBsb3QoZ29mbzBfNCwgbWFpbiA9ICIiKSAjaG9ycmlibGUKcGxvdChnb2YwLmdkXzQsIG1haW4gPSAiIikgI2JhZCAoYWthOiBuZWVkIHN0cnVjdHVyYWwgZWZmZWN0cykKYGBgCgojIyBNb2RlbCA1CgojIyMgQ3JlYXRlIEVmZmVjdHMKYGBge3IgR09GIGZ1bmN0aW9ucyBNb2RlbCA1IHN0cn0KbW9kZWxfNV9lZmZlY3RzIDwtIHJlYWRfcmRzKCJtb2RfNV9zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCmdvZmkwXzUgPC0gc2llbmFHT0YobW9kZWxfNV9lZmZlY3RzLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpnb2ZvMF81IDwtIHNpZW5hR09GKG1vZGVsXzVfZWZmZWN0cywgT3V0ZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCBsZXZscyA9IGMoMDoxMCwgMTUsIDIwKSwKICAgIHZhck5hbWUgPSAibmV0IikKZ29mMC5nZF81IDwtIHNpZW5hR09GKG1vZGVsXzVfZWZmZWN0cywgR2VvZGVzaWNEaXN0cmlidXRpb24sIGN1bXVsYXRpdmUgPSBGQUxTRSwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpgYGAKCiMjIyBEZXNjcmliZSBFZmZlY3RzIAoKYGBge3IgR09GIEdyYXBocyBNb2RlbCA1IHN0cn0KcGxvdChnb2ZpMF81LCBtYWluID0gIiIpICMgc3RpbGwgYSB0cmFnZWR5IGJiCnBsb3QoZ29mbzBfNSwgbWFpbiA9ICIiKSAjaG9ycmlibGUKcGxvdChnb2YwLmdkXzUsIG1haW4gPSAiIikgI2JhZCAoYWthOiBuZWVkIHN0cnVjdHVyYWwgZWZmZWN0cykKYGBgCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUlNpZW5hIEFuYWx5c2lzIgpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQKZGF0ZTogIjIwMjQtMTAtMTYiCi0tLQojIEdldCB0aGUgQmFzaWNzCgoKYGBge3IsIGluY2x1ZGU9RkFMU0V9CmtuaXRyOjpvcHRzX2NodW5rJHNldCgKIGV2YWwgPSBGCikKYGBgCgpgYGB7ciBwYWNrYWdlcywgbWVzc2FnZSA9IEYsIHdhcm5pbmc9Rn0KcmVxdWlyZSh0aWR5dmVyc2UpCnJlcXVpcmUoaWdyYXBoKQpyZXF1aXJlKHNoaW55KQpyZXF1aXJlKFJTaWVuYSkKcmVxdWlyZShybWRmb3JtYXRzKQpyZXF1aXJlKHByZXR0eWRvYykKcmVxdWlyZShocmJydGhlbWVzKQpyZXF1aXJlKHRpbnQpCnJlcXVpcmUodHVmdGUpCnJlcXVpcmUocHN5Y2gpCmxpYnJhcnkoZGF0YS50YWJsZSkgIApsaWJyYXJ5KHhtbDIpCmxpYnJhcnkocnZlc3QpCmxpYnJhcnkoeG1sMikKbGlicmFyeShYTUwpCmxpYnJhcnkobGFiZWxsZWQpCmxpYnJhcnkoZm9yY2F0cykKYGBgCgpgYGB7ciBkYXRhc2V0LCBpbmNsdWRlPUYsIHdhcm5pbmc9RiwgbWVzc2FnZT1GQUxTRX0Kd2F2ZV8xIDwtIHJlYWRfcmRzKCJkYXRhc2V0c19maW5hbC93YXZlXzFfZmlyc3RfYXV0aG9ycy5yZHMiKQp3YXZlXzIgPC0gcmVhZF9yZHMoImRhdGFzZXRzX2ZpbmFsL3dhdmVfMl9maXJzdF9hdXRob3JzLnJkcyIpCmRlbW9ncmFwaGljc19oYW5uYWggPC0gcmVhZF9jc3YoImRlbW9ncmFwaGljc19oYW5uYWhfZmluYWwuY3N2Iiwgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSkKdmlldyhkZW1vZ3JhcGhpY3NfaGFubmFoKQpuZXRfc29jX2FycmF5IDwtIHJlYWRfcmRzKCJkYXRhc2V0c19maW5hbC9uZXRfc29jX2FycmF5X2ZpcnN0X2F1dGgucmRzIikKYGBgCgpgYGB7ciBmY29sbmV0LCBpbmNsdWRlID0gRiwgd2FybmluZz1GLCBtZXNzYWdlPUZ9CmZjb2xuZXQgPC0gZnVuY3Rpb24oZGF0YSA9IHNjaG9sYXJzLCB1bml2ZXJzaXR5ID0gIlJVIiwgCiAgICAgICAgICAgICAgICAgICAgZGlzY2lwbGluZSA9ICJzb2Npb2xvZ3kiLCB3YXZlcyA9IGxpc3QoYygyMDE1LAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMjAxOCksIGMoMjAxOSwgMjAyMykpLCB0eXBlID0gYygiZmlyc3QiKSkgewogIAogICMgc3RlcCAxCiAgZGVtb2dyYXBoaWNzIDwtIGRvLmNhbGwocmJpbmQuZGF0YS5mcmFtZSwgZGF0YSRkZW1vZ3JhcGhpY3MpCiAgZGVtb2dyYXBoaWNzIDwtIGRlbW9ncmFwaGljcyAlPiUKICAgIG11dGF0ZShVbml2ZXJzaXRlaXQxLjIyID0gcmVwbGFjZShVbml2ZXJzaXRlaXQxLjIyLCBpcy5uYShVbml2ZXJzaXRlaXQxLjIyKSwgIiIpLCBVbml2ZXJzaXRlaXQyLjIyID0gcmVwbGFjZShVbml2ZXJzaXRlaXQyLjIyLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlzLm5hKFVuaXZlcnNpdGVpdDIuMjIpLCAiIiksIFVuaXZlcnNpdGVpdDEuMjQgPSByZXBsYWNlKFVuaXZlcnNpdGVpdDEuMjQsIGlzLm5hKFVuaXZlcnNpdGVpdDEuMjQpLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICIiKSwgVW5pdmVyc2l0ZWl0Mi4yNCA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0Mi4yNCwgaXMubmEoVW5pdmVyc2l0ZWl0Mi4yNCksICIiKSwgZGlzY2lwbGluZS4yMiA9IHJlcGxhY2UoZGlzY2lwbGluZS4yMiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlzLm5hKGRpc2NpcGxpbmUuMjIpLCAiIiksIGRpc2NpcGxpbmUuMjQgPSByZXBsYWNlKGRpc2NpcGxpbmUuMjQsIGlzLm5hKGRpc2NpcGxpbmUuMjQpLCAiIikpCiAgCiAgc2FtcGxlIDwtIHdoaWNoKChkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0MS4yMiAlaW4lIHVuaXZlcnNpdHkgfCBkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0Mi4yMiAlaW4lCiAgICAgICAgICAgICAgICAgICAgIHVuaXZlcnNpdHkgfCBkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0MS4yNCAlaW4lIHVuaXZlcnNpdHkgfCBkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0Mi4yNCAlaW4lCiAgICAgICAgICAgICAgICAgICAgIHVuaXZlcnNpdHkpICYgKGRlbW9ncmFwaGljcyRkaXNjaXBsaW5lLjIyICVpbiUgZGlzY2lwbGluZSB8IGRlbW9ncmFwaGljcyRkaXNjaXBsaW5lLjI0ICVpbiUgZGlzY2lwbGluZSkpCiAgCiAgZGVtb2dyYXBoaWNzX3NvYyA8LSBkZW1vZ3JhcGhpY3Nbc2FtcGxlLCBdCiAgc2Nob2xhcnNfc2VsIDwtIGxhcHBseShzY2hvbGFycywgIlsiLCBzYW1wbGUpCiAgCiAgIyBzdGVwIDIKICBpZHMgPC0gZGVtb2dyYXBoaWNzX3NvYyRhdV9pZAogIG53YXZlcyA8LSBsZW5ndGgod2F2ZXMpCiAgbmV0cyA8LSBhcnJheSgwLCBkaW0gPSBjKG53YXZlcywgbGVuZ3RoKGlkcyksIGxlbmd0aChpZHMpKSwgZGltbmFtZXMgPSBsaXN0KHdhdmUgPSAxOm53YXZlcywgaWRzLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZHMpKQogIGRpbW5hbWVzKG5ldHMpCiAgCiAgIyBzdGVwIDMKICBkZl93b3JrcyA8LSB0aWJibGUod29ya3NfaWQgPSB1bmxpc3QobGFwcGx5KHNjaG9sYXJzX3NlbCR3b3JrLCBmdW5jdGlvbihsKSBsJGlkKSksIHdvcmtzX2F1dGhvciA9IHVubGlzdChsYXBwbHkoc2Nob2xhcnNfc2VsJHdvcmssCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZ1bmN0aW9uKGwpIGwkYXV0aG9yKSwgcmVjdXJzaXZlID0gRkFMU0UpLCB3b3Jrc195ZWFyID0gdW5saXN0KGxhcHBseShzY2hvbGFyc19zZWwkd29yaywgZnVuY3Rpb24obCkgbCRwdWJsaWNhdGlvbl95ZWFyKSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVjdXJzaXZlID0gRkFMU0UpKQogIAogIGRmX3dvcmtzIDwtIGRmX3dvcmtzWyFkdXBsaWNhdGVkKGRmX3dvcmtzKSwgXQogIAogICMgc3RlcCA0CiAgaWYgKHR5cGUgPT0gImZpcnN0IikgewogICAgZm9yIChqIGluIDE6bndhdmVzKSB7CiAgICAgIGRmX3dvcmtzX3cgPC0gZGZfd29ya3NbZGZfd29ya3Mkd29ya3NfeWVhciA+PSB3YXZlc1tbal1dWzFdICYgZGZfd29ya3Mkd29ya3NfeWVhciA8PSB3YXZlc1tbal1dWzJdLAogICAgICBdCiAgICAgIGZvciAoaSBpbiAxOm5yb3coZGZfd29ya3NfdykpIHsKICAgICAgICBlZ28gPC0gZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZFsxXQogICAgICAgIGFsdGVycyA8LSBkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkWy0xXQogICAgICAgIGlmIChzdW0oaWRzICVpbiUgZWdvKSA+IDAgJiBzdW0oaWRzICVpbiUgYWx0ZXJzKSA+IDApIHsKICAgICAgICAgIG5ldHNbaiwgd2hpY2goaWRzICVpbiUgZWdvKSwgd2hpY2goaWRzICVpbiUgYWx0ZXJzKV0gPC0gMQogICAgICAgIH0KICAgICAgfQogICAgfQogIH0KICAKICBpZiAodHlwZSA9PSAibGFzdCIpIHsKICAgIGZvciAoaiBpbiAxOm53YXZlcykgewogICAgICBkZl93b3Jrc193IDwtIGRmX3dvcmtzW2RmX3dvcmtzJHdvcmtzX3llYXIgPj0gd2F2ZXNbW2pdXVsxXSAmIGRmX3dvcmtzJHdvcmtzX3llYXIgPD0gd2F2ZXNbW2pdXVsyXSwKICAgICAgXQogICAgICBmb3IgKGkgaW4gMTpucm93KGRmX3dvcmtzX3cpKSB7CiAgICAgICAgZWdvIDwtIHJldihkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkKVsxXQogICAgICAgIGFsdGVycyA8LSByZXYoZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZClbLTFdCiAgICAgICAgaWYgKHN1bShpZHMgJWluJSBlZ28pID4gMCAmIHN1bShpZHMgJWluJSBhbHRlcnMpID4gMCkgewogICAgICAgICAgbmV0c1tqLCB3aGljaChpZHMgJWluJSBlZ28pLCB3aGljaChpZHMgJWluJSBhbHRlcnMpXSA8LSAxCiAgICAgICAgfQogICAgICB9CiAgICB9CiAgfQogIAogIGlmICh0eXBlID09ICJhbGwiKSB7CiAgICBmb3IgKGogaW4gMTpud2F2ZXMpIHsKICAgICAgZGZfd29ya3NfdyA8LSBkZl93b3Jrc1tkZl93b3JrcyR3b3Jrc195ZWFyID49IHdhdmVzW1tqXV1bMV0gJiBkZl93b3JrcyR3b3Jrc195ZWFyIDw9IHdhdmVzW1tqXV1bMl0sCiAgICAgIF0KICAgICAgZm9yIChpIGluIDE6bnJvdyhkZl93b3Jrc193KSkgewogICAgICAgIGVnb3MgPC0gZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZAogICAgICAgIGlmIChzdW0oaWRzICVpbiUgZWdvcykgPiAwKSB7CiAgICAgICAgICBuZXRzW2osIHdoaWNoKGlkcyAlaW4lIGVnb3MpLCB3aGljaChpZHMgJWluJSBlZ29zKV0gPC0gMQogICAgICAgIH0KICAgICAgfQogICAgfQogIH0KICBvdXRwdXQgPC0gbGlzdCgpCiAgb3V0cHV0JGRhdGEgPC0gc2Nob2xhcnNfc2VsCiAgb3V0cHV0JG5ldHMgPC0gbmV0cwogIHJldHVybihvdXRwdXQpCn0KCmBgYAoKYGBge3IgdXNlciBkZWZpbmVkIGZ1bmN0aW9ucywgaW5jbHVkZSA9IEYsIG1lc3NhZ2U9Riwgd2FybmluZz1GfQpHZW9kZXNpY0Rpc3RyaWJ1dGlvbiA8LSBmdW5jdGlvbihpLCBkYXRhLCBzaW1zLCBwZXJpb2QsIGdyb3VwTmFtZSwgdmFyTmFtZSwgbGV2bHMgPSBjKDE6NSwgSW5mKSwgY3VtdWxhdGl2ZSA9IFRSVUUsCiAgICAuLi4pIHsKICAgIHggPC0gbmV0d29ya0V4dHJhY3Rpb24oaSwgZGF0YSwgc2ltcywgcGVyaW9kLCBncm91cE5hbWUsIHZhck5hbWUpCiAgICByZXF1aXJlKHNuYSkKICAgIGEgPC0gc25hOjpnZW9kaXN0KHN5bW1ldHJpemUoeCkpJGdkaXN0CiAgICBpZiAoY3VtdWxhdGl2ZSkgewogICAgICAgIGdkaSA8LSBzYXBwbHkobGV2bHMsIGZ1bmN0aW9uKGkpIHsKICAgICAgICAgICAgc3VtKGEgPD0gaSkKICAgICAgICB9KQogICAgfSBlbHNlIHsKICAgICAgICBnZGkgPC0gc2FwcGx5KGxldmxzLCBmdW5jdGlvbihpKSB7CiAgICAgICAgICAgIHN1bShhID09IGkpCiAgICAgICAgfSkKICAgIH0KICAgIG5hbWVzKGdkaSkgPC0gYXMuY2hhcmFjdGVyKGxldmxzKQogICAgZ2RpCn0KCiMgVGhlIGZvbGxvd2luZyBmdW5jdGlvbiBpcyB0YWtlbiBmcm9tIHRoZSBoZWxwIHBhZ2UgZm9yIHNpZW5hVGVzdAoKdGVzdGFsbCA8LSBmdW5jdGlvbihhbnMpIHsKICAgIGZvciAoaSBpbiB3aGljaChhbnMkdGVzdCkpIHsKICAgICAgICBzY3QgPC0gc2NvcmUuVGVzdChhbnMsIGkpCiAgICAgICAgY2F0KGFucyRyZXF1ZXN0ZWRFZmZlY3RzJGVmZmVjdE5hbWVbaV0sICJcbiIpCiAgICAgICAgcHJpbnQoc2N0KQogICAgfQogICAgaW52aXNpYmxlKHNjb3JlLlRlc3QoYW5zKSkKfQpgYGAKCiMgVmFyaWFibGVzIAoKYGBge3IgdmFyaWFibGVzIGRlZmluaXRpb259CiNkZXBlbmRlbnQgdmFyaWFibGUgCm5ldCA8LSBzaWVuYURlcGVuZGVudChuZXRfc29jX2FycmF5KQoKI2luZGVwZW5kZW50IHZhcmlhYmxlIApob29nbGVyYWFyX2NvdmFyIDwtICBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkaG9vZ2xlcmFhcikKZnVuY3RpZV9jb3ZhciA8LSBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkZnVuY3RpZSkKZ2VuZGVyX2NvdmFyIDwtIGNvQ292YXIoZGVtb2dyYXBoaWNzX2hhbm5haCRwZXJjX2ZlbWFsZSkKY291bnRyeV9jb3ZhciA8LSBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkYm9ybl9pbl9iaW5hcnkpCndoaXRlX3Bhc3NfY292YXIgPC0gY29Db3ZhcihkZW1vZ3JhcGhpY3NfaGFubmFoJHdoaXRlX29yX25vdCkKaF9pbmRleF9jb3ZhciA8LSBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkaF9pbmRleCkKYGBgCgojIEdldCBFZmZlY3QgU3RydWN0dXJlIAoKYGBge3IgZ29vZCBkYXRhfQp0aGVfZGF0YSA8LSBzaWVuYURhdGFDcmVhdGUobmV0LCB3aGl0ZV9wYXNzX2NvdmFyLCBjb3VudHJ5X2NvdmFyLCBnZW5kZXJfY292YXIsIGZ1bmN0aWVfY292YXIsIGhfaW5kZXhfY292YXIpCm15ZWZmXzEgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKbXllZmZfMQpgYGAKCmBgYHtyIHdoZXJlIHRvIHB1dCBpdCwgaW5jbHVkZT1GLCBlY2hvPUZ9CmlmZWxzZSghZGlyLmV4aXN0cygicmVzdWx0cyIpLCBkaXIuY3JlYXRlKCJyZXN1bHRzIiksIEZBTFNFKQpwcmludDAxUmVwb3J0KHRoZV9kYXRhLCBtb2RlbG5hbWUgPSAiLi9yZXN1bHRzL3ByZWxpbXNoKnQiKSAgCmBgYAojIE1vZGVscyAtIFBhcmFtZXRlciBFZmZlY3RzIHsudGFic2V0fQojIyBNMTogUmFjZQoKIyMjIE1ha2luZyB0aGUgTW9kZWwKYGBge3J9Cm15ZWZmXzEgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKdmlldyhteWVmZl8xKQpteWVmZl8xIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzEsIHNhbWVYLCBpbnRlcmFjdGlvbjEgPSAid2hpdGVfcGFzc19jb3ZhciIpCm15ZWZmXzEgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgZWdvWCwgYWx0WCwgaW50ZXJhY3Rpb24xID0id2hpdGVfcGFzc19jb3ZhciIpCm15ZWZmXzEgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgaW5wb3BYLCBpbnRlcmFjdGlvbjEgPSJ3aGl0ZV9wYXNzX2NvdmFyIikKYGBgCgojIyMgUmVzdWx0cwpgYGB7ciByZXN1bHRzIGFsb2dvcml0bSwgZWNobyA9IEZ9Cm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzFfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl8xLCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzFfZWZmZWN0cyAKYGBgCgpgYGB7ciwgaW5jbHVkZSA9IEYsIGVjaG8gPSBGfQojbW9kXzFfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl8xLCBwcmV2YW5zID0gbW9kXzFfZWZmZWN0cywgcmV0dXJuRGVwcz1UUlVFKQojP3NpZW5hMDcKIyBhbnNfTTJfMgpgYGAKCiMjIE0yOiBFdGhuaWNpdHkKCmBgYHtyIG1vZGVsIDJ9Cm15ZWZmXzIgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKbXllZmZfMiA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8yLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImNvdW50cnlfY292YXIiKQpteWVmZl8yIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ICJjb3VudHJ5X2NvdmFyIikKbXlBbGdvcml0aG0gPC0gc2llbmFBbGdvcml0aG1DcmVhdGUocHJvam5hbWUgPSAicHJlbGltaW5hcnkiKQptb2RfMl9lZmZlY3RzIDwtIHNpZW5hMDcobXlBbGdvcml0aG0sIGRhdGEgPSB0aGVfZGF0YSwgZWZmZWN0cyA9IG15ZWZmXzIsIHJldHVybkRlcHMgPSBUUlVFKQptb2RfMl9lZmZlY3RzCiN3cml0ZV9yZHMobW9kXzJfZWZmZWN0cywgIm1vZF8yX2VmZmVjc19jb252XzEucmRzIikKYGBgCgoKIyMgTTM6IEdlbmRlcgoKYGBge3IgZ2VuZGVyIG1vZGVsfQpteWVmZl8zIDwtIGdldEVmZmVjdHModGhlX2RhdGEpCm15ZWZmXzMgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMywgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteWVmZl8zIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzMsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF8zX2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfMywgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF8zX2VmZmVjdHMKI3dyaXRlX3Jkcyhtb2RfM19lZmZlY3RzLCAibW9kXzNfZWZmZWNzX2NvbnZfMS5yZHMiKQpgYGAKCgoKIyMgTTQ6IEdlbmRlciBhbmQgUmFjZQpgYGB7ciBmb3VydGhtb2RlbCwgaW5jbHVkZSA9IFR9Cm15ZWZmXzQgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteWVmZl80IDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzQsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF80X2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfNCwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF80X2VmZmVjdHMKI3dyaXRlX3Jkcyhtb2RfNF9lZmZlY3RzLCAibW9kXzRfZWZmZWNzX2NvbnZfMS5yZHMiKQpgYGAKIyMgTTU6IEdlbmRlciBhbmQgRXRobmljaXR5CgpgYGB7ciBmaWZ0aHRobW9kZWwsIGluY2x1ZGUgPSBUfQpteWVmZl81IDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIHNhbWVYLCBpbnRlcmFjdGlvbjEgPSAiZ2VuZGVyX2NvdmFyIikKbXllZmZfNSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl81LCBlZ29YLCBhbHRYLCBpbnRlcmFjdGlvbjEgPSAiZ2VuZGVyX2NvdmFyIikKbXlBbGdvcml0aG0gPC0gc2llbmFBbGdvcml0aG1DcmVhdGUocHJvam5hbWUgPSAicHJlbGltaW5hcnkiKQptb2RfNV9lZmZlY3RzIDwtIHNpZW5hMDcobXlBbGdvcml0aG0sIGRhdGEgPSB0aGVfZGF0YSwgZWZmZWN0cyA9IG15ZWZmXzUsIHJldHVybkRlcHMgPSBUUlVFKQptb2RfNV9lZmZlY3RzCiN3cml0ZV9yZHMobW9kXzVfZWZmZWN0cywgIm1vZF81X2VmZmVjc19jb252XzEucmRzIikKYGBgCgojIEdPRiAtLSBQYXJhbWV0ZXIgTW9kZWxzIHsudGFic2V0fQoKIyMgTTEKCiMjIyBDcmVhdGUgRWZmZWN0cwpgYGB7ciBHT0YgZnVuY3Rpb25zIE1vZGVsIDEsIG1lc3NhZ2UgPSBGLCB3YXJuaW5nPUZ9Cm1vZGVsXzFfZWZmZWN0cyA8LSByZWFkX3JkcygibW9kXzFfZWZmZWN0c19jb252XzEucmRzIikKZ29maTBfMSA8LSBzaWVuYUdPRihtb2RlbF8xX2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzEgPC0gc2llbmFHT0YobW9kZWxfMV9lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzEgPC0gc2llbmFHT0YobW9kZWxfMV9lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMKYGBge3IgR09GIEdyYXBocyBNb2RlbCAxfQpwbG90KGdvZmkwXzEsIG1haW4gPSAiIikKcGxvdChnb2ZvMF8xLCBtYWluID0gIiIpCnBsb3QoZ29mMC5nZF8xLCBtYWluID0gIiIpICNzbyB0aGVzZSBkb24ndCB3b3JrLCB3ZSBuZWVkIHRvIGFkanVzdCEgKGxpa2UsIHdpdGggb3RoZXIgbW9kZWxzPyBzbyBsb29rIGF0IDQpCmBgYAoKIyMgTW9kZWwgNAoKIyMjIENyZWF0ZSBFZmZlY3RzCmBgYHtyIEdPRiBmdW5jdGlvbnMgTW9kZWwgNH0KbW9kZWxfNF9lZmZlY3RzIDwtIHJlYWRfcmRzKCJtb2RfNF9lZmZlY3NfY29udl8xLnJkcyIpCmdvZmkwXzQgPC0gc2llbmFHT0YobW9kZWxfNF9lZmZlY3RzLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpnb2ZvMF80IDwtIHNpZW5hR09GKG1vZGVsXzRfZWZmZWN0cywgT3V0ZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCBsZXZscyA9IGMoMDoxMCwgMTUsIDIwKSwKICAgIHZhck5hbWUgPSAibmV0IikKZ29mMC5nZF80IDwtIHNpZW5hR09GKG1vZGVsXzRfZWZmZWN0cywgR2VvZGVzaWNEaXN0cmlidXRpb24sIGN1bXVsYXRpdmUgPSBGQUxTRSwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpgYGAKCiMjIyBEZXNjcmliZSBFZmZlY3RzCmBgYHtyIEdPRiBHcmFwaHMgTW9kZWwgNH0KcGxvdChnb2ZpMF80LCBtYWluID0gIiIpICMgc3RpbGwgYSB0cmFnZWR5IGJiCnBsb3QoZ29mbzBfNCwgbWFpbiA9ICIiKSAjaG9ycmlibGUKcGxvdChnb2YwLmdkXzQsIG1haW4gPSAiIikgI2JhZCAoYWthOiBuZWVkIHN0cnVjdHVyYWwgZWZmZWN0cykKYGBgCgojIyBNb2RlbCA1CgojIyMgQ3JlYXRlIEVmZmVjdHMKYGBge3IgR09GIGZ1bmN0aW9ucyBNb2RlbCA1fQptb2RlbF81X2VmZmVjdHMgPC0gcmVhZF9yZHMoIm1vZF81X2VmZmVjc19jb252XzEucmRzIikKZ29maTBfNSA8LSBzaWVuYUdPRihtb2RlbF81X2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzUgPC0gc2llbmFHT0YobW9kZWxfNV9lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzUgPC0gc2llbmFHT0YobW9kZWxfNV9lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMgCgpgYGB7ciBHT0YgR3JhcGhzIE1vZGVsIDV9CnBsb3QoZ29maTBfNSwgbWFpbiA9ICIiKSAjIHN0aWxsIGEgdHJhZ2VkeSBiYgpwbG90KGdvZm8wXzUsIG1haW4gPSAiIikgI2hvcnJpYmxlCnBsb3QoZ29mMC5nZF81LCBtYWluID0gIiIpICNiYWQgKGFrYTogbmVlZCBzdHJ1Y3R1cmFsIGVmZmVjdHMpCmBgYAoKIyBNb2RlbHMgV2l0aCBTdHJ1Y3RydXJhbCBFZmZlY3RzIHsudGFic2V0fQoKIyMgUmFjZQoKYGBge3Igc3RyY3RybCB3aGl0ZSBwYXNzaW5nfQpteWVmZl8xIDwtIGdldEVmZmVjdHModGhlX2RhdGEpCiN2aWV3KG15ZWZmXzEpCm15ZWZmXzEgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJ3aGl0ZV9wYXNzX2NvdmFyIikKbXllZmZfMSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCBlZ29YLCBhbHRYLCBpbnRlcmFjdGlvbjEgPSJ3aGl0ZV9wYXNzX2NvdmFyIikKbXllZmZfMSA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8xLCB0cmFuc1RyaXApCm15ZWZmXzEgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgdHJhbnNUaWVzKQoKbXlBbGdvcml0aG0gPC0gc2llbmFBbGdvcml0aG1DcmVhdGUocHJvam5hbWUgPSAicHJlbGltaW5hcnkiKQptb2RfMV9lZmZlY3RzIDwtIHNpZW5hMDcobXlBbGdvcml0aG0sIGRhdGEgPSB0aGVfZGF0YSwgZWZmZWN0cyA9IG15ZWZmXzEsIHJldHVybkRlcHMgPSBUUlVFKQptb2RfMV9lZmZlY3RzICMgCiN3cml0ZV9yZHMobW9kXzFfZWZmZWN0cywgIm1vZF8xX3N0cnVjdHVyYWxfZWZmX2luY2xfcHQyLnJkcyIpCgpgYGAKCiMjIEV0aG5pY2l0eQoKYGBge3Igc3RyY3RybCBldGhuaWNpdHl9Cm15ZWZmXzIgPC0gZ2V0RWZmZWN0cyh0aGVfZGF0YSkKI3ZpZXcobXllZmZfMikKbXllZmZfMiA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8yLCBzYW1lWCwgaW50ZXJhY3Rpb24xID0gImNvdW50cnlfY292YXIiKQpteWVmZl8yIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ImNvdW50cnlfY292YXIiKQpteWVmZl8yIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzIsIHRyYW5zVHJpcCkKbXllZmZfMiA8LSBpbmNsdWRlRWZmZWN0cyhteWVmZl8yLCB0cmFuc1RpZXMpCgpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF8yX2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfMiwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF8yX2VmZmVjdHMgIyAKI3dyaXRlX3Jkcyhtb2RfMl9lZmZlY3RzLCAibW9kXzJfc3RydWN0dXJhbF9lZmZfaW5jbC5yZHMiKQpgYGAKCiMjIEdlbmRlciAKCmBgYHtyIHN0cmN0cmwgZ2VuZGVyfQpteWVmZl8zIDwtIGdldEVmZmVjdHModGhlX2RhdGEpCiN2aWV3KG15ZWZmXzEpCm15ZWZmXzMgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMywgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteWVmZl8zIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzMsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ImdlbmRlcl9jb3ZhciIpCm15ZWZmXzMgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMywgdHJhbnNUcmlwKQpteWVmZl8zIDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzMsIHRyYW5zVGllcykKCm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzNfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl8zLCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzNfZWZmZWN0cyAjIAojd3JpdGVfcmRzKG1vZF8zX2VmZmVjdHMsICJtb2RfM19zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCgpgYGAKCiMjIFJhY2UvR2VuZGVyCmBgYHtyIHN0cmN0cmwgcmFjZSBnZW5kZXJ9Cm15ZWZmXzQgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMSwgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteWVmZl80IDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzQsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ImdlbmRlcl9jb3ZhciIpCgpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF80X2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfNCwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF80X2VmZmVjdHMgIyAKI3dyaXRlX3Jkcyhtb2RfNF9lZmZlY3RzLCAibW9kXzRfc3RydWN0dXJhbF9lZmZfaW5jbC5yZHMiKQoKYGBgCgojIyBFdGhuaWNpdHkvR2VuZGVyCgpgYGB7ciBzdHJjdHJsIGV0aG5pY2l0eSBnZW5kZXJ9Cm15ZWZmXzUgPC0gaW5jbHVkZUVmZmVjdHMobXllZmZfMiwgc2FtZVgsIGludGVyYWN0aW9uMSA9ICJnZW5kZXJfY292YXIiKQpteWVmZl81IDwtIGluY2x1ZGVFZmZlY3RzKG15ZWZmXzUsIGVnb1gsIGFsdFgsIGludGVyYWN0aW9uMSA9ImdlbmRlcl9jb3ZhciIpCgpteUFsZ29yaXRobSA8LSBzaWVuYUFsZ29yaXRobUNyZWF0ZShwcm9qbmFtZSA9ICJwcmVsaW1pbmFyeSIpCm1vZF81X2VmZmVjdHMgPC0gc2llbmEwNyhteUFsZ29yaXRobSwgZGF0YSA9IHRoZV9kYXRhLCBlZmZlY3RzID0gbXllZmZfNSwgcmV0dXJuRGVwcyA9IFRSVUUpCm1vZF81X2VmZmVjdHMgIyAKI3dyaXRlX3Jkcyhtb2RfNV9lZmZlY3RzLCAibW9kXzVfc3RydWN0dXJhbF9lZmZfaW5jbC5yZHMiKQoKYGBgCgojIEdPRiBTdHJ1Y3R1cmFsIEVmZmVjdHMgey50YWJzZXR9CiMjIE0xCiMjIyBDcmVhdGUgRWZmZWN0cwpgYGB7ciBHT0YgZnVuY3Rpb25zIE1vZGVsIDEgc3RyLCBtZXNzYWdlID0gRiwgd2FybmluZz1GfQptb2RlbF8xX2VmZmVjdHMgPC0gcmVhZF9yZHMoIm1vZF8xX3N0cnVjdHVyYWxfZWZmX2luY2xfcHQyLnJkcyIpCmdvZmkwXzEgPC0gc2llbmFHT0YobW9kZWxfMV9lZmZlY3RzLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpnb2ZvMF8xIDwtIHNpZW5hR09GKG1vZGVsXzFfZWZmZWN0cywgT3V0ZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCBsZXZscyA9IGMoMDoxMCwgMTUsIDIwKSwKICAgIHZhck5hbWUgPSAibmV0IikKZ29mMC5nZF8xIDwtIHNpZW5hR09GKG1vZGVsXzFfZWZmZWN0cywgR2VvZGVzaWNEaXN0cmlidXRpb24sIGN1bXVsYXRpdmUgPSBGQUxTRSwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpgYGAKCiMjIyBEZXNjcmliZSBFZmZlY3RzCmBgYHtyIEdPRiBHcmFwaHMgTW9kZWwgMSBzdHJ9CnBsb3QoZ29maTBfMSwgbWFpbiA9ICIiKQpwbG90KGdvZm8wXzEsIG1haW4gPSAiIikKcGxvdChnb2YwLmdkXzEsIG1haW4gPSAiIikgI3NvIHRoZXNlIGRvbid0IHdvcmssIHdlIG5lZWQgdG8gYWRqdXN0ISAobGlrZSwgd2l0aCBvdGhlciBtb2RlbHM/IHNvIGxvb2sgYXQgNCkKYGBgCgojIyBNb2RlbCAyCgojIyMgQ3JlYXRlIEVmZmVjdHMKYGBge3IgR09GIGZ1bmN0aW9ucyBNb2RlbCAyIHN0cn0KbW9kZWxfMl9lZmZlY3RzIDwtIHJlYWRfcmRzKCJtb2RfMl9zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCmdvZmkwXzIgPC0gc2llbmFHT0YobW9kZWxfMl9lZmZlY3RzLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpnb2ZvMF8yIDwtIHNpZW5hR09GKG1vZGVsXzJfZWZmZWN0cywgT3V0ZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCBsZXZscyA9IGMoMDoxMCwgMTUsIDIwKSwKICAgIHZhck5hbWUgPSAibmV0IikKZ29mMC5nZF8yIDwtIHNpZW5hR09GKG1vZGVsXzJfZWZmZWN0cywgR2VvZGVzaWNEaXN0cmlidXRpb24sIGN1bXVsYXRpdmUgPSBGQUxTRSwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpgYGAKCiMjIyBEZXNjcmliZSBFZmZlY3RzCmBgYHtyIEdPRiBHcmFwaHMgTW9kZWwgMiBzdHJ9CnBsb3QoZ29maTBfMiwgbWFpbiA9ICIiKSAjIHN0aWxsIGEgdHJhZ2VkeSBiYgpwbG90KGdvZm8wXzIsIG1haW4gPSAiIikgI2hvcnJpYmxlCnBsb3QoZ29mMC5nZF8yLCBtYWluID0gIiIpICNiYWQgKGFrYTogbmVlZCBzdHJ1Y3R1cmFsIGVmZmVjdHMpCmBgYAoKCiMjIE1vZGVsIDMKCiMjIyBDcmVhdGUgRWZmZWN0cwpgYGB7ciBHT0YgZnVuY3Rpb25zIE1vZGVsIDMgc3RyfQptb2RlbF8zX2VmZmVjdHMgPC0gcmVhZF9yZHMoIm1vZF8zX3N0cnVjdHVyYWxfZWZmX2luY2wucmRzIikKZ29maTBfMyA8LSBzaWVuYUdPRihtb2RlbF8zX2VmZmVjdHMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmdvZm8wXzMgPC0gc2llbmFHT0YobW9kZWxfM19lZmZlY3RzLCBPdXRkZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIGxldmxzID0gYygwOjEwLCAxNSwgMjApLAogICAgdmFyTmFtZSA9ICJuZXQiKQpnb2YwLmdkXzMgPC0gc2llbmFHT0YobW9kZWxfM19lZmZlY3RzLCBHZW9kZXNpY0Rpc3RyaWJ1dGlvbiwgY3VtdWxhdGl2ZSA9IEZBTFNFLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldCIpCmBgYAoKIyMjIERlc2NyaWJlIEVmZmVjdHMKYGBge3IgR09GIEdyYXBocyBNb2RlbCAzIHN0cn0KcGxvdChnb2ZpMF8zLCBtYWluID0gIiIpICMgc3RpbGwgYSB0cmFnZWR5IGJiCnBsb3QoZ29mbzBfMywgbWFpbiA9ICIiKSAjaG9ycmlibGUKcGxvdChnb2YwLmdkXzMsIG1haW4gPSAiIikgI2JhZCAoYWthOiBuZWVkIHN0cnVjdHVyYWwgZWZmZWN0cykKYGBgCgojIyBNb2RlbCA0CgojIyMgQ3JlYXRlIEVmZmVjdHMKYGBge3IgR09GIGZ1bmN0aW9ucyBNb2RlbCA0IHN0cn0KbW9kZWxfNF9lZmZlY3RzIDwtIHJlYWRfcmRzKCJtb2RfNF9zdHJ1Y3R1cmFsX2VmZl9pbmNsLnJkcyIpCmdvZmkwXzQgPC0gc2llbmFHT0YobW9kZWxfNF9lZmZlY3RzLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpnb2ZvMF80IDwtIHNpZW5hR09GKG1vZGVsXzRfZWZmZWN0cywgT3V0ZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCBsZXZscyA9IGMoMDoxMCwgMTUsIDIwKSwKICAgIHZhck5hbWUgPSAibmV0IikKZ29mMC5nZF80IDwtIHNpZW5hR09GKG1vZGVsXzRfZWZmZWN0cywgR2VvZGVzaWNEaXN0cmlidXRpb24sIGN1bXVsYXRpdmUgPSBGQUxTRSwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXQiKQpgYGAKCiMjIyBEZXNjcmliZSBFZmZlY3RzCmBgYHtyIEdPRiBHcmFwaHMgTW9kZWwgNCBzdHJ9CnBsb3QoZ29maTBfNCwgbWFpbiA9ICIiKSAjIHN0aWxsIGEgdHJhZ2VkeSBiYgpwbG90KGdvZm8wXzQsIG1haW4gPSAiIikgI2hvcnJpYmxlCnBsb3QoZ29mMC5nZF80LCBtYWluID0gIiIpICNiYWQgKGFrYTogbmVlZCBzdHJ1Y3R1cmFsIGVmZmVjdHMpCmBgYAoKIyMgTW9kZWwgNQoKIyMjIENyZWF0ZSBFZmZlY3RzCmBgYHtyIEdPRiBmdW5jdGlvbnMgTW9kZWwgNSBzdHJ9Cm1vZGVsXzVfZWZmZWN0cyA8LSByZWFkX3JkcygibW9kXzVfc3RydWN0dXJhbF9lZmZfaW5jbC5yZHMiKQpnb2ZpMF81IDwtIHNpZW5hR09GKG1vZGVsXzVfZWZmZWN0cywgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKZ29mbzBfNSA8LSBzaWVuYUdPRihtb2RlbF81X2VmZmVjdHMsIE91dGRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgbGV2bHMgPSBjKDA6MTAsIDE1LCAyMCksCiAgICB2YXJOYW1lID0gIm5ldCIpCmdvZjAuZ2RfNSA8LSBzaWVuYUdPRihtb2RlbF81X2VmZmVjdHMsIEdlb2Rlc2ljRGlzdHJpYnV0aW9uLCBjdW11bGF0aXZlID0gRkFMU0UsIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0IikKYGBgCgojIyMgRGVzY3JpYmUgRWZmZWN0cyAKCmBgYHtyIEdPRiBHcmFwaHMgTW9kZWwgNSBzdHJ9CnBsb3QoZ29maTBfNSwgbWFpbiA9ICIiKSAjIHN0aWxsIGEgdHJhZ2VkeSBiYgpwbG90KGdvZm8wXzUsIG1haW4gPSAiIikgI2hvcnJpYmxlCnBsb3QoZ29mMC5nZF81LCBtYWluID0gIiIpICNiYWQgKGFrYTogbmVlZCBzdHJ1Y3R1cmFsIGVmZmVjdHMpCmBgYAo=</div>
 
 
 </div>

@@ -1,29 +1,52 @@
 ---
-title: "Intro"
+title: "Introduction "
 output: html_document
 date: "2024-10-23"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Introduction
 
-## R Markdown
+Over the past decades — in the context of a rapidly diversifying and globalising world — diversity attained the status of a valuable — both in- and extrinsically — asset in the academic world (Llamas, Nguyen & Tran, 2021). The diversification of both the staff and student body has been demonstrated to provide recognition for minorities that have not always felt that way, which has subsequently lead to an additional increase in minority staff (Llamas, Nguyen & Tran, 2021). Diversity’s positive effect in academics is not only felt in classrooms, where it has been demonstrated to positively affect student’s academic performance, but also an in the scientific community at large, where it positively affects innovation and diversity in academic subjects and techniques (Freeman & Huang, 2015)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+However, while the benefits and intrinsic value of diversity are gaining increasing recognition, academia is still a sphere characterised by unequal opportunities – from the point of becoming a student, to rising to the most senior positions (Pizarro, 2017). In a recent paper, Mulders, Hofstra, and Tolsma (2024) demonstrate how ethnic and racial minorities in Dutch academia are less likely to complete their university education, either on time or at all. When they do finish their degree, and continue on to acquire a doctorate, racial and ethnic are less lparkikely to subsequently continue in academics compared to their white and Dutch colleagues. Furthermore, if they do continue a career in academia, this career is likely to be shorter and less prestigious than that of white and Dutch people. This pattern of shorter and less prestigious careers is one that occurs across academia (Gaughan, Melkers & Welch, 2018; Dupree & Boykin, 2021; Heffernan, 2021). These papers demonstrate that the careers of ethnic- and racial minorities are not only shorter, but that the patterns of paper-publication and co-authorship are also segregated.\
+While career age and co-authorship are, to an extent, correlated, co-authorship and an academic's network of collaborators have also been demonstrated to play an important role in academic prestige, influence, and career progression (Heffernan, 2021). Assessing how co-authorship, and the subsequent networks thereof, differently affect ethnic and racial minority and majority groups has demonstrated that minorities often benefit less from similar circumstances (Gaughan, Melkers & Welch, 2018).
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+However, work on the differences between the collaboration networks of racial and ethnic minority and majority groups, often collapses race and ethnicity into one ('race/ethnicity) category (see: Gaughan, Melkers & Welch, 2018; Bertolero et al., 2020; Heffernan, 2021; Park & Barnett, 2024, and many more), while they are not necessarily completely overlapping categories. Generally speaking, as descriped by the Merriam Webster dictionary (2024), the difference between the two categories is that race refers to a categorisation characterised by genealogical and physical similarities, while ethnicity refers to a categorisation based on cultural and religious similarities and grouping. While there is an *overlap* between these two, collapsing them into one category might overlook some of the intricacies involved in the ways in which they differently affect an actor's relation to other academics in their (potential) network, and thus affect their academic career.
 
-```{r cars}
-summary(cars)
-```
+Following these considerations, and earlier work done in the Dutch context, this paper poses the following research question:\
+\
+**RSQ 1**: How does the formation of co-authorship relations differ between people of colour and ethnic minorities people -- both from each other, and from white and Dutch people -- in the context of Dutch Sociology departments?\
+\
+This paper will subsequently focus on the effects of these differences, when it comes to the collaboration networks. The differences between the academic careers of people of colour and ethnic minorities, compared to white and Dutch academics is not merely explained by the difference in number of collaborators. What it is related to, however, is in how these differences represent a lack of connections, networking, and recognition in a field where competition is strong -- and having connections *matters* (Heffernan, 2021). As such, this paper will go beyond merely assessing the differences between these groups, and go further by investigating how race and ethnicity affect collaboration. Earlier research has demonstrated how one of the most important determinants of future collaboration is an academic's prestige (Abbasi, Chung & Hossain, 2012), and while it has been argued that demographic factors such as race and ethnicity interact with prestige in their determining of collaboration -- race and ethnicity have not often been separated. As such, the second question this paper will focus on is as follows:\
+\
+**RSQ 2**: How does prestige differently affect an author's collaboration network according to race, and ethnicity in Dutch Sociology departments?\
+\
+This paper contributes to scientific research on race/ethnicity segregation in collaboration networks by approaching it from an angle that differentiates between ethnicity and race, comparing the two. It furthermore does this by approaching the question from a relational perspective, which means it can assess how relationships among minorities, majority groups, and between the two, affect their career and situation -- by treating them as connected and dependent on each other, instead of individual actors who can be viewed as separate from their context.
 
-## Including Plots
+This paper will continue by giving a short overview of the literature on collaboration/co-authorship networks, again highlighting their importance for investigation inequality. It will then subsequently focus on several different relational factors that affect the structure of these networks, before continuing on to assess the role of prestige.
 
-You can also embed plots, for example:
+Using webscraped data on the employees of the Sociology departments of four Dutch universities, the hypotheses posed in the literature overview will be assessed using a two-pronged approach of both descriptive and explanatory analysis. For the descriptive analysis, the `igraph` package will be used to estimate network characteristics. The subsequent explanatory analysis will employ the `RSiena` package for longitudinal network analysis (Snijders et al., 2024)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+## References
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Abbasi, A., Chung, K. S. K., & Hossain, L. (2012). Egocentric analysis of co-authorship network structure, position and performance. *Information Processing & Management*, *48*(4), 671-679.
+
+Bertolero, M. A., Dworkin, J. D., David, S. U., Lloreda, C. L., Srivastava, P., Stiso, J., ... & Bassett, D. S. (2020). Racial and ethnic imbalance in neuroscience reference lists and intersections with gender. *BioRxiv*, 2020-10.
+
+“Difference between race and ethnicity”. 2024. In *Merriam-Webster.com*.*Retrieved November 2, 2011, from <https://www.merriam-webster.com/grammar/difference-between-race-and-ethnicity>*
+
+Dupree, C. H., & Boykin, C. M. (2021). Racial inequality in academia: Systemic origins, modern challenges, and policy recommendations. *Policy Insights from the Behavioral and Brain Sciences*, *8*(1), 11-18.
+
+Freeman, R. B., & Huang, W. (2015). Collaborating with people like me: Ethnic coauthorship within the United States. *Journal of Labor Economics*, *33*(S1), S289-S318.
+
+Gaughan, M., Melkers, J., & Welch, E. (2018). Differential social network effects on scholarly productivity: An intersectional analysis. *Science, Technology, & Human Values*, *43*(3), 570-599.
+
+Heffernan, T. (2021). Academic networks and career trajectory:‘There’s no career in academia without networks’. *Higher Education Research & Development*, *40*(5), 981-994.
+
+Llamas, J. D., Nguyen, K., & Tran, A. G. (2021). The case for greater faculty diversity: Examining the educational impacts of student-faculty racial/ethnic match. *Race Ethnicity and Education*, *24*(3), 375-391.
+
+Mulders, A. M., Hofstra, B., & Tolsma, J. (2024). A matter of time? Gender and ethnic inequality in the academic publishing careers of Dutch PhDs. *Quantitative Science Studies*, 1-29.
+
+Park, H. W., & Barnett, G. A. (2024). ICA fellows’ networking patterns in terms of collaboration, citation, and bibliographic coupling and the relevance of co-ethnicity. *Scientometrics*, *129*(9), 5433-5452.
+
+Snijders TA, Ripley RM, Boitmanis K, Steglich C, Niezink NM, Amati V, Schoenenberger F (2024). “Siena - Simulation Investigation for Empirical Network Analysis.” R package version 1.4.7, <https://www.stats.ox.ac.uk/~snijders/siena/>.

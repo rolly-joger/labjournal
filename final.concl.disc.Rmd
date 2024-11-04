@@ -1,29 +1,31 @@
 ---
 title: "Conclusion and Discussion"
 output: html_document
-date: "2024-10-23"
+date: "2024-11-03"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Conclusion and Discussion
 
-## R Markdown
+In this paper, I endeavoured to disentangle the effects of one's racial and ethnic identity on academic collaboration networks. While these factors have often been recognised as affecting and shaping relationships -- and thus collaboration – in these networks, they have often been collapsed into one concept. While this is common practice in academic literature, this paper has aimed to disentangle the concepts, to assess the validity of the collapsing of these two concepts, and to separately asses their effects. This subjects has subsequently been analysed using a webscraped dataset covering four different Dutch sociology departments, containing two waves. The effects of race and ethnicity in collaboration networks were subsequently analysed using a two-pronged approach, employing both descriptive and explanatory methods. The latter of which was done through estimating network evolution with the Stochastic Actor Oriented Model (SOAM) as found in the `RSiena` package (Ripley et al., 2024; Snijders et al., 2024).
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Following the literature on network differences based on race/ethnicity, the first hypothesis involved assessing the differences in degree first between white people and people of colour, and then between Dutch people and non-Dutch people. The results demonstrated that a substantial difference in degree exists between the minority group and the majority group both on the level of race, as well as on the level of ethnicity. What stood out, however, was that the difference between the average degree of white people and people of colour was much bigger than the difference between Dutch people, and non-Dutch people. There are several reasons why this might occur, and it is not against expectations exactly. One possibility is simply that some ethnic minorities are not viewed and treated as too dissimilar from Dutch people, while most – if not all – people of colour are distinctly 'other' in this way. In the introduction, I noted how relationality is an incredibly important concept in understanding the experience of minorities in white – or Dutch – dominated fields. Expanding on that, it is important to remember that ethnic and relational identities are inherently relational, always formed, constructed, and maintained 'in relation' to others (Molina, 2018). Applied to the academic context, which is still mostly white, it might be easier to understand how some identities have become more integrated and normalised than others – their relation to others being not as 'the other', but as someone more similar. This can be applied to the bigger difference in degrees for race, compared to ethnicity. It might simply be the case that 'white foreigners' are more easily accepted than people of colour. Though, to fully assess this, further research is needed.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+The second part of the descriptive analysis, which focussed on differences in *h*-index across racial and ethnic minority and majority groups, was performed in order to assess whether there was also a difference in prestige between these groups. Because while it is true that degree indicates one's connections in a co-authorship network, it is also possible to rarely collaborate with others, or to only collaborate with people who happen to not be included in this network. As such, I performed a two-sample t-test on the *h*-indices for race, and ethnicity. Similarly to the results on differences in degree, the *h*-indices for both white people and Dutch people were higher than their respective counterparts – with the difference between Dutch people and non-Dutch people, again, being smaller than the difference between white people and people of colour. Similarly to the previous hypothesis, I again believe that this might have something to do with the larger number of different relationally closer 'categories' within ethnicity, than in race. Though, again, more research ought to be done in order to assess this.
 
-```{r cars}
-summary(cars)
-```
+Contrary to these descriptive hypotheses, neither of the explanatory hypotheses were supported by the data. No supportive evidence for the second hypothesis was observed, because the lack of observed racial and ethnic homophily observed in the data, due to the estimates not attaining a significant status. This is quite logical, however, due to the size of the sample, and especially the number of people of colour in this sample. This power problem furthermore lead to these problems for the estimation due to relatively low number of degrees for both people of colour, and non-Dutch people. This meant that there was little to no data to estimate the hypothesis sufficiently. As a result, there was simply not enough power to estimate a homophily parameter.
 
-## Including Plots
+The last models ran concerned the question at the core of this paper, namely whether the effect of one's prestige differed between white people, and people of colour, and between Dutch and non-Dutch people. While the data did demonstrate a significant difference for both categories, this difference contradicted the hypothesised effects. Instead of white people benefiting more from their status, they appeared to benefit less. Both white people, and Dutch people, appear to become less likely to collaborate as their prestige grows. I suspect that this result, and its conflict with my initial expectations, is in most part caused by the unexpected effect of prestige in itself. While I had estimated one's level of prestige to positively affect the likelihood of collaborating on more papers, the models estimated seem to indicate the opposite. As a result, the interaction is therefore also negative, and thus 'positive' for minority groups. A possible way to re-estimate this, would be to switch the meaning of the values of 'race' and 'ethnicity' around, having 0 be white/Dutch, and 1 be person of colour/not Dutch.
 
-You can also embed plots, for example:
+Beyond this, a further conclusion that can be drawn from these models is that there is indeed a difference between the effects of race, and ethnicity – at least, in this context. Because besides the aforementioned differences observed in the descriptive analysis, similar patterns emerged in the exploratory analysis. The 'benefit' of being white in a network was consistently larger than being Dutch. In other words, the degree to which a white academic will collaborate more than a person of colour, is larger than that of a Dutch person compared to a non-Dutch person. These findings are in line with the aforementioned relationality of identity, and might point towards the need for more research into differences between different ethnic groups, and intersections between race and ethnicity.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+Further research on the topic could benefit from taking a similar approach, to a larger sample, which might be beneficial for the investigation of homophily in the network. A larger sample could also be used to further disentangle the relationship between race and ethnicity. As discussed here, the differences between these two groups point towards something that could not be measured here, such as people relating differently to different ethnic identities. Having a larger sample allows one to further look into these differences between ethnic groups, though keeping in mind that an intersection between ethnicity and race might also be a possible effect. In line with this intersection, these data could also be used to investigate intersections between gender and race, or ethnicity – and see if there are any distinctions between the latter two groups to be found there.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Altogether, this paper thus found that while networks are indeed segregated – both when it comes to race, as well as when it comes to ethnicity – and demonstrated the importance of relationships when it comes to investigating inequality. As such, concluding that to truly understand differences, what they are and how they are performed, relationships are of utmost importance.
+
+## References
+
+Molina, N. (2018). Understanding race as a relational concept. *Modern American History*, *1*(1), 101-105.
+
+Ripley, R. M., Snijders, T. A., Boda, Z., Vörös, A., & Preciado, P. (2011). Manual for RSIENA. *University of Oxford, Department of Statistics, Nuffield College*, *1*, 2011.
+
+Snijders TA, Ripley RM, Boitmanis K, Steglich C, Niezink NM, Amati V, Schoenenberger F (2024). “Siena - Simulation Investigation for Empirical Network Analysis.” R package version 1.4.7, <https://www.stats.ox.ac.uk/~snijders/siena/>.

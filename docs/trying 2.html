@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-10-24" />
+
+<title>Analysis – Explanatory</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprepping For the Apocalypse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="making.gender.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="h.index.html">h-Index</a>
+    </li>
+    <li>
+      <a href="full.and.final.data.html">Final Dataset</a>
+    </li>
+    <li>
+      <a href="all.descriptives.html">Descriptives</a>
+    </li>
+    <li>
+      <a href="rsiena.analysis.html">Analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Analysis – Explanatory</h1>
+<h4 class="date">2024-10-24</h4>
+
+</div>
+
+
+<div id="get-the-basics" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Get the Basics</h1>
+<p>For the analysis of the explanatory research question, we are working
+with ‘RSiena’, or – more specifically – ‘RSienaTwoStep’, though TwoStep
+is just an extension of RSiena, and as such, we will be referring to the
+main package being used here as ‘RSiena’.<br />
+| ‘SIENA (Simulation Investigation for Empirical Network Analysis) is a
+statistical tool de- veloped for the analysis of longitudinal network
+data, collected in a network panel study with two or more ‘waves’ of
+observations.’ RSiena is a Siena package, that thus enables one to
+employ llongtitudinal network data to estimate network models, based on
+estimated network evolution. This network evolution is based on what are
+called ‘minsteps’. Ministeps are founded on the RSiena being an
+actor-based model, which in its estimation of a network at t2, from the
+data at t1, estimates ties an actor can maintain, create, or dissolve.
+These ‘decisions’ are called ministeps – and are ‘probabilistic, and
+made sequentially’. Which means that only one actor in a network can
+make a ministep at a time. Based on the parameters given in the model
+specifications, RSiena ‘takes’ the data from a network at T1, and uses
+these parameters as rules dictating the ways in which ministeps are
+made. Since ministeps are based on likelihood, and parameters are as
+well, RSiena results ought to be interpreted as loglikelihood estimates.
+In the estimation of the model, “[t]he statistical procedures utilize a
+large number of repeated simulations of the network evolution from each
+wave to the next. They estimate and test the parameters producing a
+probabilistic network evolution that ‘could have’ brought these
+observations to follow one another.” To evaluate the goodness of fit of
+the estimated model, results can be compared with the observed
+second-wave network data, and using a <strong>ttest????</strong> the fit
+can be estimated.</p>
+<p>As previously explained, this analysis will consist of two parts –
+one estimating the role of race, the other estimating the role of
+ethnicity. Each of these two parts will be built up out of six different
+models. Not all of these models will be discussed equally as
+extensively, but they will all be included and briefly commented on,
+since their evolution is important in understanding them.</p>
+<p>We will be using the following packages …</p>
+<pre class="r"><code>require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(forcats)</code></pre>
+<p>… user defined functions …</p>
+<p>… and data.</p>
+<div id="define-the-variables" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Define the
+Variables</h2>
+<p>First we have to define the variables, and transform them into
+RSiena-sanctioned shapes. These shapes are a respective sienaDependent
+object containing the matrices for each wave, an application of the and
+‘coCovar’ function to all of our independent variables, to make them
+continuous covariance variables.</p>
+<pre class="r"><code>#dependent variable 
+net &lt;- sienaDependent(net_soc_array)
+
+#independent variable 
+gender_covar &lt;- coCovar(demographics_hannah$perc_female)
+country_covar &lt;- coCovar(demographics_hannah$born_in_binary)
+white_pass_covar &lt;- coCovar(demographics_hannah$white_or_not)
+h_index_covar &lt;- coCovar(demographics_hannah$h_index)
+interaction_race_covar &lt;- coCovar(demographics_hannah$int_h_race)
+interaction_ethnicity_covar &lt;- coCovar(demographics_hannah$int_h_eth)</code></pre>
+</div>
+</div>
+<div id="get-effect-structure" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Get Effect
+Structure</h1>
+<p>With these variables, we create the Siena-data object which will be
+used in the algorithms which will create our models, and create our
+first effect object – which will tell us which possible effects we can
+add to our models.</p>
+<pre class="r"><code>the_data &lt;- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, h_index_covar, interaction_race_covar, interaction_ethnicity_covar)
+myeff_1 &lt;- getEffects(the_data)
+view(myeff_1)</code></pre>
+</div>
+<div id="models-for-race" class="section level1 tabset" number="3">
+<h1 class="tabset"><span class="header-section-number">3</span> Models
+for Race</h1>
+<div id="model-1-empty-model" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Model 1: Empty
+Model</h2>
+<p>First, we estimate our baseline model – to see how our model is
+estimated without any other restraint than rate and density. We do this
+in order to always have something to compare our future models with, a
+base-line to see if something can be estimate with just these
+parameters.</p>
+<pre class="r"><code>myeff_1 &lt;- getEffects(the_data)</code></pre>
+<pre class="r"><code>myAlgorithm &lt;- sienaAlgorithmCreate(projname = &quot;preliminary&quot;)
+mod_1_effects &lt;- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects 
+#write_rds(mod_1_effects, &quot;models/m1_race_empty.rds&quot;)</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQW5hbHlzaXMgLS0gRXhwbGFuYXRvcnkiCm91dHB1dDogaHRtbF9kb2N1bWVudApkYXRlOiAiMjAyNC0xMC0yNCIKLS0tCgojIEdldCB0aGUgQmFzaWNzCgpGb3IgdGhlIGFuYWx5c2lzIG9mIHRoZSBleHBsYW5hdG9yeSByZXNlYXJjaCBxdWVzdGlvbiwgd2UgYXJlIHdvcmtpbmcgd2l0aCAnUlNpZW5hJywgb3Ig4oCTIG1vcmUgc3BlY2lmaWNhbGx5IOKAkyAnUlNpZW5hVHdvU3RlcCcsIHRob3VnaCBUd29TdGVwIGlzIGp1c3QgYW4gZXh0ZW5zaW9uIG9mIFJTaWVuYSwgYW5kIGFzIHN1Y2gsIHdlIHdpbGwgYmUgcmVmZXJyaW5nIHRvIHRoZSBtYWluIHBhY2thZ2UgYmVpbmcgdXNlZCBoZXJlIGFzICdSU2llbmEnLlwKfCAgICdTSUVOQSAoU2ltdWxhdGlvbiBJbnZlc3RpZ2F0aW9uIGZvciBFbXBpcmljYWwgTmV0d29yayBBbmFseXNpcykgaXMgYSBzdGF0aXN0aWNhbCB0b29sIGRlLSB2ZWxvcGVkIGZvciB0aGUgYW5hbHlzaXMgb2YgbG9uZ2l0dWRpbmFsIG5ldHdvcmsgZGF0YSwgY29sbGVjdGVkIGluIGEgbmV0d29yayBwYW5lbCBzdHVkeSB3aXRoIHR3byBvciBtb3JlIOKAmHdhdmVz4oCZIG9mIG9ic2VydmF0aW9ucy4nIFJTaWVuYSBpcyBhIFNpZW5hIHBhY2thZ2UsIHRoYXQgdGh1cyBlbmFibGVzIG9uZSB0byBlbXBsb3kgbGxvbmd0aXR1ZGluYWwgbmV0d29yayBkYXRhIHRvIGVzdGltYXRlIG5ldHdvcmsgbW9kZWxzLCBiYXNlZCBvbiBlc3RpbWF0ZWQgbmV0d29yayBldm9sdXRpb24uIFRoaXMgbmV0d29yayBldm9sdXRpb24gaXMgYmFzZWQgb24gd2hhdCBhcmUgY2FsbGVkICdtaW5zdGVwcycuIE1pbmlzdGVwcyBhcmUgZm91bmRlZCBvbiB0aGUgUlNpZW5hIGJlaW5nIGFuIGFjdG9yLWJhc2VkIG1vZGVsLCB3aGljaCBpbiBpdHMgZXN0aW1hdGlvbiBvZiBhIG5ldHdvcmsgYXQgdDIsIGZyb20gdGhlIGRhdGEgYXQgdDEsIGVzdGltYXRlcyB0aWVzIGFuIGFjdG9yIGNhbiBtYWludGFpbiwgY3JlYXRlLCBvciBkaXNzb2x2ZS4gVGhlc2UgJ2RlY2lzaW9ucycgYXJlIGNhbGxlZCBtaW5pc3RlcHMg4oCTIGFuZCBhcmUgJ3Byb2JhYmlsaXN0aWMsIGFuZCBtYWRlIHNlcXVlbnRpYWxseScuIFdoaWNoIG1lYW5zIHRoYXQgb25seSBvbmUgYWN0b3IgaW4gYSBuZXR3b3JrIGNhbiBtYWtlIGEgbWluaXN0ZXAgYXQgYSB0aW1lLiBCYXNlZCBvbiB0aGUgcGFyYW1ldGVycyBnaXZlbiBpbiB0aGUgbW9kZWwgc3BlY2lmaWNhdGlvbnMsIFJTaWVuYSAndGFrZXMnIHRoZSBkYXRhIGZyb20gYSBuZXR3b3JrIGF0IFQxLCBhbmQgdXNlcyB0aGVzZSBwYXJhbWV0ZXJzIGFzIHJ1bGVzIGRpY3RhdGluZyB0aGUgd2F5cyBpbiB3aGljaCBtaW5pc3RlcHMgYXJlIG1hZGUuIFNpbmNlIG1pbmlzdGVwcyBhcmUgYmFzZWQgb24gbGlrZWxpaG9vZCwgYW5kIHBhcmFtZXRlcnMgYXJlIGFzIHdlbGwsIFJTaWVuYSByZXN1bHRzIG91Z2h0IHRvIGJlIGludGVycHJldGVkIGFzIGxvZ2xpa2VsaWhvb2QgZXN0aW1hdGVzLiBJbiB0aGUgZXN0aW1hdGlvbiBvZiB0aGUgbW9kZWwsICJbdF1oZSBzdGF0aXN0aWNhbCBwcm9jZWR1cmVzIHV0aWxpemUgYSBsYXJnZSBudW1iZXIgb2YgcmVwZWF0ZWQgc2ltdWxhdGlvbnMgb2YgdGhlIG5ldHdvcmsgZXZvbHV0aW9uIGZyb20gZWFjaCB3YXZlIHRvIHRoZSBuZXh0LiBUaGV5IGVzdGltYXRlIGFuZCB0ZXN0IHRoZSBwYXJhbWV0ZXJzIHByb2R1Y2luZyBhIHByb2JhYmlsaXN0aWMgbmV0d29yayBldm9sdXRpb24gdGhhdCDigJhjb3VsZCBoYXZl4oCZIGJyb3VnaHQgdGhlc2Ugb2JzZXJ2YXRpb25zIHRvIGZvbGxvdyBvbmUgYW5vdGhlci4iIFRvIGV2YWx1YXRlIHRoZSBnb29kbmVzcyBvZiBmaXQgb2YgdGhlIGVzdGltYXRlZCBtb2RlbCwgcmVzdWx0cyBjYW4gYmUgY29tcGFyZWQgd2l0aCB0aGUgb2JzZXJ2ZWQgc2Vjb25kLXdhdmUgbmV0d29yayBkYXRhLCBhbmQgdXNpbmcgYSAqKnR0ZXN0Pz8/PyoqIHRoZSBmaXQgY2FuIGJlIGVzdGltYXRlZC4KCkFzIHByZXZpb3VzbHkgZXhwbGFpbmVkLCB0aGlzIGFuYWx5c2lzIHdpbGwgY29uc2lzdCBvZiB0d28gcGFydHMg4oCTIG9uZSBlc3RpbWF0aW5nIHRoZSByb2xlIG9mIHJhY2UsIHRoZSBvdGhlciBlc3RpbWF0aW5nIHRoZSByb2xlIG9mIGV0aG5pY2l0eS4gRWFjaCBvZiB0aGVzZSB0d28gcGFydHMgd2lsbCBiZSBidWlsdCB1cCBvdXQgb2Ygc2l4IGRpZmZlcmVudCBtb2RlbHMuIE5vdCBhbGwgb2YgdGhlc2UgbW9kZWxzIHdpbGwgYmUgZGlzY3Vzc2VkIGVxdWFsbHkgYXMgZXh0ZW5zaXZlbHksIGJ1dCB0aGV5IHdpbGwgYWxsIGJlIGluY2x1ZGVkIGFuZCBicmllZmx5IGNvbW1lbnRlZCBvbiwgc2luY2UgdGhlaXIgZXZvbHV0aW9uIGlzIGltcG9ydGFudCBpbiB1bmRlcnN0YW5kaW5nIHRoZW0uCgpXZSB3aWxsIGJlIHVzaW5nIHRoZSBmb2xsb3dpbmcgcGFja2FnZXMgLi4uCgpgYGB7ciBwYWNrYWdlcywgbWVzc2FnZSA9IEYsIHdhcm5pbmc9Rn0KcmVxdWlyZSh0aWR5dmVyc2UpCnJlcXVpcmUoaWdyYXBoKQpyZXF1aXJlKHNoaW55KQpyZXF1aXJlKFJTaWVuYSkKcmVxdWlyZShybWRmb3JtYXRzKQpyZXF1aXJlKHByZXR0eWRvYykKcmVxdWlyZShocmJydGhlbWVzKQpyZXF1aXJlKHRpbnQpCnJlcXVpcmUodHVmdGUpCnJlcXVpcmUocHN5Y2gpCmxpYnJhcnkoZGF0YS50YWJsZSkgIApsaWJyYXJ5KGZvcmNhdHMpCmBgYAoKLi4uIHVzZXIgZGVmaW5lZCBmdW5jdGlvbnMgLi4uCgpgYGB7ciB1c2VyIGRlZmluZWQgZnVuY3Rpb25zLCBpbmNsdWRlID0gRiwgbWVzc2FnZT1GLCB3YXJuaW5nPUZ9CnRlc3RhbGwgPC0gZnVuY3Rpb24oYW5zKSB7CiAgICBmb3IgKGkgaW4gd2hpY2goYW5zJHRlc3QpKSB7CiAgICAgICAgc2N0IDwtIHNjb3JlLlRlc3QoYW5zLCBpKQogICAgICAgIGNhdChhbnMkcmVxdWVzdGVkRWZmZWN0cyRlZmZlY3ROYW1lW2ldLCAiXG4iKQogICAgICAgIHByaW50KHNjdCkKICAgIH0KICAgIGludmlzaWJsZShzY29yZS5UZXN0KGFucykpCn0KYGBgCgouLi4gYW5kIGRhdGEuCgpgYGB7ciBkYXRhc2V0LCBpbmNsdWRlPUYsIHdhcm5pbmc9RiwgbWVzc2FnZT1GQUxTRX0Kd2F2ZV8xIDwtIHJlYWRfcmRzKCJkYXRhc2V0c19maW5hbC93YXZlXzFfZmlyc3RfYXV0aG9ycy5yZHMiKSAjbWF0cml4IGZvciB3YXZlIDEgKGZyb20gLi4uIHRvIC4uLikKd2F2ZV8yIDwtIHJlYWRfcmRzKCJkYXRhc2V0c19maW5hbC93YXZlXzJfZmlyc3RfYXV0aG9ycy5yZHMiKSAjbWF0cml4IGZvciB3YXZlIDIgKGZyb20gLi4uIHRvIC4uLiApCmRlbW9ncmFwaGljc19oYW5uYWggPC0gcmVhZF9jc3YoImRlbW9ncmFwaGljc19oYW5uYWhfZmluYWwuY3N2Iiwgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSkgI2RlbW9ncmFwaGljIGNoYXJhY3RlcmlzdGljcyBvZiBhY3RvcnMgaW4gbWF0cml4Cm5ldF9zb2NfYXJyYXkgPC0gcmVhZF9yZHMoImRhdGFzZXRzX2ZpbmFsL25ldF9zb2NfYXJyYXlfZmlyc3RfYXV0aC5yZHMiKSAjdGhlIGFycmF5IG9mIGl0IGFsbApgYGAKCiMjIERlZmluZSB0aGUgVmFyaWFibGVzCgpGaXJzdCB3ZSBoYXZlIHRvIGRlZmluZSB0aGUgdmFyaWFibGVzLCBhbmQgdHJhbnNmb3JtIHRoZW0gaW50byBSU2llbmEtc2FuY3Rpb25lZCBzaGFwZXMuIFRoZXNlIHNoYXBlcyBhcmUgYSByZXNwZWN0aXZlIHNpZW5hRGVwZW5kZW50IG9iamVjdCBjb250YWluaW5nIHRoZSBtYXRyaWNlcyBmb3IgZWFjaCB3YXZlLCBhbiBhcHBsaWNhdGlvbiBvZiB0aGUgYW5kICdjb0NvdmFyJyBmdW5jdGlvbiB0byBhbGwgb2Ygb3VyIGluZGVwZW5kZW50IHZhcmlhYmxlcywgdG8gbWFrZSB0aGVtIGNvbnRpbnVvdXMgY292YXJpYW5jZSB2YXJpYWJsZXMuCgpgYGB7ciB2YXJpYWJsZXMgZGVmaW5pdGlvbn0KI2RlcGVuZGVudCB2YXJpYWJsZSAKbmV0IDwtIHNpZW5hRGVwZW5kZW50KG5ldF9zb2NfYXJyYXkpCgojaW5kZXBlbmRlbnQgdmFyaWFibGUgCmdlbmRlcl9jb3ZhciA8LSBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkcGVyY19mZW1hbGUpCmNvdW50cnlfY292YXIgPC0gY29Db3ZhcihkZW1vZ3JhcGhpY3NfaGFubmFoJGJvcm5faW5fYmluYXJ5KQp3aGl0ZV9wYXNzX2NvdmFyIDwtIGNvQ292YXIoZGVtb2dyYXBoaWNzX2hhbm5haCR3aGl0ZV9vcl9ub3QpCmhfaW5kZXhfY292YXIgPC0gY29Db3ZhcihkZW1vZ3JhcGhpY3NfaGFubmFoJGhfaW5kZXgpCmludGVyYWN0aW9uX3JhY2VfY292YXIgPC0gY29Db3ZhcihkZW1vZ3JhcGhpY3NfaGFubmFoJGludF9oX3JhY2UpCmludGVyYWN0aW9uX2V0aG5pY2l0eV9jb3ZhciA8LSBjb0NvdmFyKGRlbW9ncmFwaGljc19oYW5uYWgkaW50X2hfZXRoKQpgYGAKCiMgR2V0IEVmZmVjdCBTdHJ1Y3R1cmUKCldpdGggdGhlc2UgdmFyaWFibGVzLCB3ZSBjcmVhdGUgdGhlIFNpZW5hLWRhdGEgb2JqZWN0IHdoaWNoIHdpbGwgYmUgdXNlZCBpbiB0aGUgYWxnb3JpdGhtcyB3aGljaCB3aWxsIGNyZWF0ZSBvdXIgbW9kZWxzLCBhbmQgY3JlYXRlIG91ciBmaXJzdCBlZmZlY3Qgb2JqZWN0IOKAkyB3aGljaCB3aWxsIHRlbGwgdXMgd2hpY2ggcG9zc2libGUgZWZmZWN0cyB3ZSBjYW4gYWRkIHRvIG91ciBtb2RlbHMuCgpgYGB7ciBnb29kIGRhdGF9CnRoZV9kYXRhIDwtIHNpZW5hRGF0YUNyZWF0ZShuZXQsIHdoaXRlX3Bhc3NfY292YXIsIGNvdW50cnlfY292YXIsIGdlbmRlcl9jb3ZhciwgaF9pbmRleF9jb3ZhciwgaW50ZXJhY3Rpb25fcmFjZV9jb3ZhciwgaW50ZXJhY3Rpb25fZXRobmljaXR5X2NvdmFyKQpteWVmZl8xIDwtIGdldEVmZmVjdHModGhlX2RhdGEpCnZpZXcobXllZmZfMSkKYGBgCgojIE1vZGVscyBmb3IgUmFjZSB7LnRhYnNldH0KCiMjIE1vZGVsIDE6IEVtcHR5IE1vZGVsCgpGaXJzdCwgd2UgZXN0aW1hdGUgb3VyIGJhc2VsaW5lIG1vZGVsIOKAkyB0byBzZWUgaG93IG91ciBtb2RlbCBpcyBlc3RpbWF0ZWQgd2l0aG91dCBhbnkgb3RoZXIgcmVzdHJhaW50IHRoYW4gcmF0ZSBhbmQgZGVuc2l0eS4gV2UgZG8gdGhpcyBpbiBvcmRlciB0byBhbHdheXMgaGF2ZSBzb21ldGhpbmcgdG8gY29tcGFyZSBvdXIgZnV0dXJlIG1vZGVscyB3aXRoLCBhIGJhc2UtbGluZSB0byBzZWUgaWYgc29tZXRoaW5nIGNhbiBiZSBlc3RpbWF0ZSB3aXRoIGp1c3QgdGhlc2UgcGFyYW1ldGVycy4KCmBgYHtyIHdoZXJlIHRvIHB1dCBpdCwgaW5jbHVkZT1GLCBlY2hvPUZ9CmlmZWxzZSghZGlyLmV4aXN0cygicmVzdWx0cyIpLCBkaXIuY3JlYXRlKCJyZXN1bHRzIiksIEZBTFNFKQpwcmludDAxUmVwb3J0KHRoZV9kYXRhLCBtb2RlbG5hbWUgPSAiLi9yZXN1bHRzL20xX3JhY2UiKQpgYGAKCmBgYHtyLCByZXN1bHRzID0gImhpZGUifQpteWVmZl8xIDwtIGdldEVmZmVjdHModGhlX2RhdGEpCmBgYAoKYGBge3IgcmVzdWx0cyBhbG9nb3JpdG0sIHJlc3VsdHMgPSAiaGlkZSJ9Cm15QWxnb3JpdGhtIDwtIHNpZW5hQWxnb3JpdGhtQ3JlYXRlKHByb2puYW1lID0gInByZWxpbWluYXJ5IikKbW9kXzFfZWZmZWN0cyA8LSBzaWVuYTA3KG15QWxnb3JpdGhtLCBkYXRhID0gdGhlX2RhdGEsIGVmZmVjdHMgPSBteWVmZl8xLCByZXR1cm5EZXBzID0gVFJVRSkKbW9kXzFfZWZmZWN0cyAKI3dyaXRlX3Jkcyhtb2RfMV9lZmZlY3RzLCAibW9kZWxzL20xX3JhY2VfZW1wdHkucmRzIikKCmBgYAoK</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("trying.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,29 +1,61 @@
 ---
-title: "theoretical framewoek"
+title: "Theoretical Framework"
 output: html_document
 date: "2024-10-23"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Theoretical Framework
 
-## R Markdown
+Academic collaboration networks -- networks that represent co-authorship between authors -- are strong indicators of not only the way in which academics work and interact with each other, but they can also be used to assess how they achieve prestige, academic status, and influence in their field (Guaghan et al., 2018). Publication records are often employed to assess whether and how beginning academics would thrive in their chosen fields, and are subsequently employed in hiring practice (Gaughan et al.m 2018). It is not only at the beginning of one's career that one's network and collaborations represent a crucial aspect of one's attractiveness as a (prospective) academic, even further into one's career -- when switching jobs, requesting grants, or aiming to rise the academic ladder (Bertolero et al., 2020) -- these networks and connections represent crucial insights into not only who an academic is, but what they can do, and who they know. Networks can be exploited, as such, to expand who and what one knows in the academic world, providing not only a worthy resource in writing possible papers, but also in social capital (Heffernan, 2021).
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Hypothesis 1
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Collaboration networks themselves have been the subject of much research, especially when treated as social networks. In this context, networks are seen as structures that allow actors to exploit their social capital, or -- on the flipside -- to suffer the consequences. Whether one will positively or negatively profit from a network, depends on a multitude of factors. However, since networks revolve around the ties *between* these actors, it is precisely these ties, and what they are affected by, that form the core aspect that will reveal how one will experience their position in a network.\
+Demographic factors, such as race, age, gender, and social class (Heffernan, 2021), have been extensively reported for their role in structuring (the evolution of) networks. Since the structure and evolution of networks revolves around creating, maintaining, or dissolving ties, the roles of these demographics on exactly these things has been studied. These effects, also known as 'selection effects' (Steglich, Snijders & Pearson, 2010) determine when an why an actor would prefer to dissolve, maintain, or create a tie. In the context of the role of demographics in the structuring of collaboration networks, this refers to the ways in which these demographics affect authors' decisions on to start, stop, or continue collaborating with someone else (Gaughan et al., 2018). Since collaboration is always relational, with *someone else*, the demographic characteristics of *both* actors in a collaboration matter. Research has demonstrated that factors such as gender and race negatively affect the size of one's network (Gaughan et al., 2018). Women and people of colour -- of people of foreign descent -- tend to have smaller networks, collaborating with less people. While more recent research has also demonstrated that the difference between men and women is shrinking (Gaughan et al., 2018), race-based segregation on this level has not appeared to decrease. However, due to the literature's tendency to collapse race and ethnicity into one category, it is also more difficult to untangle these effects, and understand if it is both these characteristics that make an individual less attractive to collaborate with, or whether it is only one of these. Based on the literature, to investigate this, I therefore pose the following two hypotheses.
 
-```{r cars}
-summary(cars)
-```
+**Hypothesis 1a**: White people have more degrees than minorities.\
+**Hypothesis 1b**: Dutch people have more degrees than non-Dutch people.\
 
-## Including Plots
+## Hypothesis 2
 
-You can also embed plots, for example:
+Building on these disparities in degrees -- or academic collaborations -- there are further effects had by one's race or ethnicity. One of the most frequently demonstrated patterns in social networks of whatever kind, is that of *homophily* (AlShebli et al., 2018). This refers to the idea that actors prefer to form ties with others who are like them. Translated to the current context, this would mean that white people are more likely to collaborate on papers with other white people, Dutch people with other Dutch people. It also means, however, that people of colour are more likely to collaborate with people of colour, and that non-Dutch people are more likely to collaborate with other non-Dutch people. As such, I propose the following hypothesis:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+**Hypothesis 2a**: Researchers display race homophily in their collaboration preferences: white people prefer to collaborate with white people, and people of colour with people of colour.\
+**Hypothesis 2b**: Researchers display ethnic homophily in their collaboration preferences: Dutch people prefer to collaborate with Dutch people, and non-Dutch people prefer to collaborate with non-Dutch people.\
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Hypothesis 3
+
+Collaborations are not, however, the only indicators of an author's success and evolution in academia. It is possible to collaborate very little, but also still perform very well. However, despite this, impact and prestige have also been demonstrated to be segregated across race. A study by White, Xia, and Edwards (2020) indicated that, given similar circumstances, men and white people were more likely to achieve higher levels of academic productivity and prestige than women and people of colour. While Hopkins et al. (2012) present a more nuanced view, by disentangling different ethnic identities, and demonstrating how it is Hispanic and Black people, especially, who underrepresented in academia, with Black people systematically demonstrating a lower level of prestige than their peers.\
+With these findings, it is thus predicted that there is a level of segregation both in the realm of race, and in that of ethnicity when it comes to prestige and academic influence and standing. As such, the following hypotheses are posed:
+
+**Hypothesis 3a**: White people are more prestigious than people of colour.\
+**Hypothesis 3b**: Dutch people are more prestigious than non-Dutch people.\
+
+## Hypothesis 4
+
+Performance, however, has also been studied as a factor affecting tie-formation, maintenance, and dissolution in collaboration networks. Authors with a high-scientific impact -- a high *h*-index, which is often used as a proxy for performance -- are known to more widely collaborate with others, have a more diverse network, and subsequently maintain these ties across their careers (Pike, 2010) Authors with lower *h*-indices, however, collaborate less, have less diverse networks, and do not always manage to maintain the ties they have for extended periods of time (Pike, 2010).\
+These demonstrated effects of performance on collaboration and co-authorship are not independent, however, of other factors. Park and Barnett's (2024) study, for example, found that ethnicity not only determines the structure of networks as a 'separate' characteristic, but also strongly and complexly interacts with other characteristics of both networks and actors. As such, ethnicity -- and race, as these two are often collapsed -- does not only simply affect the likelihood of collaboration between two actors, but also interacts with factors such as performance to more complexly affect the structure and evolution of networks. More precisely, it has been argued that -- given similar circumstances -- the effect of one's performance and prestige on the likelihood of collaborating on a paper is smaller for those belonging to an ethnic minority, than for those who do not.\
+Building on the understanding that race and ethnicity are often collapsed in the literature, and that understanding their particular mechanics requires them being untangled, the following hypotheses are thus posed:
+
+**Hypothesis 4a**: The effect of prestige on popularity is moderated by race.\
+**Hypothesis 4b**: The effect of prestige on popularity is moderated by ethnicity. 
+
+# References
+
+AlShebli, B. K., Rahwan, T., & Woon, W. L. (2018). The preeminence of ethnic diversity in scientific collaboration. *Nature Communications*, *9*. <https://doi.org/10.1038/s41467-018-07634-8>
+
+Bertolero, M. A., Dworkin, J. D., David, S. U., Lloreda, C. L., Srivastava, P., Stiso, J., ... & Bassett, D. S. (2020). Racial and ethnic imbalance in neuroscience reference lists and intersections with gender. *BioRxiv*, 2020-10.
+
+Gaughan, M., Melkers, J., & Welch, E. (2018). Differential social network effects on scholarly productivity: An intersectional analysis. *Science, Technology, & Human Values*, *43*(3), 570-599.
+
+Heffernan, T. (2021). Academic networks and career trajectory:‘There’s no career in academia without networks’. *Higher Education Research & Development*, *40*(5), 981-994.
+
+Hopkins, A. L., Jawitz, J. W., McCarty, C., Goldman, A., & Basu, N. B. (2013). Disparities in publication patterns by gender, race and ethnicity based on a survey of a random sample of authors. *Scientometrics*, *96*, 515-534.
+
+Park, H. W., & Barnett, G. A. (2024). ICA fellows’ networking patterns in terms of collaboration, citation, and bibliographic coupling and the relevance of co-ethnicity. *Scientometrics*, *129*(9), 5433-5452.
+
+Pike, T. W. (2010). Collaboration networks and scientific impact among behavioral ecologists. *Behavioral Ecology*, *21*(2), 431-435.
+
+Steglich, C., Snijders, T. A., & Pearson, M. (2010). Dynamic networks and behavior: Separating selection from influence. *Sociological methodology*, *40*(1), 329-393.
+
+White, S. W., Xia, M., & Edwards, G. (2021). Race, gender, and scholarly impact: Disparities for women and faculty of color in clinical psychology. *Journal of Clinical Psychology*, *77*(1), 78-89.

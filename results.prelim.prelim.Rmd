@@ -4,6 +4,11 @@ subtitle: "... or: how do I interpret RSiena output???"
 output: html_document
 date: "2024-10-08"
 ---
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+eval = F
+)
+```
 
 ```{r functions/packages to include, include=FALSE}
 require(tidyverse)

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-11-03" />
+
+<title>Conclusion and Discussion</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+    <li>
+      <a href="week7.html">Week 7</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprep
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="making.gender.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="h.index.html">h-Index</a>
+    </li>
+    <li>
+      <a href="full.and.final.data.html">Final Dataset</a>
+    </li>
+    <li>
+      <a href="all.descriptives.html">Descriptives</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Conclusion and Discussion</h1>
+<h4 class="date">2024-11-03</h4>
+
+</div>
+
+
+<p>In this paper, I endeavoured to disentangle the effects of one’s
+racial and ethnic identity on academic collaboration networks. While
+these factors have often been recognised as affecting and shaping
+relationships – and thus collaboration – in these networks, they have
+often been collapsed into one concept. While this is common practice in
+academic literature, this paper has aimed to disentangle the concepts,
+to assess the validity of the collapsing of these two concepts, and to
+separately asses their effects. This subjects has subsequently been
+analysed using a webscraped dataset covering four different Dutch
+sociology departments, containing two waves. The effects of race and
+ethnicity in collaboration networks were subsequently analysed using a
+two-pronged approach, employing both descriptive and explanatory
+methods. The latter of which was done through estimating network
+evolution with the Stochastic Actor Oriented Model (SOAM) as found in
+the <code>RSiena</code> package (Ripley et al., 2024; Snijders et al.,
+2024).</p>
+<p>Following the literature on network differences based on
+race/ethnicity, the first hypothesis involved assessing the differences
+in degree first between white people and people of colour, and then
+between Dutch people and non-Dutch people. The results demonstrated that
+a substantial difference in degree exists between the minority group and
+the majority group both on the level of race, as well as on the level of
+ethnicity. What stood out, however, was that the difference between the
+average degree of white people and people of colour was much bigger than
+the difference between Dutch people, and non-Dutch people. There are
+several reasons why this might occur, and it is not against expectations
+exactly. One possibility is simply that some ethnic minorities are not
+viewed and treated as too dissimilar from Dutch people, while most – if
+not all – people of colour are distinctly ‘other’ in this way. In the
+introduction, I noted how relationality is an incredibly important
+concept in understanding the experience of minorities in white – or
+Dutch – dominated fields. Expanding on that, it is important to remember
+that ethnic and relational identities are inherently relational, always
+formed, constructed, and maintained ‘in relation’ to others (Molina,
+2018). Applied to the academic context, which is still mostly white, it
+might be easier to understand how some identities have become more
+integrated and normalised than others – their relation to others being
+not as ‘the other’, but as someone more similar. This can be applied to
+the bigger difference in degrees for race, compared to ethnicity. It
+might simply be the case that ‘white foreigners’ are more easily
+accepted than people of colour. Though, to fully assess this, further
+research is needed.</p>
+<p>The second part of the descriptive analysis, which focussed on
+differences in <em>h</em>-index across racial and ethnic minority and
+majority groups, was performed in order to assess whether there was also
+a difference in prestige between these groups. Because while it is true
+that degree indicates one’s connections in a co-authorship network, it
+is also possible to rarely collaborate with others, or to only
+collaborate with people who happen to not be included in this network.
+As such, I performed a two-sample t-test on the <em>h</em>-indices for
+race, and ethnicity. Similarly to the results on differences in degree,
+the <em>h</em>-indices for both white people and Dutch people were
+higher than their respective counterparts – with the difference between
+Dutch people and non-Dutch people, again, being smaller than the
+difference between white people and people of colour. Similarly to the
+previous hypothesis, I again believe that this might have something to
+do with the larger number of different relationally closer ‘categories’
+within ethnicity, than in race. Though, again, more research ought to be
+done in order to assess this.</p>
+<p>Contrary to these descriptive hypotheses, neither of the explanatory
+hypotheses were supported by the data. No supportive evidence for the
+second hypothesis was observed, because the lack of observed racial and
+ethnic homophily observed in the data, due to the estimates not
+attaining a significant status. This is quite logical, however, due to
+the size of the sample, and especially the number of people of colour in
+this sample. This power problem furthermore lead to these problems for
+the estimation due to relatively low number of degrees for both people
+of colour, and non-Dutch people. This meant that there was little to no
+data to estimate the hypothesis sufficiently. As a result, there was
+simply not enough power to estimate a homophily parameter.</p>
+<p>The last models ran concerned the question at the core of this paper,
+namely whether the effect of one’s prestige differed between white
+people, and people of colour, and between Dutch and non-Dutch people.
+While the data did demonstrate a significant difference for both
+categories, this difference contradicted the hypothesised effects.
+Instead of white people benefiting more from their status, they appeared
+to benefit less. Both white people, and Dutch people, appear to become
+less likely to collaborate as their prestige grows. I suspect that this
+result, and its conflict with my initial expectations, is in most part
+caused by the unexpected effect of prestige in itself. While I had
+estimated one’s level of prestige to positively affect the likelihood of
+collaborating on more papers, the models estimated seem to indicate the
+opposite. As a result, the interaction is therefore also negative, and
+thus ‘positive’ for minority groups. A possible way to re-estimate this,
+would be to switch the meaning of the values of ‘race’ and ‘ethnicity’
+around, having 0 be white/Dutch, and 1 be person of colour/not
+Dutch.</p>
+<p>Beyond this, a further conclusion that can be drawn from these models
+is that there is indeed a difference between the effects of race, and
+ethnicity – at least, in this context. Because besides the
+aforementioned differences observed in the descriptive analysis, similar
+patterns emerged in the exploratory analysis. The ‘benefit’ of being
+white in a network was consistently larger than being Dutch. In other
+words, the degree to which a white academic will collaborate more than a
+person of colour, is larger than that of a Dutch person compared to a
+non-Dutch person. These findings are in line with the aforementioned
+relationality of identity, and might point towards the need for more
+research into differences between different ethnic groups, and
+intersections between race and ethnicity.</p>
+<p>Further research on the topic could benefit from taking a similar
+approach, to a larger sample, which might be beneficial for the
+investigation of homophily in the network. A larger sample could also be
+used to further disentangle the relationship between race and ethnicity.
+As discussed here, the differences between these two groups point
+towards something that could not be measured here, such as people
+relating differently to different ethnic identities. Having a larger
+sample allows one to further look into these differences between ethnic
+groups, though keeping in mind that an intersection between ethnicity
+and race might also be a possible effect. In line with this
+intersection, these data could also be used to investigate intersections
+between gender and race, or ethnicity – and see if there are any
+distinctions between the latter two groups to be found there.</p>
+<p>Altogether, this paper thus found that while networks are indeed
+segregated – both when it comes to race, as well as when it comes to
+ethnicity – and demonstrated the importance of relationships when it
+comes to investigating inequality. As such, concluding that to truly
+understand differences, what they are and how they are performed,
+relationships are of utmost importance.</p>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQ29uY2x1c2lvbiBhbmQgRGlzY3Vzc2lvbiIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTExLTAzIgotLS0KCkluIHRoaXMgcGFwZXIsIEkgZW5kZWF2b3VyZWQgdG8gZGlzZW50YW5nbGUgdGhlIGVmZmVjdHMgb2Ygb25lJ3MgcmFjaWFsIGFuZCBldGhuaWMgaWRlbnRpdHkgb24gYWNhZGVtaWMgY29sbGFib3JhdGlvbiBuZXR3b3Jrcy4gV2hpbGUgdGhlc2UgZmFjdG9ycyBoYXZlIG9mdGVuIGJlZW4gcmVjb2duaXNlZCBhcyBhZmZlY3RpbmcgYW5kIHNoYXBpbmcgcmVsYXRpb25zaGlwcyAtLSBhbmQgdGh1cyBjb2xsYWJvcmF0aW9uIOKAkyBpbiB0aGVzZSBuZXR3b3JrcywgdGhleSBoYXZlIG9mdGVuIGJlZW4gY29sbGFwc2VkIGludG8gb25lIGNvbmNlcHQuIFdoaWxlIHRoaXMgaXMgY29tbW9uIHByYWN0aWNlIGluIGFjYWRlbWljIGxpdGVyYXR1cmUsIHRoaXMgcGFwZXIgaGFzIGFpbWVkIHRvIGRpc2VudGFuZ2xlIHRoZSBjb25jZXB0cywgdG8gYXNzZXNzIHRoZSB2YWxpZGl0eSBvZiB0aGUgY29sbGFwc2luZyBvZiB0aGVzZSB0d28gY29uY2VwdHMsIGFuZCB0byBzZXBhcmF0ZWx5IGFzc2VzIHRoZWlyIGVmZmVjdHMuIFRoaXMgc3ViamVjdHMgaGFzIHN1YnNlcXVlbnRseSBiZWVuIGFuYWx5c2VkIHVzaW5nIGEgd2Vic2NyYXBlZCBkYXRhc2V0IGNvdmVyaW5nIGZvdXIgZGlmZmVyZW50IER1dGNoIHNvY2lvbG9neSBkZXBhcnRtZW50cywgY29udGFpbmluZyB0d28gd2F2ZXMuIFRoZSBlZmZlY3RzIG9mIHJhY2UgYW5kIGV0aG5pY2l0eSBpbiBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzIHdlcmUgc3Vic2VxdWVudGx5IGFuYWx5c2VkIHVzaW5nIGEgdHdvLXByb25nZWQgYXBwcm9hY2gsIGVtcGxveWluZyBib3RoIGRlc2NyaXB0aXZlIGFuZCBleHBsYW5hdG9yeSBtZXRob2RzLiBUaGUgbGF0dGVyIG9mIHdoaWNoIHdhcyBkb25lIHRocm91Z2ggZXN0aW1hdGluZyBuZXR3b3JrIGV2b2x1dGlvbiB3aXRoIHRoZSBTdG9jaGFzdGljIEFjdG9yIE9yaWVudGVkIE1vZGVsIChTT0FNKSBhcyBmb3VuZCBpbiB0aGUgYFJTaWVuYWAgcGFja2FnZSAoUmlwbGV5IGV0IGFsLiwgMjAyNDsgU25pamRlcnMgZXQgYWwuLCAyMDI0KS4KCkZvbGxvd2luZyB0aGUgbGl0ZXJhdHVyZSBvbiBuZXR3b3JrIGRpZmZlcmVuY2VzIGJhc2VkIG9uIHJhY2UvZXRobmljaXR5LCB0aGUgZmlyc3QgaHlwb3RoZXNpcyBpbnZvbHZlZCBhc3Nlc3NpbmcgdGhlIGRpZmZlcmVuY2VzIGluIGRlZ3JlZSBmaXJzdCBiZXR3ZWVuIHdoaXRlIHBlb3BsZSBhbmQgcGVvcGxlIG9mIGNvbG91ciwgYW5kIHRoZW4gYmV0d2VlbiBEdXRjaCBwZW9wbGUgYW5kIG5vbi1EdXRjaCBwZW9wbGUuIFRoZSByZXN1bHRzIGRlbW9uc3RyYXRlZCB0aGF0IGEgc3Vic3RhbnRpYWwgZGlmZmVyZW5jZSBpbiBkZWdyZWUgZXhpc3RzIGJldHdlZW4gdGhlIG1pbm9yaXR5IGdyb3VwIGFuZCB0aGUgbWFqb3JpdHkgZ3JvdXAgYm90aCBvbiB0aGUgbGV2ZWwgb2YgcmFjZSwgYXMgd2VsbCBhcyBvbiB0aGUgbGV2ZWwgb2YgZXRobmljaXR5LiBXaGF0IHN0b29kIG91dCwgaG93ZXZlciwgd2FzIHRoYXQgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgYXZlcmFnZSBkZWdyZWUgb2Ygd2hpdGUgcGVvcGxlIGFuZCBwZW9wbGUgb2YgY29sb3VyIHdhcyBtdWNoIGJpZ2dlciB0aGFuIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gRHV0Y2ggcGVvcGxlLCBhbmQgbm9uLUR1dGNoIHBlb3BsZS4gVGhlcmUgYXJlIHNldmVyYWwgcmVhc29ucyB3aHkgdGhpcyBtaWdodCBvY2N1ciwgYW5kIGl0IGlzIG5vdCBhZ2FpbnN0IGV4cGVjdGF0aW9ucyBleGFjdGx5LiBPbmUgcG9zc2liaWxpdHkgaXMgc2ltcGx5IHRoYXQgc29tZSBldGhuaWMgbWlub3JpdGllcyBhcmUgbm90IHZpZXdlZCBhbmQgdHJlYXRlZCBhcyB0b28gZGlzc2ltaWxhciBmcm9tIER1dGNoIHBlb3BsZSwgd2hpbGUgbW9zdCDigJMgaWYgbm90IGFsbCDigJMgcGVvcGxlIG9mIGNvbG91ciBhcmUgZGlzdGluY3RseSAnb3RoZXInIGluIHRoaXMgd2F5LiBJbiB0aGUgaW50cm9kdWN0aW9uLCBJIG5vdGVkIGhvdyByZWxhdGlvbmFsaXR5IGlzIGFuIGluY3JlZGlibHkgaW1wb3J0YW50IGNvbmNlcHQgaW4gdW5kZXJzdGFuZGluZyB0aGUgZXhwZXJpZW5jZSBvZiBtaW5vcml0aWVzIGluIHdoaXRlIOKAkyBvciBEdXRjaCDigJMgZG9taW5hdGVkIGZpZWxkcy4gRXhwYW5kaW5nIG9uIHRoYXQsIGl0IGlzIGltcG9ydGFudCB0byByZW1lbWJlciB0aGF0IGV0aG5pYyBhbmQgcmVsYXRpb25hbCBpZGVudGl0aWVzIGFyZSBpbmhlcmVudGx5IHJlbGF0aW9uYWwsIGFsd2F5cyBmb3JtZWQsIGNvbnN0cnVjdGVkLCBhbmQgbWFpbnRhaW5lZCAnaW4gcmVsYXRpb24nIHRvIG90aGVycyAoTW9saW5hLCAyMDE4KS4gQXBwbGllZCB0byB0aGUgYWNhZGVtaWMgY29udGV4dCwgd2hpY2ggaXMgc3RpbGwgbW9zdGx5IHdoaXRlLCBpdCBtaWdodCBiZSBlYXNpZXIgdG8gdW5kZXJzdGFuZCBob3cgc29tZSBpZGVudGl0aWVzIGhhdmUgYmVjb21lIG1vcmUgaW50ZWdyYXRlZCBhbmQgbm9ybWFsaXNlZCB0aGFuIG90aGVycyDigJMgdGhlaXIgcmVsYXRpb24gdG8gb3RoZXJzIGJlaW5nIG5vdCBhcyAndGhlIG90aGVyJywgYnV0IGFzIHNvbWVvbmUgbW9yZSBzaW1pbGFyLiBUaGlzIGNhbiBiZSBhcHBsaWVkIHRvIHRoZSBiaWdnZXIgZGlmZmVyZW5jZSBpbiBkZWdyZWVzIGZvciByYWNlLCBjb21wYXJlZCB0byBldGhuaWNpdHkuIEl0IG1pZ2h0IHNpbXBseSBiZSB0aGUgY2FzZSB0aGF0ICd3aGl0ZSBmb3JlaWduZXJzJyBhcmUgbW9yZSBlYXNpbHkgYWNjZXB0ZWQgdGhhbiBwZW9wbGUgb2YgY29sb3VyLiBUaG91Z2gsIHRvIGZ1bGx5IGFzc2VzcyB0aGlzLCBmdXJ0aGVyIHJlc2VhcmNoIGlzIG5lZWRlZC4KClRoZSBzZWNvbmQgcGFydCBvZiB0aGUgZGVzY3JpcHRpdmUgYW5hbHlzaXMsIHdoaWNoIGZvY3Vzc2VkIG9uIGRpZmZlcmVuY2VzIGluICpoKi1pbmRleCBhY3Jvc3MgcmFjaWFsIGFuZCBldGhuaWMgbWlub3JpdHkgYW5kIG1ham9yaXR5IGdyb3Vwcywgd2FzIHBlcmZvcm1lZCBpbiBvcmRlciB0byBhc3Nlc3Mgd2hldGhlciB0aGVyZSB3YXMgYWxzbyBhIGRpZmZlcmVuY2UgaW4gcHJlc3RpZ2UgYmV0d2VlbiB0aGVzZSBncm91cHMuIEJlY2F1c2Ugd2hpbGUgaXQgaXMgdHJ1ZSB0aGF0IGRlZ3JlZSBpbmRpY2F0ZXMgb25lJ3MgY29ubmVjdGlvbnMgaW4gYSBjby1hdXRob3JzaGlwIG5ldHdvcmssIGl0IGlzIGFsc28gcG9zc2libGUgdG8gcmFyZWx5IGNvbGxhYm9yYXRlIHdpdGggb3RoZXJzLCBvciB0byBvbmx5IGNvbGxhYm9yYXRlIHdpdGggcGVvcGxlIHdobyBoYXBwZW4gdG8gbm90IGJlIGluY2x1ZGVkIGluIHRoaXMgbmV0d29yay4gQXMgc3VjaCwgSSBwZXJmb3JtZWQgYSB0d28tc2FtcGxlIHQtdGVzdCBvbiB0aGUgKmgqLWluZGljZXMgZm9yIHJhY2UsIGFuZCBldGhuaWNpdHkuIFNpbWlsYXJseSB0byB0aGUgcmVzdWx0cyBvbiBkaWZmZXJlbmNlcyBpbiBkZWdyZWUsIHRoZSAqaCotaW5kaWNlcyBmb3IgYm90aCB3aGl0ZSBwZW9wbGUgYW5kIER1dGNoIHBlb3BsZSB3ZXJlIGhpZ2hlciB0aGFuIHRoZWlyIHJlc3BlY3RpdmUgY291bnRlcnBhcnRzIOKAkyB3aXRoIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gRHV0Y2ggcGVvcGxlIGFuZCBub24tRHV0Y2ggcGVvcGxlLCBhZ2FpbiwgYmVpbmcgc21hbGxlciB0aGFuIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gd2hpdGUgcGVvcGxlIGFuZCBwZW9wbGUgb2YgY29sb3VyLiBTaW1pbGFybHkgdG8gdGhlIHByZXZpb3VzIGh5cG90aGVzaXMsIEkgYWdhaW4gYmVsaWV2ZSB0aGF0IHRoaXMgbWlnaHQgaGF2ZSBzb21ldGhpbmcgdG8gZG8gd2l0aCB0aGUgbGFyZ2VyIG51bWJlciBvZiBkaWZmZXJlbnQgcmVsYXRpb25hbGx5IGNsb3NlciAnY2F0ZWdvcmllcycgd2l0aGluIGV0aG5pY2l0eSwgdGhhbiBpbiByYWNlLiBUaG91Z2gsIGFnYWluLCBtb3JlIHJlc2VhcmNoIG91Z2h0IHRvIGJlIGRvbmUgaW4gb3JkZXIgdG8gYXNzZXNzIHRoaXMuCgpDb250cmFyeSB0byB0aGVzZSBkZXNjcmlwdGl2ZSBoeXBvdGhlc2VzLCBuZWl0aGVyIG9mIHRoZSBleHBsYW5hdG9yeSBoeXBvdGhlc2VzIHdlcmUgc3VwcG9ydGVkIGJ5IHRoZSBkYXRhLiBObyBzdXBwb3J0aXZlIGV2aWRlbmNlIGZvciB0aGUgc2Vjb25kIGh5cG90aGVzaXMgd2FzIG9ic2VydmVkLCBiZWNhdXNlIHRoZSBsYWNrIG9mIG9ic2VydmVkIHJhY2lhbCBhbmQgZXRobmljIGhvbW9waGlseSBvYnNlcnZlZCBpbiB0aGUgZGF0YSwgZHVlIHRvIHRoZSBlc3RpbWF0ZXMgbm90IGF0dGFpbmluZyBhIHNpZ25pZmljYW50IHN0YXR1cy4gVGhpcyBpcyBxdWl0ZSBsb2dpY2FsLCBob3dldmVyLCBkdWUgdG8gdGhlIHNpemUgb2YgdGhlIHNhbXBsZSwgYW5kIGVzcGVjaWFsbHkgdGhlIG51bWJlciBvZiBwZW9wbGUgb2YgY29sb3VyIGluIHRoaXMgc2FtcGxlLiBUaGlzIHBvd2VyIHByb2JsZW0gZnVydGhlcm1vcmUgbGVhZCB0byB0aGVzZSBwcm9ibGVtcyBmb3IgdGhlIGVzdGltYXRpb24gZHVlIHRvIHJlbGF0aXZlbHkgbG93IG51bWJlciBvZiBkZWdyZWVzIGZvciBib3RoIHBlb3BsZSBvZiBjb2xvdXIsIGFuZCBub24tRHV0Y2ggcGVvcGxlLiBUaGlzIG1lYW50IHRoYXQgdGhlcmUgd2FzIGxpdHRsZSB0byBubyBkYXRhIHRvIGVzdGltYXRlIHRoZSBoeXBvdGhlc2lzIHN1ZmZpY2llbnRseS4gQXMgYSByZXN1bHQsIHRoZXJlIHdhcyBzaW1wbHkgbm90IGVub3VnaCBwb3dlciB0byBlc3RpbWF0ZSBhIGhvbW9waGlseSBwYXJhbWV0ZXIuCgpUaGUgbGFzdCBtb2RlbHMgcmFuIGNvbmNlcm5lZCB0aGUgcXVlc3Rpb24gYXQgdGhlIGNvcmUgb2YgdGhpcyBwYXBlciwgbmFtZWx5IHdoZXRoZXIgdGhlIGVmZmVjdCBvZiBvbmUncyBwcmVzdGlnZSBkaWZmZXJlZCBiZXR3ZWVuIHdoaXRlIHBlb3BsZSwgYW5kIHBlb3BsZSBvZiBjb2xvdXIsIGFuZCBiZXR3ZWVuIER1dGNoIGFuZCBub24tRHV0Y2ggcGVvcGxlLiBXaGlsZSB0aGUgZGF0YSBkaWQgZGVtb25zdHJhdGUgYSBzaWduaWZpY2FudCBkaWZmZXJlbmNlIGZvciBib3RoIGNhdGVnb3JpZXMsIHRoaXMgZGlmZmVyZW5jZSBjb250cmFkaWN0ZWQgdGhlIGh5cG90aGVzaXNlZCBlZmZlY3RzLiBJbnN0ZWFkIG9mIHdoaXRlIHBlb3BsZSBiZW5lZml0aW5nIG1vcmUgZnJvbSB0aGVpciBzdGF0dXMsIHRoZXkgYXBwZWFyZWQgdG8gYmVuZWZpdCBsZXNzLiBCb3RoIHdoaXRlIHBlb3BsZSwgYW5kIER1dGNoIHBlb3BsZSwgYXBwZWFyIHRvIGJlY29tZSBsZXNzIGxpa2VseSB0byBjb2xsYWJvcmF0ZSBhcyB0aGVpciBwcmVzdGlnZSBncm93cy4gSSBzdXNwZWN0IHRoYXQgdGhpcyByZXN1bHQsIGFuZCBpdHMgY29uZmxpY3Qgd2l0aCBteSBpbml0aWFsIGV4cGVjdGF0aW9ucywgaXMgaW4gbW9zdCBwYXJ0IGNhdXNlZCBieSB0aGUgdW5leHBlY3RlZCBlZmZlY3Qgb2YgcHJlc3RpZ2UgaW4gaXRzZWxmLiBXaGlsZSBJIGhhZCBlc3RpbWF0ZWQgb25lJ3MgbGV2ZWwgb2YgcHJlc3RpZ2UgdG8gcG9zaXRpdmVseSBhZmZlY3QgdGhlIGxpa2VsaWhvb2Qgb2YgY29sbGFib3JhdGluZyBvbiBtb3JlIHBhcGVycywgdGhlIG1vZGVscyBlc3RpbWF0ZWQgc2VlbSB0byBpbmRpY2F0ZSB0aGUgb3Bwb3NpdGUuIEFzIGEgcmVzdWx0LCB0aGUgaW50ZXJhY3Rpb24gaXMgdGhlcmVmb3JlIGFsc28gbmVnYXRpdmUsIGFuZCB0aHVzICdwb3NpdGl2ZScgZm9yIG1pbm9yaXR5IGdyb3Vwcy4gQSBwb3NzaWJsZSB3YXkgdG8gcmUtZXN0aW1hdGUgdGhpcywgd291bGQgYmUgdG8gc3dpdGNoIHRoZSBtZWFuaW5nIG9mIHRoZSB2YWx1ZXMgb2YgJ3JhY2UnIGFuZCAnZXRobmljaXR5JyBhcm91bmQsIGhhdmluZyAwIGJlIHdoaXRlL0R1dGNoLCBhbmQgMSBiZSBwZXJzb24gb2YgY29sb3VyL25vdCBEdXRjaC4KCkJleW9uZCB0aGlzLCBhIGZ1cnRoZXIgY29uY2x1c2lvbiB0aGF0IGNhbiBiZSBkcmF3biBmcm9tIHRoZXNlIG1vZGVscyBpcyB0aGF0IHRoZXJlIGlzIGluZGVlZCBhIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgZWZmZWN0cyBvZiByYWNlLCBhbmQgZXRobmljaXR5IOKAkyBhdCBsZWFzdCwgaW4gdGhpcyBjb250ZXh0LiBCZWNhdXNlIGJlc2lkZXMgdGhlIGFmb3JlbWVudGlvbmVkIGRpZmZlcmVuY2VzIG9ic2VydmVkIGluIHRoZSBkZXNjcmlwdGl2ZSBhbmFseXNpcywgc2ltaWxhciBwYXR0ZXJucyBlbWVyZ2VkIGluIHRoZSBleHBsb3JhdG9yeSBhbmFseXNpcy4gVGhlICdiZW5lZml0JyBvZiBiZWluZyB3aGl0ZSBpbiBhIG5ldHdvcmsgd2FzIGNvbnNpc3RlbnRseSBsYXJnZXIgdGhhbiBiZWluZyBEdXRjaC4gSW4gb3RoZXIgd29yZHMsIHRoZSBkZWdyZWUgdG8gd2hpY2ggYSB3aGl0ZSBhY2FkZW1pYyB3aWxsIGNvbGxhYm9yYXRlIG1vcmUgdGhhbiBhIHBlcnNvbiBvZiBjb2xvdXIsIGlzIGxhcmdlciB0aGFuIHRoYXQgb2YgYSBEdXRjaCBwZXJzb24gY29tcGFyZWQgdG8gYSBub24tRHV0Y2ggcGVyc29uLiBUaGVzZSBmaW5kaW5ncyBhcmUgaW4gbGluZSB3aXRoIHRoZSBhZm9yZW1lbnRpb25lZCByZWxhdGlvbmFsaXR5IG9mIGlkZW50aXR5LCBhbmQgbWlnaHQgcG9pbnQgdG93YXJkcyB0aGUgbmVlZCBmb3IgbW9yZSByZXNlYXJjaCBpbnRvIGRpZmZlcmVuY2VzIGJldHdlZW4gZGlmZmVyZW50IGV0aG5pYyBncm91cHMsIGFuZCBpbnRlcnNlY3Rpb25zIGJldHdlZW4gcmFjZSBhbmQgZXRobmljaXR5LgoKRnVydGhlciByZXNlYXJjaCBvbiB0aGUgdG9waWMgY291bGQgYmVuZWZpdCBmcm9tIHRha2luZyBhIHNpbWlsYXIgYXBwcm9hY2gsIHRvIGEgbGFyZ2VyIHNhbXBsZSwgd2hpY2ggbWlnaHQgYmUgYmVuZWZpY2lhbCBmb3IgdGhlIGludmVzdGlnYXRpb24gb2YgaG9tb3BoaWx5IGluIHRoZSBuZXR3b3JrLiBBIGxhcmdlciBzYW1wbGUgY291bGQgYWxzbyBiZSB1c2VkIHRvIGZ1cnRoZXIgZGlzZW50YW5nbGUgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuIHJhY2UgYW5kIGV0aG5pY2l0eS4gQXMgZGlzY3Vzc2VkIGhlcmUsIHRoZSBkaWZmZXJlbmNlcyBiZXR3ZWVuIHRoZXNlIHR3byBncm91cHMgcG9pbnQgdG93YXJkcyBzb21ldGhpbmcgdGhhdCBjb3VsZCBub3QgYmUgbWVhc3VyZWQgaGVyZSwgc3VjaCBhcyBwZW9wbGUgcmVsYXRpbmcgZGlmZmVyZW50bHkgdG8gZGlmZmVyZW50IGV0aG5pYyBpZGVudGl0aWVzLiBIYXZpbmcgYSBsYXJnZXIgc2FtcGxlIGFsbG93cyBvbmUgdG8gZnVydGhlciBsb29rIGludG8gdGhlc2UgZGlmZmVyZW5jZXMgYmV0d2VlbiBldGhuaWMgZ3JvdXBzLCB0aG91Z2gga2VlcGluZyBpbiBtaW5kIHRoYXQgYW4gaW50ZXJzZWN0aW9uIGJldHdlZW4gZXRobmljaXR5IGFuZCByYWNlIG1pZ2h0IGFsc28gYmUgYSBwb3NzaWJsZSBlZmZlY3QuIEluIGxpbmUgd2l0aCB0aGlzIGludGVyc2VjdGlvbiwgdGhlc2UgZGF0YSBjb3VsZCBhbHNvIGJlIHVzZWQgdG8gaW52ZXN0aWdhdGUgaW50ZXJzZWN0aW9ucyBiZXR3ZWVuIGdlbmRlciBhbmQgcmFjZSwgb3IgZXRobmljaXR5IOKAkyBhbmQgc2VlIGlmIHRoZXJlIGFyZSBhbnkgZGlzdGluY3Rpb25zIGJldHdlZW4gdGhlIGxhdHRlciB0d28gZ3JvdXBzIHRvIGJlIGZvdW5kIHRoZXJlLgoKQWx0b2dldGhlciwgdGhpcyBwYXBlciB0aHVzIGZvdW5kIHRoYXQgd2hpbGUgbmV0d29ya3MgYXJlIGluZGVlZCBzZWdyZWdhdGVkIOKAkyBib3RoIHdoZW4gaXQgY29tZXMgdG8gcmFjZSwgYXMgd2VsbCBhcyB3aGVuIGl0IGNvbWVzIHRvIGV0aG5pY2l0eSDigJMgYW5kIGRlbW9uc3RyYXRlZCB0aGUgaW1wb3J0YW5jZSBvZiByZWxhdGlvbnNoaXBzIHdoZW4gaXQgY29tZXMgdG8gaW52ZXN0aWdhdGluZyBpbmVxdWFsaXR5LiBBcyBzdWNoLCBjb25jbHVkaW5nIHRoYXQgdG8gdHJ1bHkgdW5kZXJzdGFuZCBkaWZmZXJlbmNlcywgd2hhdCB0aGV5IGFyZSBhbmQgaG93IHRoZXkgYXJlIHBlcmZvcm1lZCwgcmVsYXRpb25zaGlwcyBhcmUgb2YgdXRtb3N0IGltcG9ydGFuY2UuCg==</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("final.concl.disc.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

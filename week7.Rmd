@@ -1,0 +1,389 @@
+---
+title: "week 7"
+output: html_document
+date: "2024-11-03"
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  eval = F
+)
+```
+# Get the Basics
+
+```{r packages, results = "hide", message = F, warning=F}
+require(tidyverse)
+require(igraph)
+require(shiny)
+require(RSiena)
+require(rmdformats)
+require(prettydoc)
+require(hrbrthemes)
+require(tint)
+require(tufte)
+require(psych)
+library(data.table)  
+library(forcats)
+```
+
+```{r user defined functions,results = "hide", message=F, warning=F}
+testall <- function(ans) {
+    for (i in which(ans$test)) {
+        sct <- score.Test(ans, i)
+        cat(ans$requestedEffects$effectName[i], "\n")
+        print(sct)
+    }
+    invisible(score.Test(ans))
+}
+```
+
+```{r dataset, results = "hide", warning=F, message=FALSE}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds") #matrix for wave 1 (from ... to ...)
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds") #matrix for wave 2 (from ... to ... )
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE) #demographic characteristics of actors in matrix
+net_soc_array <- read_rds("datasets_final/net_soc_array_first_auth.rds") #the array of it all
+```
+
+# Variables 
+```{r variables definition, results = "hide"}
+#dependent variable 
+net <- sienaDependent(net_soc_array)
+
+#independent variable 
+gender_covar <- coCovar(demographics_hannah$perc_female)
+country_covar <- coCovar(demographics_hannah$born_in_binary)
+white_pass_covar <- coCovar(demographics_hannah$white_or_not)
+h_index_covar <- coCovar(demographics_hannah$h_index)
+interaction_race_covar <- coCovar(demographics_hannah$int_h_race)
+interaction_ethnicity_covar <- coCovar(demographics_hannah$int_h_eth)
+```
+
+# Effect Structure 
+
+```{r good data, results = "hide"}
+the_data <- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, h_index_covar, interaction_race_covar, interaction_ethnicity_covar)
+myeff_1 <- getEffects(the_data)
+view(myeff_1)
+```
+
+# Models Basic
+## 1
+```{r where to put it, include=F, echo=F}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+print01Report(the_data, modelname = "./results/m1_race")
+```
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+```
+
+```{r results alogoritm, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+#write_rds(mod_1_effects, "models/m1_race_empty.rds")
+```
+
+```{r}
+mod_1_effects <- read_rds("models/m1_race_empty.rds")
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE)
+#write_rds(ansM1, "models/m1_race_empty.rds")
+model <- read_rds("models/m1_race_empty.rds") # load previously estimated model 
+model # view the model 
+```
+
+## 2
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+```
+
+```{r results alogoritm 2, echo = F, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) #create the model 
+#write_rds(mod_1_effects, "models/m2_race_str.rds") # save the model 
+mod_1_effects <- read_rds("models/m2_race_str.rds")
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m2_race_str.rds") # save it 
+model <- read_rds("models/m2_race_str.rds") # load previously estimated model 
+model # view the model 
+```
+
+Both density and reciprocity retain their significance, and their respective positive and negative sign. For the new effects, both transTies and inPopSqrt demonstrate the expected positive and significant effect. transTrip, however, fails to attain signficant status – with a standard error that is more than 1.5 times as high as the parameter estimate.
+
+# Race  Models 
+## 3
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+```
+
+```{r results alogoritm 3, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+mod_1_effects 
+#write_rds(mod_1_effects, "models/m3_race_par.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m3_race_par.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m3_race_par.rds") # save it 
+model <- read_rds("models/m3_race_par.rds") # load previously estimated model 
+model # view the model 
+```
+## 4
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+```
+
+```{r results alogoritm 4, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+mod_1_effects 
+#write_rds(mod_1_effects, "models/m4_race_strpar.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m4_race_strpar.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m4_race_strpar.rds") # save it 
+model <- read_rds("models/m4_race_strpar.rds") # load previously estimated model 
+model # view the model 
+```
+
+## 5
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+```
+
+```{r results alogoritm 5, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m5_race_cntrl.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m5_race_cntrl.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m5_race_cntrl.rds") # save it 
+model <- read_rds("models/m5_race_cntrl.rds") # load the re-estimated model 
+model # view the model 
+```
+
+This model indicates that – besides all other parameters staying similar, and the convergence rate also being quite the same – both the ego and the alter effect of h-index are significant, with the ego effect being negative, and the alter effect being positive. This indicates that if one is tied to more actors with a high prestige, one is more likely to create new ties compared to when one is *not* in contact with higher prestige actors. The negative effect of the ego effect, furthermore, means that higher h-values indicate collaborating less (?????).
+
+## 6.1
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, transTies)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, egoX, altX, sameX, interaction1="interaction_race_covar")
+
+```
+
+```{r results alogoritm 100, echo = F, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m6a_race_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6a_race_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m6a_race_interact.rds") # save it 
+model <- read_rds("models/m6a_race_interact.rds") # load the re-estimated model 
+model # view the model 
+```
+## 6.2
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, transTies)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 ="h_index_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, sameX, interaction1="interaction_race_covar")
+
+```
+
+```{r results alogoritm 1001, echo = F, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m6_race_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6_race_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m6_race_interact.rds") # save it 
+model <- read_rds("models/m6_race_interact.rds") # load the re-estimated model 
+model # view the model 
+```
+
+## 6.3
+```{r}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, transTies)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, unequal, interaction1 ="h_index_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+#myeff_1 <- includeInteraction(myeff_1, altX, altX, interaction1=c("h_index_covar", "white_pass_covar"))
+myeff_1 <- includeInteraction(myeff_1, egoX, altX, interaction1=c("h_index_covar", "white_pass_covar"))
+
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) 
+#write_rds(mod_1_effects, "models/m6.3_race_interact.rds") 
+#mod_1_effects <- read_rds("models/m6.3_race_interact.rds") 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+ansM1
+#write_rds(ansM1, "models/m6_race_interact.rds") # save it 
+#model <- read_rds("models/m6.3_race_interact.rds") # load the re-estimated model 
+#model # view the model 
+```
+# GOF Race with Interaction
+
+{r GOF functions Model 1, message = F, warning=F, results = "hide"}
+mod_1_effects <- read_rds("models/m6_race_interact.rds")
+gofi0_1 <- sienaGOF(mod_1_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
+
+{r GOF Graphs Model 1}
+plot(gofi0_1, main = "")
+
+# Ethnicity
+
+## 1
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
+```
+
+```{r results alogoritm 8, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+write_rds(mod_1_effects, "models/m3_eth_par.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m3_eth_par.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+write_rds(ansM1, "models/m3_eth_par.rds") # save it 
+model <- read_rds("models/m3_eth_par.rds") # load the re-estimated model 
+model # view the model 
+```
+
+## 2
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
+```
+
+```{r results alogoritm 9, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+write_rds(mod_1_effects, "models/m4_eth_both.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m4_eth_both.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+write_rds(ansM1, "models/m4_eth_both.rds") # save it 
+model <- read_rds("models/m4_eth_both.rds") # load the re-estimated model 
+model # view the model 
+```
+
+## 3
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+```
+
+```{r results alogoritm 10, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+write_rds(mod_1_effects, "models/m5_eth_cntrl.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m5_eth_cntrl.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+write_rds(ansM1, "models/m5_eth_cntrl.rds") # save it 
+model <- read_rds("models/m5_eth_cntrl.rds") # load the re-estimated model 
+model # view the model 
+
+```
+
+## 4.1
+
+```{r interaction ethnicity 76, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, egoX, altX, sameX, interaction1="interaction_ethnicity_covar")
+```
+
+```{r results alogoritm 101hgf, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+write_rds(mod_1_effects, "models/m6a_eth_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6a_eth_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+write_rds(ansM1, "models/m6a_eth_interact.rds") # save it 
+model <- read_rds("models/m6a_eth_interact.rds") # load the re-estimated model 
+model # view the model 
+```
+
+## 4.2
+```{r interaction ethnicitykgyfil, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, sameX, interaction1="interaction_ethnicity_covar")
+```
+
+```{r results alogoritm 101gggg, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+write_rds(mod_1_effects, "models/m6_eth_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6_eth_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+write_rds(ansM1, "models/m6_eth_interact.rds") # save it 
+model <- read_rds("models/m6_eth_interact.rds") # load the re-estimated model 
+model # view the model 
+```
+
+
+
+
+---
+## Model 6: Interaction
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, transTies)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, egoX, altX, sameX, interaction1="interaction_race_covar")
+
+```
+
+```{r resultjjjjjs alogoritm 100, echo = F, results = "hide"}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m6a_race_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6a_race_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m6a_race_interact.rds") # save it 
+model <- read_rds("models/m6a_race_interact.rds") # load the re-estimated model 
+model # view the model 
+```
+
+Similarly to before, both the ego and the alter effect are significant, with the interaction effects having similar signs to previously. ... higher convergence ratio tho

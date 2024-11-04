@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-10-24" />
+
+<title>Descriptives</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workshop Content
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Week1.html">Week 1</a>
+    </li>
+    <li>
+      <a href="Week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Week3Webscraping.html">Week 3</a>
+    </li>
+    <li>
+      <a href="Graphs2.html">Week 4</a>
+    </li>
+    <li>
+      <a href="visualise.og.data.html">Week 5</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+    <li>
+      <a href="week7.html">Week 7</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dataprep
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="dataprep.final.html">The Data</a>
+    </li>
+    <li>
+      <a href="making.gender.html">Making Gender</a>
+    </li>
+    <li>
+      <a href="making.ethnicity.html">Making Ethnicity</a>
+    </li>
+    <li>
+      <a href="h.index.html">h-Index</a>
+    </li>
+    <li>
+      <a href="full.and.final.data.html">Final Dataset</a>
+    </li>
+    <li>
+      <a href="all.descriptives.html">Descriptives</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    First Drafts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="JournalWeekTwo.html">Introduction First Draft</a>
+    </li>
+    <li>
+      <a href="IntroRSQ.html">Introduction, Revised</a>
+    </li>
+    <li>
+      <a href="outline.final.paper.html">Preliminary Outline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final 'Paper'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="final.intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="final.tk.html">Theoretical Framework</a>
+    </li>
+    <li>
+      <a href="final.datamethods.html">Data and Methods, Data</a>
+    </li>
+    <li>
+      <a href="final.descriptives.for.paper.html">Data and Methods, Descriptives</a>
+    </li>
+    <li>
+      <a href="descriptive.rsq.answer.html">Analysis et al. - Descriptive</a>
+    </li>
+    <li>
+      <a href="explanatory.rsq.answer.html">Analysis et al. - RSiena</a>
+    </li>
+    <li>
+      <a href="final.concl.disc.html">Conclusions</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Descriptives</h1>
+<h4 class="date">2024-10-24</h4>
+
+</div>
+
+
+<div id="ready-all-the-stuff" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Ready All the
+Stuff</h1>
+<p>… and empty workspace,</p>
+<pre class="r"><code>rm(list = ls())</code></pre>
+<p>… user defined functions,</p>
+<pre class="r"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave &lt;- function(x, file = NULL, location = &quot;./data/processed/&quot;) {
+    ifelse(!dir.exists(&quot;data&quot;), dir.create(&quot;data&quot;), FALSE)
+    ifelse(!dir.exists(&quot;data/processed&quot;), dir.create(&quot;data/processed&quot;), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename &lt;- substr(gsub(&quot;[:-]&quot;, &quot;&quot;, Sys.time()), 1, 8)
+    totalname &lt;- paste(location, file, &quot;_&quot;, datename, &quot;.rda&quot;, sep = &quot;&quot;)
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload &lt;- function(filename) {
+    load(filename)
+    get(ls()[ls() != &quot;filename&quot;])
+}
+
+fshowdf &lt;- function(x, ...) {
+    knitr::kable(x, digits = 2, &quot;html&quot;, ...) %&gt;%
+        kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+        kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)
+}
+
+fMoran.I &lt;- function(x, weight, scaled = FALSE, na.rm = FALSE, alternative = &quot;two.sided&quot;, rowstandardize = TRUE) {
+  if (rowstandardize) {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop(&quot;&#39;weight&#39; must be a square matrix&quot;)
+    n &lt;- length(x)
+    if (dim(weight)[1] != n)
+      stop(&quot;&#39;weight&#39; must have as many rows as observations in &#39;x&#39;&quot;)
+    ei &lt;- -1/(n - 1)
+    nas &lt;- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x &lt;- x[!nas]
+        n &lt;- length(x)
+        weight &lt;- weight[!nas, !nas]
+      } else {
+        warning(&quot;&#39;x&#39; has missing values: maybe you wanted to set na.rm = TRUE?&quot;)
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    ROWSUM &lt;- rowSums(weight)
+    ROWSUM[ROWSUM == 0] &lt;- 1
+    weight &lt;- weight/ROWSUM
+    s &lt;- sum(weight)
+    m &lt;- mean(x)
+    y &lt;- x - m
+    cv &lt;- sum(weight * y %o% y)
+    v &lt;- sum(y^2)
+    obs &lt;- (n/s) * (cv/v)
+    if (scaled) {
+      i.max &lt;- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs &lt;- obs/i.max
+    }
+    S1 &lt;- 0.5 * sum((weight + t(weight))^2)
+    S2 &lt;- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq &lt;- s^2
+    k &lt;- (sum(y^4)/n)/(v/n)^2
+    sdi &lt;- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative &lt;- match.arg(alternative, c(&quot;two.sided&quot;, &quot;less&quot;, &quot;greater&quot;))
+    pv &lt;- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == &quot;two.sided&quot;)
+      pv &lt;- if (obs &lt;= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == &quot;greater&quot;)
+      pv &lt;- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  } else {
+    if (dim(weight)[1] != dim(weight)[2])
+      stop(&quot;&#39;weight&#39; must be a square matrix&quot;)
+    n &lt;- length(x)
+    if (dim(weight)[1] != n)
+      stop(&quot;&#39;weight&#39; must have as many rows as observations in &#39;x&#39;&quot;)
+    ei &lt;- -1/(n - 1)
+    nas &lt;- is.na(x)
+    if (any(nas)) {
+      if (na.rm) {
+        x &lt;- x[!nas]
+        n &lt;- length(x)
+        weight &lt;- weight[!nas, !nas]
+      } else {
+        warning(&quot;&#39;x&#39; has missing values: maybe you wanted to set na.rm = TRUE?&quot;)
+        return(list(observed = NA, expected = ei, sd = NA, p.value = NA))
+      }
+    }
+    # ROWSUM &lt;- rowSums(weight) ROWSUM[ROWSUM == 0] &lt;- 1 weight &lt;- weight/ROWSUM
+    s &lt;- sum(weight)
+    m &lt;- mean(x)
+    y &lt;- x - m
+    cv &lt;- sum(weight * y %o% y)
+    v &lt;- sum(y^2)
+    obs &lt;- (n/s) * (cv/v)
+    if (scaled) {
+      i.max &lt;- (n/s) * (sd(rowSums(weight) * y)/sqrt(v/(n - 1)))
+      obs &lt;- obs/i.max
+    }
+    S1 &lt;- 0.5 * sum((weight + t(weight))^2)
+    S2 &lt;- sum((apply(weight, 1, sum) + apply(weight, 2, sum))^2)
+    s.sq &lt;- s^2
+    k &lt;- (sum(y^4)/n)/(v/n)^2
+    sdi &lt;- sqrt((n * ((n^2 - 3 * n + 3) * S1 - n * S2 + 3 * s.sq) - k * (n * (n - 1) * S1 - 2 * n *
+                                                                           S2 + 6 * s.sq))/((n - 1) * (n - 2) * (n - 3) * s.sq) - 1/((n - 1)^2))
+    alternative &lt;- match.arg(alternative, c(&quot;two.sided&quot;, &quot;less&quot;, &quot;greater&quot;))
+    pv &lt;- pnorm(obs, mean = ei, sd = sdi)
+    if (alternative == &quot;two.sided&quot;)
+      pv &lt;- if (obs &lt;= ei)
+        2 * pv else 2 * (1 - pv)
+    if (alternative == &quot;greater&quot;)
+      pv &lt;- 1 - pv
+    list(observed = obs, expected = ei, sd = sdi, p.value = pv)
+  }
+  
+  
+}</code></pre>
+<p>… packages,</p>
+<pre class="r"><code>require(tidyverse)
+require(RsienaTwoStep)
+require(RSiena)
+require(igraph)
+require(poweRlaw)
+require(ggraph)
+require(knitr)</code></pre>
+</div>
+<div id="descriptive-analysis" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Descriptive
+Analysis</h1>
+<p>In this chapter, I will first give a quick overview of the
+collaboration network trough a visual representation of the relevant
+data. This will be followed by some simple network descriptives, before
+continuing onto an analysis of degrees and prestige segreagtion in
+networks.</p>
+<div id="visual-network-descriptives" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> Visual Network
+Descriptives</h2>
+<p>The following graphs represent the racial and ethnic segregation of
+the network, at wave 1 and 2 respectively. For a better layout of the
+graph, the isolates have been removed, and therefore only those actors
+who collaborated are included in the graphs.</p>
+<div id="race" class="section level3" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Race</h3>
+<p>In this network, the colour of the nodes represents an author’s
+prestige – the bluer, the higher their h-index. The shape of the nodes,
+furthermore, represents their race. Triangles refer to white people, and
+circles to PoC. Lastly, the size of this shape is determined by the
+number of degrees – referring, in this case, to the number of
+co-authorship relations this author has established within this time
+period.</p>
+<pre class="r"><code>wave_1 &lt;- graph_from_adjacency_matrix(wave_1)
+wave_2 &lt;- graph_from_adjacency_matrix(wave_2)
+
+indegree_w1 &lt;- igraph::degree(wave_1, mode = &quot;all&quot;)
+indegree_w2 &lt;- igraph::degree(wave_2, mode = &quot;all&quot;)
+
+# wave 1 
+demographics_hannah &lt;- demographics_hannah %&gt;%
+  mutate(h_index_2 = case_when(
+    h_index &gt;= 60 ~ 50,
+    TRUE ~ h_index
+  )) 
+view(demographics_hannah)
+# assign h-index to scholar
+V(wave_1)$h_index &lt;- demographics_hannah$h_index_2
+V(wave_1)$white_or_not &lt;- demographics_hannah$white_or_not
+V(wave_1)$born_in_binary &lt;- demographics_hannah$born_in_binary
+V(wave_1)$gender &lt;- ifelse(demographics_hannah$perc_female &gt;= .5, 1, 0)
+V(wave_1)$indegree &lt;- indegree_w1
+
+#remove isolates 
+noisolates_w1 &lt;- delete_vertices(wave_1, V(wave_1)[degree(wave_1) == 0])
+
+#set size of plot
+options(repr.plot.width = 25, repr.plot.height = 25)
+
+# wave 2 
+
+# assign h-index to scholar
+V(wave_2)$h_index &lt;- demographics_hannah$h_index_2
+V(wave_2)$white_or_not &lt;- demographics_hannah$white_or_not
+V(wave_2)$born_in_binary &lt;- demographics_hannah$born_in_binary
+V(wave_2)$gender &lt;- ifelse(demographics_hannah$perc_female &gt;= .5, 1, 0)
+V(wave_2)$indegree &lt;- indegree_w2
+
+#remove isolates
+noisolates_w2 &lt;- delete_vertices(wave_2, V(wave_2)[degree(wave_2) == 0])</code></pre>
+<p>The left graph represents the first wave, which ranges from 2015 to
+2018, and the graph on the right represents the second wave, which
+ranges from 2019 to 2023 .</p>
+<pre class="r"><code>#plot wave 1
+ggraph(noisolates_w1,
+       layout = &quot;fr&quot;) +
+  geom_edge_link(color = &quot;gray&quot;, width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(white_or_not))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
+  theme_void() 
+       
+#plot wave 2
+ggraph(noisolates_w2,
+       layout = &quot;fr&quot;) +
+  geom_edge_link(color = &quot;gray&quot;, width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape =  
+                        as.factor(white_or_not))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
+  theme_void()</code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-1-1.png" width="50%" /><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-1-2.png" width="50%" /></p>
+<p>When looking at this graph, several things become clear quite
+quickly. Firstly, that the network becomes quite a lot busier in the
+second wave. The reason for this is the method of data collection as
+mentioned earlier, and as such, not immediately relevant. What is
+relevant, however, is the fact that most of the shapes – in both
+networks – are triangles. While this overrepresentation of white people
+was already noted in the previous chapter, what can now also be seen, is
+that – especially in the first wave – very few circles are bigger than
+the smallest triangle. This means that for the poc in the network, their
+degrees are – on average – smaller than those of white people.
+Furthermore, as can be noted by the comparative overrepresentation of
+blue(er) triangles compared to red circles, poc are not only less likely
+to collaborate, but their <em>h</em>-indices are also, on average, much
+lower than those of white people.<br />
+</p>
+<p>While there are some changes between the waves in these respects –
+there are some circles that tend a bit more to purple than those in the
+first wave – the changes are quite small. Though no final conclusions
+can be reached here, it can be said that it is quite clear that people
+of colour are both underrepresented in academia, but also seem to
+collaborate less, and that their works are less well-known.</p>
+</div>
+<div id="ethnicity" class="section level3" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Ethnicity</h3>
+<p>For this network, everything is the same, except that instead of the
+shapes indicating the race of an author, they now indicate ethnicity,
+with triangles indicating that an author is Dutch, and circles
+indicating that an author is not.</p>
+<pre class="r"><code>#plot wave 1
+ggraph(noisolates_w1,
+       layout = &quot;fr&quot;) +
+  geom_edge_link(color = &quot;gray&quot;, width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(born_in_binary))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
+  theme_void() +
+  labs(title = &quot;Network Wave 1, no Isolates -- Shape Indicating Ethnicity&quot;)
+
+#plot wave 1
+ggraph(noisolates_w2,
+       layout = &quot;fr&quot;) +
+  geom_edge_link(color = &quot;gray&quot;, width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(born_in_binary))) +
+  scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
+  theme_void() +
+  labs(title = &quot;Network Wave 2, no Isolates -- Shape Indicating Ethnicity&quot;)</code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/ggraph%20born%20in%20w1-1.png" width="50%" /><img src="final.descriptives.for.paper_files/figure-html/ggraph%20born%20in%20w1-2.png" width="50%" /></p>
+<p>Similarly to the previous network, there still seems to be an
+under-representation of minorities in this network, though not as
+strongly as was the case for race. There is, furthermore, at least one
+circle in the first wave that tends very strongly to blue – indicating a
+non-Dutch person with a rather high <em>h</em>-index, but their degrees
+are not as high as some Dutch authors with similar <em>h</em>-indices.
+The difference between the two waves is still quite large when it comes
+to the number of connected authors, but not when it comes to ethnic
+segregation.<br />
+</p>
+<p>Similarly to the graphs on race, these graphs on ethnicity seem to
+indicate that there are fewer non-Dutch than Dutch authors in this
+network - which is not extremely odd, since the sample concerns Dutch
+universities. However, it furthermore also indicates that these
+non-Dutch authors seem to collaborate less with Dutch authors, and often
+have lower prestige.</p>
+<p>In order to find out if these correlations are actually meaningful, I
+will now look at some actual network statistics.</p>
+</div>
+</div>
+<div id="network-descriptives" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Network
+Descriptives</h2>
+<p>The first statistics concern some of the basic aspects of the
+network, just so we can look at how it has changed over time - and what
+exactly has changed.<br />
+</p>
+<div id="basic-network-descriptives" class="section level3 tabset"
+number="2.2.1">
+<h3 class="tabset"><span class="header-section-number">2.2.1</span>
+Basic Network Descriptives</h3>
+<div id="wave-1" class="section level4" number="2.2.1.1">
+<h4><span class="header-section-number">2.2.1.1</span> Wave 1</h4>
+<p>Number of vertices in the first wave (W1).</p>
+<pre class="r"><code># wave 1
+# number of vertices
+vcount(net_graph_w1) </code></pre>
+<pre><code>## [1] 214</code></pre>
+<p>The number of edges in W1.</p>
+<pre class="r"><code>ecount(net_graph_w1)</code></pre>
+<pre><code>## [1] 89</code></pre>
+<p>The dyad census in W1, which indicates that there are 7 mutual ties,
+73 asymmetrical ties (ties where no tie is returned), and 22711
+instances where there could have been a tie, but was not.</p>
+<pre class="r"><code>igraph::dyad_census(net_graph_w1)</code></pre>
+<pre><code>## $mut
+## [1] 7
+## 
+## $asym
+## [1] 73
+## 
+## $null
+## [1] 22711</code></pre>
+<p>The triad census, furthermore indicates which triads are present in
+the network in W1.</p>
+<pre class="r"><code>igraph::triad_census(net_graph_w1)</code></pre>
+<pre><code>##  [1] 1593772   15185    1449      27      54      37      19      10       6
+## [10]       0       1       1       1       2       0       0</code></pre>
+<p>Understanding the meaning of these numbers ,can be a bit easier if we
+see the numbers distributed on a histogram:</p>
+<pre class="r"><code>hist(igraph::triad_census(net_graph_w1))</code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The general density of this graph is 0.00195, which is quite low –
+however, one has to also take into account that we are dealing with data
+observed in 2022, and that we are using those data to retrospectively
+assess a networks three years earlier. Mostly, we will be missing PhDs,
+and other people who are not working at their universities anymore, and
+have started working either somewhere outside of our sample, or have
+stopped working in academia altogether.<br />
+</p>
+<pre class="r"><code>igraph::edge_density(net_graph_w1)</code></pre>
+<pre><code>## [1] 0.001952525</code></pre>
+</div>
+<div id="wave-2" class="section level4" number="2.2.1.2">
+<h4><span class="header-section-number">2.2.1.2</span> Wave 2</h4>
+<p>Number of vertices in the second wave (W2) – the same number as in
+wave 1, which makes sense, due to the sampling method.</p>
+<pre class="r"><code>vcount(net_graph_w2) </code></pre>
+<pre><code>## [1] 214</code></pre>
+<p>The number of edges in W2 – a strong increase compared to the first
+wave, having increased almost 2.5 times.</p>
+<pre class="r"><code>ecount(net_graph_w2)</code></pre>
+<pre><code>## [1] 213</code></pre>
+<p>The dyad census in W1, which indicates that there are 19 mutual ties,
+174 asymmetrical ties (ties where no tie is returned), and 22598
+instances where there could have been a tie, but was not.</p>
+<pre class="r"><code>igraph::dyad_census(net_graph_w2)</code></pre>
+<pre><code>## $mut
+## [1] 19
+## 
+## $asym
+## [1] 174
+## 
+## $null
+## [1] 22598</code></pre>
+<p>The triad census, furthermore indicates which triadic configurations
+are present in the network of the second wave.</p>
+<pre class="r"><code>igraph::triad_census(net_graph_w2)</code></pre>
+<pre><code>##  [1] 1570278   35764    3936      87     300      87      50      15      30
+## [10]       0       3       3       3       2       5       1</code></pre>
+<p>Similarly to the previous wave, these numbers can be a bit easier to
+understand when put into a histogram:</p>
+<pre class="r"><code>hist(igraph::triad_census(net_graph_w2))</code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The general density of this graph is 0.0047, which means it has
+almost tripled in the time between waves – however, one has to still
+take into account that this might just be because these measures are
+much more accurate than those for the first wave. Regardless, we do thus
+see an evolved network.</p>
+<pre class="r"><code>igraph::edge_density(net_graph_w2)</code></pre>
+<pre><code>## [1] 0.004672897</code></pre>
+<p>With these factors in mind, that change has thus indeed occurred
+between waves, and that the density has especially increased, I will now
+turn towards the descriptives that can help answer the research
+questions.</p>
+</div>
+</div>
+<div id="degree-centrality" class="section level3" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Degree
+Centrality</h3>
+<p>Degree centrality - or degree - concerns the number of other actors,
+or <em>alters</em> an author, or <em>ego</em> is connected with. The
+structure of our data is as such, that there is an differentiation
+between degrees coming in - <em>indegrees</em> - and degrees going out -
+<em>outdegrees</em>. Indegrees, in this context, refer to the ties
+‘received’ by an ego, and concretely indicate being ‘not the first’
+author in a paper. Outdegrees, on the other hand, refer to the opposite.
+They are ties ‘sent’ by the ego, and as such refer to collaborations in
+which the ego is the first author in the paper.</p>
+<div id="general" class="section level4" number="2.2.2.1">
+<h4><span class="header-section-number">2.2.2.1</span> General</h4>
+<pre class="r"><code>#degree centrality w1 
+degree_w1 &lt;- degree(net_graph_w1)
+degree_w1 &lt;- as.data.frame(degree_w1)
+view(degree_w1)
+ggplot(degree_w1, aes(as.numeric(degree_w1), colour = as.numeric(degree_w1) )) +
+  geom_histogram(binwidth = .5) +
+  labs(
+    title = &quot;Distribution Degrees Wave 1&quot;,
+    x = &quot;Distribution of Degrees&quot;,
+    y = &quot;Count&quot;
+  ) +
+  ylim(0, 150) +
+  theme_bw()
+#degree centrality w2 
+degree_w2 &lt;- degree(net_graph_w2)
+degree_w2 &lt;- as.data.frame(degree_w2)
+ggplot(degree_w2, aes(as.numeric(degree_w2), colour = as.numeric(degree_w2))) +
+  geom_histogram(binwidth = .5) +
+  labs(
+    title = &quot;Distribution Degrees Wave 2&quot;,
+    x = &quot;Distribution of Degrees&quot;,
+    y = &quot;Count&quot;
+  ) +
+  ylim(0, 150) +
+  theme_bw()
+
+#could also do -- degree centrality of white v. non-white people, or degree centrality of dutch v. non-dutch people </code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/degree%20centrality%20w1%20and%202-1.png" width="50%" /><img src="final.descriptives.for.paper_files/figure-html/degree%20centrality%20w1%20and%202-2.png" width="50%" /></p>
+<p>As demonstrated by these histograms, there has been some shift in the
+distribution of degrees between waves. Generally speaking, they have
+become more evenly distributed – with most actors in the network now
+having collaborated on at least one paper, instead of none - as was the
+case in the first wave. Furthermore, the maximum number of degrees has
+also increased, from 10 to 12.</p>
+</div>
+</div>
+</div>
+<div id="hypothesis-1-segregation-in-degrees" class="section level2"
+number="2.3">
+<h2><span class="header-section-number">2.3</span> Hypothesis 1:
+Segregation in Degrees</h2>
+<p>To further evaluate how these characteristics are segregated across
+race and ethnicity, I will first look at the differences in mean degree
+per group, per wave. In other words, I will assess the mean degree for
+white people, people of colour, Dutch people, and non-Dutch people, for
+both wave 1 and 2.</p>
+<pre class="r"><code>degree_w1 &lt;- degree(net_graph_w1)
+degree_w1 &lt;- as.data.frame(degree_w1)
+degree_dem_1 &lt;- cbind(degree_w1, demographics_hannah)
+
+degree_w2 &lt;- degree(net_graph_w2)
+degree_w2 &lt;- as.data.frame(degree_w2)
+degree_dem_2 &lt;- cbind(degree_w2, demographics_hannah)</code></pre>
+<pre class="r"><code>#setting up the data - race 
+white_people &lt;- degree_dem_1 %&gt;%
+  filter(
+    white_or_not == 1
+  )
+poc &lt;- degree_dem_1 %&gt;%
+  filter(
+    white_or_not == 0
+  )
+
+mean_degree_white &lt;- mean(white_people$degree_w1)
+mean_degree_white &lt;- mean_degree_white %&gt;%
+  round(2)
+
+mean_degree_poc &lt;- mean(poc$degree_w1)
+mean_degree_poc &lt;- mean_degree_poc %&gt;%
+  round(2)
+
+Race &lt;- c(&quot;White People&quot;, &quot;POC&quot;)
+Degree &lt;- c(mean_degree_white, mean_degree_poc)
+
+mean_degrees &lt;- cbind(Race, Degree)
+
+# ethnicity 
+
+dutch_people &lt;- degree_dem_1 %&gt;%
+  filter(
+    born_in_binary == 1
+  )
+non_dutch_people &lt;- degree_dem_1 %&gt;%
+  filter(
+    born_in_binary == 0
+  )
+
+mean_degree_dutch &lt;- mean(dutch_people$degree_w1)
+mean_degree_dutch &lt;- mean_degree_dutch %&gt;%
+  round(2)
+
+mean_degree_non_dutch &lt;- mean(non_dutch_people$degree_w1)
+mean_degree_non_dutch &lt;- mean_degree_non_dutch %&gt;%
+  round(2)
+
+Ethnicity &lt;- c(&quot;Dutch People&quot;, &quot;Non-Dutch People&quot;)
+Degree &lt;- c(mean_degree_dutch, mean_degree_non_dutch)
+
+mean_degrees_2 &lt;- cbind(Ethnicity, Degree)</code></pre>
+<pre class="r"><code>kableExtra::kable(mean_degrees, caption = &quot;Mean Degrees White People and POC&quot;)</code></pre>
+<table>
+<caption>Mean Degrees White People and POC</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White People</td>
+<td align="left">0.93</td>
+</tr>
+<tr class="even">
+<td align="left">POC</td>
+<td align="left">0.18</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kableExtra::kable(mean_degrees_2, caption = &quot;Mean Degrees Dutch and Non-Dutch&quot;)</code></pre>
+<table>
+<caption>Mean Degrees Dutch and Non-Dutch</caption>
+<thead>
+<tr class="header">
+<th align="left">Ethnicity</th>
+<th align="left">Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Dutch People</td>
+<td align="left">1.1</td>
+</tr>
+<tr class="even">
+<td align="left">Non-Dutch People</td>
+<td align="left">0.35</td>
+</tr>
+</tbody>
+</table>
+<p>These numbers are in line with what was demonstrated by the
+visualisations of the network earlier: both poc and non_Dutch people
+have less collaborations than white people, and Dutch people -
+respectively. Furthermore, as could be noted from the smaller average
+size of the race vectors compared to the ethnicity vectors, the average
+degree for non-Dutch people is still higher than that of people of
+colour.<br />
+</p>
+<pre class="r"><code>#setting up the data - race 
+white_people_2 &lt;- degree_dem_2 %&gt;%
+  filter(
+    white_or_not == 1
+  )
+poc_2 &lt;- degree_dem_2 %&gt;%
+  filter(
+    white_or_not == 0
+  )
+
+mean_degree_white_2 &lt;- mean(white_people_2$degree_w2)
+mean_degree_white_2 &lt;- mean_degree_white_2 %&gt;%
+  round(2)
+
+mean_degree_poc_2 &lt;- mean(poc_2$degree_w2)
+mean_degree_poc_2 &lt;- mean_degree_poc_2 %&gt;%
+  round(2)
+
+Race &lt;- c(&quot;White People&quot;, &quot;POC&quot;)
+Degree &lt;- c(mean_degree_white_2, mean_degree_poc_2)
+
+mean_degrees_a &lt;- cbind(Race, Degree)
+
+# ethnicity 
+
+dutch_people_2 &lt;- degree_dem_2 %&gt;%
+  filter(
+    born_in_binary == 1
+  )
+non_dutch_people_2 &lt;- degree_dem_2 %&gt;%
+  filter(
+    born_in_binary == 0
+  )
+
+mean_degree_dutch_2 &lt;- mean(dutch_people_2$degree_w2)
+mean_degree_dutch_2 &lt;- mean_degree_dutch_2 %&gt;%
+  round(2)
+
+mean_degree_non_dutch_2 &lt;- mean(non_dutch_people_2$degree_w2)
+mean_degree_non_dutch_2 &lt;- mean_degree_non_dutch_2 %&gt;%
+  round(2)
+
+Ethnicity &lt;- c(&quot;Dutch People&quot;, &quot;Non-Dutch People&quot;)
+Degree &lt;- c(mean_degree_dutch_2, mean_degree_non_dutch_2)
+
+mean_degrees_b &lt;- cbind(Ethnicity, Degree)</code></pre>
+<pre class="r"><code>kableExtra::kable(mean_degrees_a, caption = &quot;Mean Degrees White People and POC Wave 2&quot;)</code></pre>
+<table>
+<caption>Mean Degrees White People and POC Wave 2</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White People</td>
+<td align="left">2.13</td>
+</tr>
+<tr class="even">
+<td align="left">POC</td>
+<td align="left">0.86</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kableExtra::kable(mean_degrees_b, caption = &quot;Mean Degrees Dutch and Non-Dutch Wave 2&quot;)</code></pre>
+<table>
+<caption>Mean Degrees Dutch and Non-Dutch Wave 2</caption>
+<thead>
+<tr class="header">
+<th align="left">Ethnicity</th>
+<th align="left">Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Dutch People</td>
+<td align="left">2.34</td>
+</tr>
+<tr class="even">
+<td align="left">Non-Dutch People</td>
+<td align="left">1.29</td>
+</tr>
+</tbody>
+</table>
+<p>This pattern persists into the second wave, though the proportions of
+degree have become more favourable for both racial and ethnic
+minorities. However, there is still a strong segregation for both these
+groups demonstrated in these numbers. <br />
+</p>
+<p>This can furthermore be illustrated by the following graph:</p>
+<pre class="r"><code>ggplot(degree_dem_1, aes(as.numeric(degree_w1))) +
+  geom_histogram(binwidth = .5) +
+  labs(
+    title = &quot;Distribution Degrees Wave 1&quot;,
+    x = &quot;Distribution of Degrees&quot;,
+    y = &quot;Count&quot;
+  ) +
+  ylim(0, 150) +
+  theme_bw() +
+  facet_wrap(~white_or_not)
+
+#degree centrality w2 
+degree_w2 &lt;- degree(net_graph_w2)
+degree_w2 &lt;- as.data.frame(degree_w2)
+degree_dem_2 &lt;- cbind(degree_w2, demographics_hannah)
+
+ggplot(degree_dem_2, aes(as.numeric(degree_w2))) +
+  geom_histogram(binwidth = .5) +
+  labs(
+    title = &quot;Distribution Degrees Wave 2&quot;,
+    x = &quot;Distribution of Degrees&quot;,
+    y = &quot;Count&quot;
+  ) +
+  ylim(0, 150) +
+  theme_bw() +
+  facet_wrap(~white_or_not)</code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-20-1.png" width="50%" /><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-20-2.png" width="50%" /></p>
+<p>This graph highlights the difference in degree-distributions between
+white people (1) and people of colour (0) - across waves. In line with
+most observations on the differences in number of collaborations between
+waves, this graph also demonstrates that there are much fewer people -
+regardless of race - <em>without</em> collaborations. However, it should
+also be noted that in both waves, no people of colour seem to exceed
+three collaborations, while many white people do seem to achieve
+this. </p>
+<p>Whether these differences in degree are qualitatively different
+between white people and people of colour, can be estimated using an
+independent two-sample t-test, testing the null-hypothesis that there is
+no difference between the mean degree of the minority group, and the
+majority group in question.</p>
+<pre class="r"><code>t.poc_deg_1 &lt;- t.test(poc$degree_w1, white_people$degree_w1, alternative = &quot;two.sided&quot;, var.equal = F)
+t.poc_deg_2 &lt;- t.test(poc_2$degree_w2, white_people_2$degree_w2, alternative = &quot;two.sided&quot;, var.equal = F)
+t.eth_deg_1 &lt;- t.test(non_dutch_people$degree_w1, dutch_people$degree_w1, alternative = &quot;two.sided&quot;, var.equal = FALSE)
+t.eth_deg_2 &lt;- t.test(non_dutch_people_2$degree_w2, dutch_people_2$degree_w2, alternative = &quot;two.sided&quot;, var.equal = FALSE)</code></pre>
+<pre class="r"><code>t.poc_deg_1</code></pre>
+<pre style="max-height: 100px;"><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  poc$degree_w1 and white_people$degree_w1
+## t = -4.002, df = 60.11, p-value = 0.0001749
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.1242712 -0.3749496
+## sample estimates:
+## mean of x mean of y 
+## 0.1818182 0.9314286</code></pre>
+<pre class="r"><code>t.poc_deg_2</code></pre>
+<pre style="max-height: 100px;"><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  poc_2$degree_w2 and white_people_2$degree_w2
+## t = -4.5488, df = 70.851, p-value = 2.176e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.8235390 -0.7120454
+## sample estimates:
+## mean of x mean of y 
+## 0.8636364 2.1314286</code></pre>
+<pre class="r"><code>t.eth_deg_1</code></pre>
+<pre style="max-height: 100px;"><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  non_dutch_people$degree_w1 and dutch_people$degree_w1
+## t = -3.8916, df = 192.95, p-value = 0.0001371
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.1312477 -0.3702559
+## sample estimates:
+## mean of x mean of y 
+## 0.3484848 1.0992366</code></pre>
+<pre class="r"><code>t.eth_deg_2</code></pre>
+<pre style="max-height: 100px;"><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  non_dutch_people_2$degree_w2 and dutch_people_2$degree_w2
+## t = -3.3909, df = 189.64, p-value = 0.0008476
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.6697118 -0.4415535
+## sample estimates:
+## mean of x mean of y 
+##  1.287879  2.343511</code></pre>
+<p>As, however, indicated by these t-test, this null-hypothesis can be
+rejected in each case. Thus giving evidence for both H1a, and H1b,
+namely that - on average - racial and ethnic minority groups collaborate
+less than racial and ethnic majority groups.</p>
+</div>
+<div id="hypothesis-3-segregation-in-prestige" class="section level2"
+number="2.4">
+<h2><span class="header-section-number">2.4</span> Hypothesis 3:
+Segregation in Prestige</h2>
+<div id="h-index" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> h-Index</h3>
+<p>In order to assess the third hypothesis, which stated that the
+<em>h</em>-index is both segregated across race, and also across
+ethnicity, a similar analysis to the previous hypothesis will be
+performed.</p>
+<div id="calculations" class="section level4" number="2.4.1.1">
+<h4><span class="header-section-number">2.4.1.1</span> Calculations</h4>
+<p>The following graph represents the distribution of the
+<em>h</em>-index across the entire sample:</p>
+<pre class="r"><code>demographics_hannah %&gt;%
+  ggplot(mapping = aes(h_index_2)) +
+  geom_bar(position = &quot;dodge&quot;) +
+    labs(
+    x = &quot;h Index&quot;,
+    y = &quot;Count&quot;
+  ) +
+  theme_bw() </code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/h-index-1.png" width="672" /></p>
+<p>In order to better estimate the differences in average
+<em>h</em>-index between minority and majority groups, the following
+graph displays the <em>h</em>-index of people of colour and white
+people, on the left, and that of ethnic minorities and Dutch people, on
+the right.</p>
+<pre class="r"><code>demographics_hannah %&gt;%
+  ggplot(mapping = aes(h_index_2)) +
+  geom_bar(position = &quot;dodge&quot;) +
+    labs(
+    x = &quot;h Index&quot;,
+    y = &quot;Count&quot;
+  ) +
+  theme_bw() +
+  facet_wrap(~white_or_not)
+
+demographics_hannah %&gt;%
+  ggplot(mapping = aes(h_index_2)) +
+  geom_bar(position = &quot;dodge&quot;) +
+    labs(
+    x = &quot;h Index&quot;,
+    y = &quot;Count&quot;
+  ) +
+  theme_bw() +
+  facet_wrap(~born_in_binary)</code></pre>
+<p><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-24-1.png" width="50%" /><img src="final.descriptives.for.paper_files/figure-html/unnamed-chunk-24-2.png" width="50%" /></p>
+<p>As already indicated by the visualised network at the beginning of
+this chapter, the <em>h</em>-indices of both people of colour, and
+ethnic minorities are much lower than those of white and Dutch people.
+While the highest <em>h</em>-index for people of an ethnic minority is
+quite high, it is also a clear outlier, as opposed to the denser and
+higher distribution of <em>h</em>-indices of both white and Dutch
+people.</p>
+<p>To further investigate these distributions and differences, a
+two-sample t-test was performed, first assessing the differences in mean
+between people of colour, and white people, and subsequently assessing
+the difference between Dutch and non-Dutch people.</p>
+<pre class="r"><code># overal mean h-index
+mean(demographics_hannah$h_index)
+
+# segregation h-inedex
+mean_h_race &lt;- tapply(demographics_hannah$h_index, demographics_hannah$white_or_not, mean)
+mean_h_ethn &lt;- tapply(demographics_hannah$h_index, demographics_hannah$born_in_binary, mean)
+
+# Mean h-index per Uni.
+Race &lt;- c(&quot;POC&quot;, &quot;White People&quot;)
+Ethnicity &lt;- c(&quot;Not Dutch&quot;, &quot;Dutch&quot;)
+h_Index_Race &lt;- mean_h_race %&gt;%
+  round(2)
+h_Index_Ethnicity &lt;- mean_h_ethn %&gt;%
+  round(2)
+h_seg_mean&lt;- cbind(Race, h_Index_Race, Ethnicity, h_Index_Ethnicity)</code></pre>
+<pre class="r"><code>kableExtra::kable(h_seg_mean, caption = &quot;h-Index seggregation&quot;)</code></pre>
+<table>
+<caption>h-Index seggregation</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Race</th>
+<th align="left">h_Index_Race</th>
+<th align="left">Ethnicity</th>
+<th align="left">h_Index_Ethnicity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">POC</td>
+<td align="left">5.05</td>
+<td align="left">Not Dutch</td>
+<td align="left">9.18</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">White People</td>
+<td align="left">13.06</td>
+<td align="left">Dutch</td>
+<td align="left">13.67</td>
+</tr>
+</tbody>
+</table>
+<p>Firstly, the differences between the mean <em>h</em>-index of the
+majority groups and non-majority groups is already quite apparent – with
+the <em>h</em>-index of white people being almost three times as high as
+that of people of colour. The difference between Dutch and non-Dutch
+people is not as large, however.</p>
+<pre class="r"><code>t.test(poc$h_index_2, white_people$h_index_2, alternative = &quot;two.sided&quot;, var.equal = F)</code></pre>
+<pre style="max-height: 100px;"><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  poc$h_index_2 and white_people$h_index_2
+## t = -4.805, df = 48.547, p-value = 1.53e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -10.649939  -4.367724
+## sample estimates:
+## mean of x mean of y 
+##  5.045455 12.554286</code></pre>
+<pre class="r"><code>t.test(non_dutch_people$h_index_2, dutch_people$h_index_2, alternative = &quot;two.sided&quot;, var.equal = F)</code></pre>
+<pre style="max-height: 100px;"><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  non_dutch_people$h_index_2 and dutch_people$h_index_2
+## t = -2.3296, df = 166.17, p-value = 0.02103
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -7.0399818 -0.5811146
+## sample estimates:
+## mean of x mean of y 
+##  9.181818 12.992366</code></pre>
+<p>A two-sample t-test on these numbers, however, demonstrates that both
+these groups are significantly different from each other. Indicating a
+rejection of the null-hypothesis that there is no difference between
+racial groups, or ethnic groups. Thus, giving evidence for both H3a, and
+H3b.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGVzY3JpcHRpdmVzIgpvdXRwdXQ6IAogIGh0bWxfZG9jdW1lbnQ6CiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUKZGF0ZTogIjIwMjQtMTAtMjQiCi0tLQoKIyBSZWFkeSBBbGwgdGhlIFN0dWZmCgouLi4gYW5kIGVtcHR5IHdvcmtzcGFjZSwKCmBgYHtyIHJlbW92ZSB3b3Jrc3BhY2V9CnJtKGxpc3QgPSBscygpKQpgYGAKCi4uLiB1c2VyIGRlZmluZWQgZnVuY3Rpb25zLAoKYGBge3IgdXNlci1kZWZpbmVkIGZ1bmN0aW9uc30KCmZwYWNrYWdlLmNoZWNrIDwtIGZ1bmN0aW9uKHBhY2thZ2VzKSB7CiAgICBsYXBwbHkocGFja2FnZXMsIEZVTiA9IGZ1bmN0aW9uKHgpIHsKICAgICAgICBpZiAoIXJlcXVpcmUoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKSkgewogICAgICAgICAgICBpbnN0YWxsLnBhY2thZ2VzKHgsIGRlcGVuZGVuY2llcyA9IFRSVUUpCiAgICAgICAgICAgIGxpYnJhcnkoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKQogICAgICAgIH0KICAgIH0pCn0KCmZzYXZlIDwtIGZ1bmN0aW9uKHgsIGZpbGUgPSBOVUxMLCBsb2NhdGlvbiA9ICIuL2RhdGEvcHJvY2Vzc2VkLyIpIHsKICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YSIpLCBkaXIuY3JlYXRlKCJkYXRhIiksIEZBTFNFKQogICAgaWZlbHNlKCFkaXIuZXhpc3RzKCJkYXRhL3Byb2Nlc3NlZCIpLCBkaXIuY3JlYXRlKCJkYXRhL3Byb2Nlc3NlZCIpLCBGQUxTRSkKICAgIGlmIChpcy5udWxsKGZpbGUpKQogICAgICAgIGZpbGUgPSBkZXBhcnNlKHN1YnN0aXR1dGUoeCkpCiAgICBkYXRlbmFtZSA8LSBzdWJzdHIoZ3N1YigiWzotXSIsICIiLCBTeXMudGltZSgpKSwgMSwgOCkKICAgIHRvdGFsbmFtZSA8LSBwYXN0ZShsb2NhdGlvbiwgZmlsZSwgIl8iLCBkYXRlbmFtZSwgIi5yZGEiLCBzZXAgPSAiIikKICAgIHNhdmUoeCwgZmlsZSA9IHRvdGFsbmFtZSkgICNuZWVkIHRvIGZpeCBpZiBmaWxlIGlzIHJlbG9hZGVkIGFzIGlucHV0IG5hbWUsIG5vdCBhcyB4LiAKfQoKZmxvYWQgPC0gZnVuY3Rpb24oZmlsZW5hbWUpIHsKICAgIGxvYWQoZmlsZW5hbWUpCiAgICBnZXQobHMoKVtscygpICE9ICJmaWxlbmFtZSJdKQp9Cgpmc2hvd2RmIDwtIGZ1bmN0aW9uKHgsIC4uLikgewogICAga25pdHI6OmthYmxlKHgsIGRpZ2l0cyA9IDIsICJodG1sIiwgLi4uKSAlPiUKICAgICAgICBrYWJsZUV4dHJhOjprYWJsZV9zdHlsaW5nKGJvb3RzdHJhcF9vcHRpb25zID0gYygic3RyaXBlZCIsICJob3ZlciIpKSAlPiUKICAgICAgICBrYWJsZUV4dHJhOjpzY3JvbGxfYm94KHdpZHRoID0gIjEwMCUiLCBoZWlnaHQgPSAiMzAwcHgiKQp9CgpmTW9yYW4uSSA8LSBmdW5jdGlvbih4LCB3ZWlnaHQsIHNjYWxlZCA9IEZBTFNFLCBuYS5ybSA9IEZBTFNFLCBhbHRlcm5hdGl2ZSA9ICJ0d28uc2lkZWQiLCByb3dzdGFuZGFyZGl6ZSA9IFRSVUUpIHsKICBpZiAocm93c3RhbmRhcmRpemUpIHsKICAgIGlmIChkaW0od2VpZ2h0KVsxXSAhPSBkaW0od2VpZ2h0KVsyXSkKICAgICAgc3RvcCgiJ3dlaWdodCcgbXVzdCBiZSBhIHNxdWFyZSBtYXRyaXgiKQogICAgbiA8LSBsZW5ndGgoeCkKICAgIGlmIChkaW0od2VpZ2h0KVsxXSAhPSBuKQogICAgICBzdG9wKCInd2VpZ2h0JyBtdXN0IGhhdmUgYXMgbWFueSByb3dzIGFzIG9ic2VydmF0aW9ucyBpbiAneCciKQogICAgZWkgPC0gLTEvKG4gLSAxKQogICAgbmFzIDwtIGlzLm5hKHgpCiAgICBpZiAoYW55KG5hcykpIHsKICAgICAgaWYgKG5hLnJtKSB7CiAgICAgICAgeCA8LSB4WyFuYXNdCiAgICAgICAgbiA8LSBsZW5ndGgoeCkKICAgICAgICB3ZWlnaHQgPC0gd2VpZ2h0WyFuYXMsICFuYXNdCiAgICAgIH0gZWxzZSB7CiAgICAgICAgd2FybmluZygiJ3gnIGhhcyBtaXNzaW5nIHZhbHVlczogbWF5YmUgeW91IHdhbnRlZCB0byBzZXQgbmEucm0gPSBUUlVFPyIpCiAgICAgICAgcmV0dXJuKGxpc3Qob2JzZXJ2ZWQgPSBOQSwgZXhwZWN0ZWQgPSBlaSwgc2QgPSBOQSwgcC52YWx1ZSA9IE5BKSkKICAgICAgfQogICAgfQogICAgUk9XU1VNIDwtIHJvd1N1bXMod2VpZ2h0KQogICAgUk9XU1VNW1JPV1NVTSA9PSAwXSA8LSAxCiAgICB3ZWlnaHQgPC0gd2VpZ2h0L1JPV1NVTQogICAgcyA8LSBzdW0od2VpZ2h0KQogICAgbSA8LSBtZWFuKHgpCiAgICB5IDwtIHggLSBtCiAgICBjdiA8LSBzdW0od2VpZ2h0ICogeSAlbyUgeSkKICAgIHYgPC0gc3VtKHleMikKICAgIG9icyA8LSAobi9zKSAqIChjdi92KQogICAgaWYgKHNjYWxlZCkgewogICAgICBpLm1heCA8LSAobi9zKSAqIChzZChyb3dTdW1zKHdlaWdodCkgKiB5KS9zcXJ0KHYvKG4gLSAxKSkpCiAgICAgIG9icyA8LSBvYnMvaS5tYXgKICAgIH0KICAgIFMxIDwtIDAuNSAqIHN1bSgod2VpZ2h0ICsgdCh3ZWlnaHQpKV4yKQogICAgUzIgPC0gc3VtKChhcHBseSh3ZWlnaHQsIDEsIHN1bSkgKyBhcHBseSh3ZWlnaHQsIDIsIHN1bSkpXjIpCiAgICBzLnNxIDwtIHNeMgogICAgayA8LSAoc3VtKHleNCkvbikvKHYvbileMgogICAgc2RpIDwtIHNxcnQoKG4gKiAoKG5eMiAtIDMgKiBuICsgMykgKiBTMSAtIG4gKiBTMiArIDMgKiBzLnNxKSAtIGsgKiAobiAqIChuIC0gMSkgKiBTMSAtIDIgKiBuICoKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUzIgKyA2ICogcy5zcSkpLygobiAtIDEpICogKG4gLSAyKSAqIChuIC0gMykgKiBzLnNxKSAtIDEvKChuIC0gMSleMikpCiAgICBhbHRlcm5hdGl2ZSA8LSBtYXRjaC5hcmcoYWx0ZXJuYXRpdmUsIGMoInR3by5zaWRlZCIsICJsZXNzIiwgImdyZWF0ZXIiKSkKICAgIHB2IDwtIHBub3JtKG9icywgbWVhbiA9IGVpLCBzZCA9IHNkaSkKICAgIGlmIChhbHRlcm5hdGl2ZSA9PSAidHdvLnNpZGVkIikKICAgICAgcHYgPC0gaWYgKG9icyA8PSBlaSkKICAgICAgICAyICogcHYgZWxzZSAyICogKDEgLSBwdikKICAgIGlmIChhbHRlcm5hdGl2ZSA9PSAiZ3JlYXRlciIpCiAgICAgIHB2IDwtIDEgLSBwdgogICAgbGlzdChvYnNlcnZlZCA9IG9icywgZXhwZWN0ZWQgPSBlaSwgc2QgPSBzZGksIHAudmFsdWUgPSBwdikKICB9IGVsc2UgewogICAgaWYgKGRpbSh3ZWlnaHQpWzFdICE9IGRpbSh3ZWlnaHQpWzJdKQogICAgICBzdG9wKCInd2VpZ2h0JyBtdXN0IGJlIGEgc3F1YXJlIG1hdHJpeCIpCiAgICBuIDwtIGxlbmd0aCh4KQogICAgaWYgKGRpbSh3ZWlnaHQpWzFdICE9IG4pCiAgICAgIHN0b3AoIid3ZWlnaHQnIG11c3QgaGF2ZSBhcyBtYW55IHJvd3MgYXMgb2JzZXJ2YXRpb25zIGluICd4JyIpCiAgICBlaSA8LSAtMS8obiAtIDEpCiAgICBuYXMgPC0gaXMubmEoeCkKICAgIGlmIChhbnkobmFzKSkgewogICAgICBpZiAobmEucm0pIHsKICAgICAgICB4IDwtIHhbIW5hc10KICAgICAgICBuIDwtIGxlbmd0aCh4KQogICAgICAgIHdlaWdodCA8LSB3ZWlnaHRbIW5hcywgIW5hc10KICAgICAgfSBlbHNlIHsKICAgICAgICB3YXJuaW5nKCIneCcgaGFzIG1pc3NpbmcgdmFsdWVzOiBtYXliZSB5b3Ugd2FudGVkIHRvIHNldCBuYS5ybSA9IFRSVUU/IikKICAgICAgICByZXR1cm4obGlzdChvYnNlcnZlZCA9IE5BLCBleHBlY3RlZCA9IGVpLCBzZCA9IE5BLCBwLnZhbHVlID0gTkEpKQogICAgICB9CiAgICB9CiAgICAjIFJPV1NVTSA8LSByb3dTdW1zKHdlaWdodCkgUk9XU1VNW1JPV1NVTSA9PSAwXSA8LSAxIHdlaWdodCA8LSB3ZWlnaHQvUk9XU1VNCiAgICBzIDwtIHN1bSh3ZWlnaHQpCiAgICBtIDwtIG1lYW4oeCkKICAgIHkgPC0geCAtIG0KICAgIGN2IDwtIHN1bSh3ZWlnaHQgKiB5ICVvJSB5KQogICAgdiA8LSBzdW0oeV4yKQogICAgb2JzIDwtIChuL3MpICogKGN2L3YpCiAgICBpZiAoc2NhbGVkKSB7CiAgICAgIGkubWF4IDwtIChuL3MpICogKHNkKHJvd1N1bXMod2VpZ2h0KSAqIHkpL3NxcnQodi8obiAtIDEpKSkKICAgICAgb2JzIDwtIG9icy9pLm1heAogICAgfQogICAgUzEgPC0gMC41ICogc3VtKCh3ZWlnaHQgKyB0KHdlaWdodCkpXjIpCiAgICBTMiA8LSBzdW0oKGFwcGx5KHdlaWdodCwgMSwgc3VtKSArIGFwcGx5KHdlaWdodCwgMiwgc3VtKSleMikKICAgIHMuc3EgPC0gc14yCiAgICBrIDwtIChzdW0oeV40KS9uKS8odi9uKV4yCiAgICBzZGkgPC0gc3FydCgobiAqICgobl4yIC0gMyAqIG4gKyAzKSAqIFMxIC0gbiAqIFMyICsgMyAqIHMuc3EpIC0gayAqIChuICogKG4gLSAxKSAqIFMxIC0gMiAqIG4gKgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTMiArIDYgKiBzLnNxKSkvKChuIC0gMSkgKiAobiAtIDIpICogKG4gLSAzKSAqIHMuc3EpIC0gMS8oKG4gLSAxKV4yKSkKICAgIGFsdGVybmF0aXZlIDwtIG1hdGNoLmFyZyhhbHRlcm5hdGl2ZSwgYygidHdvLnNpZGVkIiwgImxlc3MiLCAiZ3JlYXRlciIpKQogICAgcHYgPC0gcG5vcm0ob2JzLCBtZWFuID0gZWksIHNkID0gc2RpKQogICAgaWYgKGFsdGVybmF0aXZlID09ICJ0d28uc2lkZWQiKQogICAgICBwdiA8LSBpZiAob2JzIDw9IGVpKQogICAgICAgIDIgKiBwdiBlbHNlIDIgKiAoMSAtIHB2KQogICAgaWYgKGFsdGVybmF0aXZlID09ICJncmVhdGVyIikKICAgICAgcHYgPC0gMSAtIHB2CiAgICBsaXN0KG9ic2VydmVkID0gb2JzLCBleHBlY3RlZCA9IGVpLCBzZCA9IHNkaSwgcC52YWx1ZSA9IHB2KQogIH0KICAKICAKfQoKCgpgYGAKCi4uLiBwYWNrYWdlcywKCmBgYHtyIGxvYWQgcGFja2FnZXMsIG1lc3NhZ2UgPSBGLCByZXN1bHRzID0gRn0KcmVxdWlyZSh0aWR5dmVyc2UpCnJlcXVpcmUoUnNpZW5hVHdvU3RlcCkKcmVxdWlyZShSU2llbmEpCnJlcXVpcmUoaWdyYXBoKQpyZXF1aXJlKHBvd2VSbGF3KQpyZXF1aXJlKGdncmFwaCkKcmVxdWlyZShrbml0cikKYGBgCgpgYGB7ciBsb2FkIGFsbCBkYXRhLCBpbmNsdWRlID0gRiwgZWNobyA9IEZ9CnVubG9hZE5hbWVzcGFjZSgic25hIikKd2F2ZV8xIDwtIHJlYWRfcmRzKCJkYXRhc2V0c19maW5hbC93YXZlXzFfZmlyc3RfYXV0aG9ycy5yZHMiKQp3YXZlXzIgPC0gcmVhZF9yZHMoImRhdGFzZXRzX2ZpbmFsL3dhdmVfMl9maXJzdF9hdXRob3JzLnJkcyIpCmRlbW9ncmFwaGljc19oYW5uYWggPC0gcmVhZF9jc3YoImRlbW9ncmFwaGljc19oYW5uYWhfZmluYWwuY3N2Iiwgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSkKYGBgCgojIERlc2NyaXB0aXZlIEFuYWx5c2lzCgpJbiB0aGlzIGNoYXB0ZXIsIEkgd2lsbCBmaXJzdCBnaXZlIGEgcXVpY2sgb3ZlcnZpZXcgb2YgdGhlIGNvbGxhYm9yYXRpb24gbmV0d29yayB0cm91Z2ggYSB2aXN1YWwgcmVwcmVzZW50YXRpb24gb2YgdGhlIHJlbGV2YW50IGRhdGEuIFRoaXMgd2lsbCBiZSBmb2xsb3dlZCBieSBzb21lIHNpbXBsZSBuZXR3b3JrIGRlc2NyaXB0aXZlcywgYmVmb3JlIGNvbnRpbnVpbmcgb250byBhbiBhbmFseXNpcyBvZiBkZWdyZWVzIGFuZCBwcmVzdGlnZSBzZWdyZWFndGlvbiBpbiBuZXR3b3Jrcy4KCiMjIFZpc3VhbCBOZXR3b3JrIERlc2NyaXB0aXZlcwoKVGhlIGZvbGxvd2luZyBncmFwaHMgcmVwcmVzZW50IHRoZSByYWNpYWwgYW5kIGV0aG5pYyBzZWdyZWdhdGlvbiBvZiB0aGUgbmV0d29yaywgYXQgd2F2ZSAxIGFuZCAyIHJlc3BlY3RpdmVseS4gRm9yIGEgYmV0dGVyIGxheW91dCBvZiB0aGUgZ3JhcGgsIHRoZSBpc29sYXRlcyBoYXZlIGJlZW4gcmVtb3ZlZCwgYW5kIHRoZXJlZm9yZSBvbmx5IHRob3NlIGFjdG9ycyB3aG8gY29sbGFib3JhdGVkIGFyZSBpbmNsdWRlZCBpbiB0aGUgZ3JhcGhzLgoKIyMjIFJhY2UKCkluIHRoaXMgbmV0d29yaywgdGhlIGNvbG91ciBvZiB0aGUgbm9kZXMgcmVwcmVzZW50cyBhbiBhdXRob3IncyBwcmVzdGlnZSAtLSB0aGUgYmx1ZXIsIHRoZSBoaWdoZXIgdGhlaXIgaC1pbmRleC4gVGhlIHNoYXBlIG9mIHRoZSBub2RlcywgZnVydGhlcm1vcmUsIHJlcHJlc2VudHMgdGhlaXIgcmFjZS4gVHJpYW5nbGVzIHJlZmVyIHRvIHdoaXRlIHBlb3BsZSwgYW5kIGNpcmNsZXMgdG8gUG9DLiBMYXN0bHksIHRoZSBzaXplIG9mIHRoaXMgc2hhcGUgaXMgZGV0ZXJtaW5lZCBieSB0aGUgbnVtYmVyIG9mIGRlZ3JlZXMgLS0gcmVmZXJyaW5nLCBpbiB0aGlzIGNhc2UsIHRvIHRoZSBudW1iZXIgb2YgY28tYXV0aG9yc2hpcCByZWxhdGlvbnMgdGhpcyBhdXRob3IgaGFzIGVzdGFibGlzaGVkIHdpdGhpbiB0aGlzIHRpbWUgcGVyaW9kLgoKYGBge3IgZ2dyYXBoIHcxLCBmaWcuc2hvdz0iaG9sZCIsIG91dC53aWR0aD0iNTAlIiwgbWVzc2FnZSA9IEYsIHJlc3VsdHM9Riwgd2FybmluZz1GQUxTRX0KCndhdmVfMSA8LSBncmFwaF9mcm9tX2FkamFjZW5jeV9tYXRyaXgod2F2ZV8xKQp3YXZlXzIgPC0gZ3JhcGhfZnJvbV9hZGphY2VuY3lfbWF0cml4KHdhdmVfMikKCmluZGVncmVlX3cxIDwtIGlncmFwaDo6ZGVncmVlKHdhdmVfMSwgbW9kZSA9ICJhbGwiKQppbmRlZ3JlZV93MiA8LSBpZ3JhcGg6OmRlZ3JlZSh3YXZlXzIsIG1vZGUgPSAiYWxsIikKCiMgd2F2ZSAxIApkZW1vZ3JhcGhpY3NfaGFubmFoIDwtIGRlbW9ncmFwaGljc19oYW5uYWggJT4lCiAgbXV0YXRlKGhfaW5kZXhfMiA9IGNhc2Vfd2hlbigKICAgIGhfaW5kZXggPj0gNjAgfiA1MCwKICAgIFRSVUUgfiBoX2luZGV4CiAgKSkgCnZpZXcoZGVtb2dyYXBoaWNzX2hhbm5haCkKIyBhc3NpZ24gaC1pbmRleCB0byBzY2hvbGFyClYod2F2ZV8xKSRoX2luZGV4IDwtIGRlbW9ncmFwaGljc19oYW5uYWgkaF9pbmRleF8yClYod2F2ZV8xKSR3aGl0ZV9vcl9ub3QgPC0gZGVtb2dyYXBoaWNzX2hhbm5haCR3aGl0ZV9vcl9ub3QKVih3YXZlXzEpJGJvcm5faW5fYmluYXJ5IDwtIGRlbW9ncmFwaGljc19oYW5uYWgkYm9ybl9pbl9iaW5hcnkKVih3YXZlXzEpJGdlbmRlciA8LSBpZmVsc2UoZGVtb2dyYXBoaWNzX2hhbm5haCRwZXJjX2ZlbWFsZSA+PSAuNSwgMSwgMCkKVih3YXZlXzEpJGluZGVncmVlIDwtIGluZGVncmVlX3cxCgojcmVtb3ZlIGlzb2xhdGVzIApub2lzb2xhdGVzX3cxIDwtIGRlbGV0ZV92ZXJ0aWNlcyh3YXZlXzEsIFYod2F2ZV8xKVtkZWdyZWUod2F2ZV8xKSA9PSAwXSkKCiNzZXQgc2l6ZSBvZiBwbG90Cm9wdGlvbnMocmVwci5wbG90LndpZHRoID0gMjUsIHJlcHIucGxvdC5oZWlnaHQgPSAyNSkKCiMgd2F2ZSAyIAoKIyBhc3NpZ24gaC1pbmRleCB0byBzY2hvbGFyClYod2F2ZV8yKSRoX2luZGV4IDwtIGRlbW9ncmFwaGljc19oYW5uYWgkaF9pbmRleF8yClYod2F2ZV8yKSR3aGl0ZV9vcl9ub3QgPC0gZGVtb2dyYXBoaWNzX2hhbm5haCR3aGl0ZV9vcl9ub3QKVih3YXZlXzIpJGJvcm5faW5fYmluYXJ5IDwtIGRlbW9ncmFwaGljc19oYW5uYWgkYm9ybl9pbl9iaW5hcnkKVih3YXZlXzIpJGdlbmRlciA8LSBpZmVsc2UoZGVtb2dyYXBoaWNzX2hhbm5haCRwZXJjX2ZlbWFsZSA+PSAuNSwgMSwgMCkKVih3YXZlXzIpJGluZGVncmVlIDwtIGluZGVncmVlX3cyCgojcmVtb3ZlIGlzb2xhdGVzCm5vaXNvbGF0ZXNfdzIgPC0gZGVsZXRlX3ZlcnRpY2VzKHdhdmVfMiwgVih3YXZlXzIpW2RlZ3JlZSh3YXZlXzIpID09IDBdKQpgYGAKClRoZSBsZWZ0IGdyYXBoIHJlcHJlc2VudHMgdGhlIGZpcnN0IHdhdmUsIHdoaWNoIHJhbmdlcyBmcm9tIDIwMTUgdG8gMjAxOCwgYW5kIHRoZSBncmFwaCBvbiB0aGUgcmlnaHQgcmVwcmVzZW50cyB0aGUgc2Vjb25kIHdhdmUsIHdoaWNoIHJhbmdlcyBmcm9tIDIwMTkgdG8gMjAyMyAuCgpgYGB7ciwgZmlnLnNob3c9ImhvbGQiLCBvdXQud2lkdGg9IjUwJSIsIHJlc3VsdHM9Riwgd2FybmluZyA9IEYsIG1lc3NhZ2UgPSBGfQojcGxvdCB3YXZlIDEKZ2dyYXBoKG5vaXNvbGF0ZXNfdzEsCiAgICAgICBsYXlvdXQgPSAiZnIiKSArCiAgZ2VvbV9lZGdlX2xpbmsoY29sb3IgPSAiZ3JheSIsIHdpZHRoID0gMC41KSArCiAgZ2VvbV9ub2RlX3BvaW50KGFlcyhzaXplID0gaW5kZWdyZWUsIGNvbG9yID0gaF9pbmRleCwgc2hhcGUgPSBhcy5mYWN0b3Iod2hpdGVfb3Jfbm90KSkpICsgCiAgc2NhbGVfc2l6ZShyYW5nZSA9IGMoMywgMTApKSArIAogIHNjYWxlX2NvbG9yX2dyYWRpZW50KGxvdyA9ICJyZWQiLCBoaWdoID0gImJsdWUiKSArIAogIHRoZW1lX3ZvaWQoKSAKICAgICAgIAojcGxvdCB3YXZlIDIKZ2dyYXBoKG5vaXNvbGF0ZXNfdzIsCiAgICAgICBsYXlvdXQgPSAiZnIiKSArCiAgZ2VvbV9lZGdlX2xpbmsoY29sb3IgPSAiZ3JheSIsIHdpZHRoID0gMC41KSArCiAgZ2VvbV9ub2RlX3BvaW50KGFlcyhzaXplID0gaW5kZWdyZWUsIGNvbG9yID0gaF9pbmRleCwgc2hhcGUgPSAgCiAgICAgICAgICAgICAgICAgICAgICAgIGFzLmZhY3Rvcih3aGl0ZV9vcl9ub3QpKSkgKyAKICBzY2FsZV9zaXplKHJhbmdlID0gYygzLCAxMCkpICsgCiAgc2NhbGVfY29sb3JfZ3JhZGllbnQobG93ID0gInJlZCIsIGhpZ2ggPSAiYmx1ZSIpICsgCiAgdGhlbWVfdm9pZCgpCmBgYAoKV2hlbiBsb29raW5nIGF0IHRoaXMgZ3JhcGgsIHNldmVyYWwgdGhpbmdzIGJlY29tZSBjbGVhciBxdWl0ZSBxdWlja2x5LiBGaXJzdGx5LCB0aGF0IHRoZSBuZXR3b3JrIGJlY29tZXMgcXVpdGUgYSBsb3QgYnVzaWVyIGluIHRoZSBzZWNvbmQgd2F2ZS4gVGhlIHJlYXNvbiBmb3IgdGhpcyBpcyB0aGUgbWV0aG9kIG9mIGRhdGEgY29sbGVjdGlvbiBhcyBtZW50aW9uZWQgZWFybGllciwgYW5kIGFzIHN1Y2gsIG5vdCBpbW1lZGlhdGVseSByZWxldmFudC4gV2hhdCBpcyByZWxldmFudCwgaG93ZXZlciwgaXMgdGhlIGZhY3QgdGhhdCBtb3N0IG9mIHRoZSBzaGFwZXMgLS0gaW4gYm90aCBuZXR3b3JrcyAtLSBhcmUgdHJpYW5nbGVzLiBXaGlsZSB0aGlzIG92ZXJyZXByZXNlbnRhdGlvbiBvZiB3aGl0ZSBwZW9wbGUgd2FzIGFscmVhZHkgbm90ZWQgaW4gdGhlIHByZXZpb3VzIGNoYXB0ZXIsIHdoYXQgY2FuIG5vdyBhbHNvIGJlIHNlZW4sIGlzIHRoYXQgLS0gZXNwZWNpYWxseSBpbiB0aGUgZmlyc3Qgd2F2ZSAtLSB2ZXJ5IGZldyBjaXJjbGVzIGFyZSBiaWdnZXIgdGhhbiB0aGUgc21hbGxlc3QgdHJpYW5nbGUuIFRoaXMgbWVhbnMgdGhhdCBmb3IgdGhlIHBvYyBpbiB0aGUgbmV0d29yaywgdGhlaXIgZGVncmVlcyBhcmUgLS0gb24gYXZlcmFnZSAtLSBzbWFsbGVyIHRoYW4gdGhvc2Ugb2Ygd2hpdGUgcGVvcGxlLiBGdXJ0aGVybW9yZSwgYXMgY2FuIGJlIG5vdGVkIGJ5IHRoZSBjb21wYXJhdGl2ZSBvdmVycmVwcmVzZW50YXRpb24gb2YgYmx1ZShlcikgdHJpYW5nbGVzIGNvbXBhcmVkIHRvIHJlZCBjaXJjbGVzLCBwb2MgYXJlIG5vdCBvbmx5IGxlc3MgbGlrZWx5IHRvIGNvbGxhYm9yYXRlLCBidXQgdGhlaXIgKmgqLWluZGljZXMgYXJlIGFsc28sIG9uIGF2ZXJhZ2UsIG11Y2ggbG93ZXIgdGhhbiB0aG9zZSBvZiB3aGl0ZSBwZW9wbGUuXAoKV2hpbGUgdGhlcmUgYXJlIHNvbWUgY2hhbmdlcyBiZXR3ZWVuIHRoZSB3YXZlcyBpbiB0aGVzZSByZXNwZWN0cyAtLSB0aGVyZSBhcmUgc29tZSBjaXJjbGVzIHRoYXQgdGVuZCBhIGJpdCBtb3JlIHRvIHB1cnBsZSB0aGFuIHRob3NlIGluIHRoZSBmaXJzdCB3YXZlIC0tIHRoZSBjaGFuZ2VzIGFyZSBxdWl0ZSBzbWFsbC4gVGhvdWdoIG5vIGZpbmFsIGNvbmNsdXNpb25zIGNhbiBiZSByZWFjaGVkIGhlcmUsIGl0IGNhbiBiZSBzYWlkIHRoYXQgaXQgaXMgcXVpdGUgY2xlYXIgdGhhdCBwZW9wbGUgb2YgY29sb3VyIGFyZSBib3RoIHVuZGVycmVwcmVzZW50ZWQgaW4gYWNhZGVtaWEsIGJ1dCBhbHNvIHNlZW0gdG8gY29sbGFib3JhdGUgbGVzcywgYW5kIHRoYXQgdGhlaXIgd29ya3MgYXJlIGxlc3Mgd2VsbC1rbm93bi4KCiMjIyBFdGhuaWNpdHkKCkZvciB0aGlzIG5ldHdvcmssIGV2ZXJ5dGhpbmcgaXMgdGhlIHNhbWUsIGV4Y2VwdCB0aGF0IGluc3RlYWQgb2YgdGhlIHNoYXBlcyBpbmRpY2F0aW5nIHRoZSByYWNlIG9mIGFuIGF1dGhvciwgdGhleSBub3cgaW5kaWNhdGUgZXRobmljaXR5LCB3aXRoIHRyaWFuZ2xlcyBpbmRpY2F0aW5nIHRoYXQgYW4gYXV0aG9yIGlzIER1dGNoLCBhbmQgY2lyY2xlcyBpbmRpY2F0aW5nIHRoYXQgYW4gYXV0aG9yIGlzIG5vdC4KCmBgYHtyIGdncmFwaCBib3JuIGluIHcxLCBmaWcuc2hvdz0iaG9sZCIsIG91dC53aWR0aD0iNTAlIiwgbWVzc2FnZT1GLCB3YXJuaW5nID0gRn0KI3Bsb3Qgd2F2ZSAxCmdncmFwaChub2lzb2xhdGVzX3cxLAogICAgICAgbGF5b3V0ID0gImZyIikgKwogIGdlb21fZWRnZV9saW5rKGNvbG9yID0gImdyYXkiLCB3aWR0aCA9IDAuNSkgKwogIGdlb21fbm9kZV9wb2ludChhZXMoc2l6ZSA9IGluZGVncmVlLCBjb2xvciA9IGhfaW5kZXgsIHNoYXBlID0gYXMuZmFjdG9yKGJvcm5faW5fYmluYXJ5KSkpICsgCiAgc2NhbGVfc2l6ZShyYW5nZSA9IGMoMywgMTApKSArIAogIHNjYWxlX2NvbG9yX2dyYWRpZW50KGxvdyA9ICJyZWQiLCBoaWdoID0gImJsdWUiKSArIAogIHRoZW1lX3ZvaWQoKSArCiAgbGFicyh0aXRsZSA9ICJOZXR3b3JrIFdhdmUgMSwgbm8gSXNvbGF0ZXMgLS0gU2hhcGUgSW5kaWNhdGluZyBFdGhuaWNpdHkiKQoKI3Bsb3Qgd2F2ZSAxCmdncmFwaChub2lzb2xhdGVzX3cyLAogICAgICAgbGF5b3V0ID0gImZyIikgKwogIGdlb21fZWRnZV9saW5rKGNvbG9yID0gImdyYXkiLCB3aWR0aCA9IDAuNSkgKwogIGdlb21fbm9kZV9wb2ludChhZXMoc2l6ZSA9IGluZGVncmVlLCBjb2xvciA9IGhfaW5kZXgsIHNoYXBlID0gYXMuZmFjdG9yKGJvcm5faW5fYmluYXJ5KSkpICsKICBzY2FsZV9jb2xvcl9ncmFkaWVudChsb3cgPSAicmVkIiwgaGlnaCA9ICJibHVlIikgKyAKICB0aGVtZV92b2lkKCkgKwogIGxhYnModGl0bGUgPSAiTmV0d29yayBXYXZlIDIsIG5vIElzb2xhdGVzIC0tIFNoYXBlIEluZGljYXRpbmcgRXRobmljaXR5IikKYGBgCgpTaW1pbGFybHkgdG8gdGhlIHByZXZpb3VzIG5ldHdvcmssIHRoZXJlIHN0aWxsIHNlZW1zIHRvIGJlIGFuIHVuZGVyLXJlcHJlc2VudGF0aW9uIG9mIG1pbm9yaXRpZXMgaW4gdGhpcyBuZXR3b3JrLCB0aG91Z2ggbm90IGFzIHN0cm9uZ2x5IGFzIHdhcyB0aGUgY2FzZSBmb3IgcmFjZS4gVGhlcmUgaXMsIGZ1cnRoZXJtb3JlLCBhdCBsZWFzdCBvbmUgY2lyY2xlIGluIHRoZSBmaXJzdCB3YXZlIHRoYXQgdGVuZHMgdmVyeSBzdHJvbmdseSB0byBibHVlIC0tIGluZGljYXRpbmcgYSBub24tRHV0Y2ggcGVyc29uIHdpdGggYSByYXRoZXIgaGlnaCAqaCotaW5kZXgsIGJ1dCB0aGVpciBkZWdyZWVzIGFyZSBub3QgYXMgaGlnaCBhcyBzb21lIER1dGNoIGF1dGhvcnMgd2l0aCBzaW1pbGFyICpoKi1pbmRpY2VzLiBUaGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSB0d28gd2F2ZXMgaXMgc3RpbGwgcXVpdGUgbGFyZ2Ugd2hlbiBpdCBjb21lcyB0byB0aGUgbnVtYmVyIG9mIGNvbm5lY3RlZCBhdXRob3JzLCBidXQgbm90IHdoZW4gaXQgY29tZXMgdG8gZXRobmljIHNlZ3JlZ2F0aW9uLlwKClNpbWlsYXJseSB0byB0aGUgZ3JhcGhzIG9uIHJhY2UsIHRoZXNlIGdyYXBocyBvbiBldGhuaWNpdHkgc2VlbSB0byBpbmRpY2F0ZSB0aGF0IHRoZXJlIGFyZSBmZXdlciBub24tRHV0Y2ggdGhhbiBEdXRjaCBhdXRob3JzIGluIHRoaXMgbmV0d29yayAtIHdoaWNoIGlzIG5vdCBleHRyZW1lbHkgb2RkLCBzaW5jZSB0aGUgc2FtcGxlIGNvbmNlcm5zIER1dGNoIHVuaXZlcnNpdGllcy4gSG93ZXZlciwgaXQgZnVydGhlcm1vcmUgYWxzbyBpbmRpY2F0ZXMgdGhhdCB0aGVzZSBub24tRHV0Y2ggYXV0aG9ycyBzZWVtIHRvIGNvbGxhYm9yYXRlIGxlc3Mgd2l0aCBEdXRjaCBhdXRob3JzLCBhbmQgb2Z0ZW4gaGF2ZSBsb3dlciBwcmVzdGlnZS4KCkluIG9yZGVyIHRvIGZpbmQgb3V0IGlmIHRoZXNlIGNvcnJlbGF0aW9ucyBhcmUgYWN0dWFsbHkgbWVhbmluZ2Z1bCwgSSB3aWxsIG5vdyBsb29rIGF0IHNvbWUgYWN0dWFsIG5ldHdvcmsgc3RhdGlzdGljcy4KCiMjIE5ldHdvcmsgRGVzY3JpcHRpdmVzCgpgYGB7ciwgaW5jbHVkZSA9IEYsIGVjaG89Rn0Kd2F2ZV8xIDwtIHJlYWRfcmRzKCJkYXRhc2V0c19maW5hbC93YXZlXzFfZmlyc3RfYXV0aG9ycy5yZHMiKQp3YXZlXzIgPC0gcmVhZF9yZHMoImRhdGFzZXRzX2ZpbmFsL3dhdmVfMl9maXJzdF9hdXRob3JzLnJkcyIpCm5ldF9ncmFwaF93MSA8LSBncmFwaF9mcm9tX2FkamFjZW5jeV9tYXRyaXgod2F2ZV8xKSAjZ3JhcGgtb2JqZWN0IHdhdmUgMQpuZXRfZ3JhcGhfdzIgPC0gZ3JhcGhfZnJvbV9hZGphY2VuY3lfbWF0cml4KHdhdmVfMikgI2dyYXBoLW9iamVjdCB3YXZlIDIKYGBgCgpUaGUgZmlyc3Qgc3RhdGlzdGljcyBjb25jZXJuIHNvbWUgb2YgdGhlIGJhc2ljIGFzcGVjdHMgb2YgdGhlIG5ldHdvcmssIGp1c3Qgc28gd2UgY2FuIGxvb2sgYXQgaG93IGl0IGhhcyBjaGFuZ2VkIG92ZXIgdGltZSAtIGFuZCB3aGF0IGV4YWN0bHkgaGFzIGNoYW5nZWQuXAoKIyMjIEJhc2ljIE5ldHdvcmsgRGVzY3JpcHRpdmVzIHsudGFic2V0fQoKIyMjIyBXYXZlIDEKCk51bWJlciBvZiB2ZXJ0aWNlcyBpbiB0aGUgZmlyc3Qgd2F2ZSAoVzEpLgoKYGBge3J9CiMgd2F2ZSAxCiMgbnVtYmVyIG9mIHZlcnRpY2VzCnZjb3VudChuZXRfZ3JhcGhfdzEpIApgYGAKClRoZSBudW1iZXIgb2YgZWRnZXMgaW4gVzEuCgpgYGB7cn0KZWNvdW50KG5ldF9ncmFwaF93MSkKYGBgCgpUaGUgZHlhZCBjZW5zdXMgaW4gVzEsIHdoaWNoIGluZGljYXRlcyB0aGF0IHRoZXJlIGFyZSA3IG11dHVhbCB0aWVzLCA3MyBhc3ltbWV0cmljYWwgdGllcyAodGllcyB3aGVyZSBubyB0aWUgaXMgcmV0dXJuZWQpLCBhbmQgMjI3MTEgaW5zdGFuY2VzIHdoZXJlIHRoZXJlIGNvdWxkIGhhdmUgYmVlbiBhIHRpZSwgYnV0IHdhcyBub3QuCgpgYGB7cn0KaWdyYXBoOjpkeWFkX2NlbnN1cyhuZXRfZ3JhcGhfdzEpCmBgYAoKVGhlIHRyaWFkIGNlbnN1cywgZnVydGhlcm1vcmUgaW5kaWNhdGVzIHdoaWNoIHRyaWFkcyBhcmUgcHJlc2VudCBpbiB0aGUgbmV0d29yayBpbiBXMS4KCmBgYHtyfQppZ3JhcGg6OnRyaWFkX2NlbnN1cyhuZXRfZ3JhcGhfdzEpCmBgYAoKVW5kZXJzdGFuZGluZyB0aGUgbWVhbmluZyBvZiB0aGVzZSBudW1iZXJzICxjYW4gYmUgYSBiaXQgZWFzaWVyIGlmIHdlIHNlZSB0aGUgbnVtYmVycyBkaXN0cmlidXRlZCBvbiBhIGhpc3RvZ3JhbToKCmBgYHtyfQpoaXN0KGlncmFwaDo6dHJpYWRfY2Vuc3VzKG5ldF9ncmFwaF93MSkpCmBgYAoKVGhlIGdlbmVyYWwgZGVuc2l0eSBvZiB0aGlzIGdyYXBoIGlzIDAuMDAxOTUsIHdoaWNoIGlzIHF1aXRlIGxvdyAtLSBob3dldmVyLCBvbmUgaGFzIHRvIGFsc28gdGFrZSBpbnRvIGFjY291bnQgdGhhdCB3ZSBhcmUgZGVhbGluZyB3aXRoIGRhdGEgb2JzZXJ2ZWQgaW4gMjAyMiwgYW5kIHRoYXQgd2UgYXJlIHVzaW5nIHRob3NlIGRhdGEgdG8gcmV0cm9zcGVjdGl2ZWx5IGFzc2VzcyBhIG5ldHdvcmtzIHRocmVlIHllYXJzIGVhcmxpZXIuIE1vc3RseSwgd2Ugd2lsbCBiZSBtaXNzaW5nIFBoRHMsIGFuZCBvdGhlciBwZW9wbGUgd2hvIGFyZSBub3Qgd29ya2luZyBhdCB0aGVpciB1bml2ZXJzaXRpZXMgYW55bW9yZSwgYW5kIGhhdmUgc3RhcnRlZCB3b3JraW5nIGVpdGhlciBzb21ld2hlcmUgb3V0c2lkZSBvZiBvdXIgc2FtcGxlLCBvciBoYXZlIHN0b3BwZWQgd29ya2luZyBpbiBhY2FkZW1pYSBhbHRvZ2V0aGVyLlwKCmBgYHtyfQppZ3JhcGg6OmVkZ2VfZGVuc2l0eShuZXRfZ3JhcGhfdzEpCmBgYAoKIyMjIyBXYXZlIDIKCk51bWJlciBvZiB2ZXJ0aWNlcyBpbiB0aGUgc2Vjb25kIHdhdmUgKFcyKSAtLSB0aGUgc2FtZSBudW1iZXIgYXMgaW4gd2F2ZSAxLCB3aGljaCBtYWtlcyBzZW5zZSwgZHVlIHRvIHRoZSBzYW1wbGluZyBtZXRob2QuCgpgYGB7cn0KdmNvdW50KG5ldF9ncmFwaF93MikgCmBgYAoKVGhlIG51bWJlciBvZiBlZGdlcyBpbiBXMiAtLSBhIHN0cm9uZyBpbmNyZWFzZSBjb21wYXJlZCB0byB0aGUgZmlyc3Qgd2F2ZSwgaGF2aW5nIGluY3JlYXNlZCBhbG1vc3QgMi41IHRpbWVzLgoKYGBge3J9CmVjb3VudChuZXRfZ3JhcGhfdzIpCmBgYAoKVGhlIGR5YWQgY2Vuc3VzIGluIFcxLCB3aGljaCBpbmRpY2F0ZXMgdGhhdCB0aGVyZSBhcmUgMTkgbXV0dWFsIHRpZXMsIDE3NCBhc3ltbWV0cmljYWwgdGllcyAodGllcyB3aGVyZSBubyB0aWUgaXMgcmV0dXJuZWQpLCBhbmQgMjI1OTggaW5zdGFuY2VzIHdoZXJlIHRoZXJlIGNvdWxkIGhhdmUgYmVlbiBhIHRpZSwgYnV0IHdhcyBub3QuCgpgYGB7cn0KaWdyYXBoOjpkeWFkX2NlbnN1cyhuZXRfZ3JhcGhfdzIpCmBgYAoKVGhlIHRyaWFkIGNlbnN1cywgZnVydGhlcm1vcmUgaW5kaWNhdGVzIHdoaWNoIHRyaWFkaWMgY29uZmlndXJhdGlvbnMgYXJlIHByZXNlbnQgaW4gdGhlIG5ldHdvcmsgb2YgdGhlIHNlY29uZCB3YXZlLgoKYGBge3J9CmlncmFwaDo6dHJpYWRfY2Vuc3VzKG5ldF9ncmFwaF93MikKYGBgCgpTaW1pbGFybHkgdG8gdGhlIHByZXZpb3VzIHdhdmUsIHRoZXNlIG51bWJlcnMgY2FuIGJlIGEgYml0IGVhc2llciB0byB1bmRlcnN0YW5kIHdoZW4gcHV0IGludG8gYSBoaXN0b2dyYW06CgpgYGB7cn0KaGlzdChpZ3JhcGg6OnRyaWFkX2NlbnN1cyhuZXRfZ3JhcGhfdzIpKQpgYGAKClRoZSBnZW5lcmFsIGRlbnNpdHkgb2YgdGhpcyBncmFwaCBpcyAwLjAwNDcsIHdoaWNoIG1lYW5zIGl0IGhhcyBhbG1vc3QgdHJpcGxlZCBpbiB0aGUgdGltZSBiZXR3ZWVuIHdhdmVzIOKAkyBob3dldmVyLCBvbmUgaGFzIHRvIHN0aWxsIHRha2UgaW50byBhY2NvdW50IHRoYXQgdGhpcyBtaWdodCBqdXN0IGJlIGJlY2F1c2UgdGhlc2UgbWVhc3VyZXMgYXJlIG11Y2ggbW9yZSBhY2N1cmF0ZSB0aGFuIHRob3NlIGZvciB0aGUgZmlyc3Qgd2F2ZS4gUmVnYXJkbGVzcywgd2UgZG8gdGh1cyBzZWUgYW4gZXZvbHZlZCBuZXR3b3JrLgoKYGBge3J9CmlncmFwaDo6ZWRnZV9kZW5zaXR5KG5ldF9ncmFwaF93MikKYGBgCgpXaXRoIHRoZXNlIGZhY3RvcnMgaW4gbWluZCwgdGhhdCBjaGFuZ2UgaGFzIHRodXMgaW5kZWVkIG9jY3VycmVkIGJldHdlZW4gd2F2ZXMsIGFuZCB0aGF0IHRoZSBkZW5zaXR5IGhhcyBlc3BlY2lhbGx5IGluY3JlYXNlZCwgSSB3aWxsIG5vdyB0dXJuIHRvd2FyZHMgdGhlIGRlc2NyaXB0aXZlcyB0aGF0IGNhbiBoZWxwIGFuc3dlciB0aGUgcmVzZWFyY2ggcXVlc3Rpb25zLgoKIyMjIERlZ3JlZSBDZW50cmFsaXR5CgpEZWdyZWUgY2VudHJhbGl0eSAtIG9yIGRlZ3JlZSAtIGNvbmNlcm5zIHRoZSBudW1iZXIgb2Ygb3RoZXIgYWN0b3JzLCBvciAqYWx0ZXJzKiBhbiBhdXRob3IsIG9yICplZ28qIGlzIGNvbm5lY3RlZCB3aXRoLiBUaGUgc3RydWN0dXJlIG9mIG91ciBkYXRhIGlzIGFzIHN1Y2gsIHRoYXQgdGhlcmUgaXMgYW4gZGlmZmVyZW50aWF0aW9uIGJldHdlZW4gZGVncmVlcyBjb21pbmcgaW4gLSAqaW5kZWdyZWVzKiAtIGFuZCBkZWdyZWVzIGdvaW5nIG91dCAtICpvdXRkZWdyZWVzKi4gSW5kZWdyZWVzLCBpbiB0aGlzIGNvbnRleHQsIHJlZmVyIHRvIHRoZSB0aWVzICdyZWNlaXZlZCcgYnkgYW4gZWdvLCBhbmQgY29uY3JldGVseSBpbmRpY2F0ZSBiZWluZyAnbm90IHRoZSBmaXJzdCcgYXV0aG9yIGluIGEgcGFwZXIuIE91dGRlZ3JlZXMsIG9uIHRoZSBvdGhlciBoYW5kLCByZWZlciB0byB0aGUgb3Bwb3NpdGUuIFRoZXkgYXJlIHRpZXMgJ3NlbnQnIGJ5IHRoZSBlZ28sIGFuZCBhcyBzdWNoIHJlZmVyIHRvIGNvbGxhYm9yYXRpb25zIGluIHdoaWNoIHRoZSBlZ28gaXMgdGhlIGZpcnN0IGF1dGhvciBpbiB0aGUgcGFwZXIuCgojIyMjIEdlbmVyYWwKCmBgYHtyIGRlZ3JlZSBjZW50cmFsaXR5IHcxIGFuZCAyLCBmaWcuc2hvdz0iaG9sZCIsIG91dC53aWR0aD0iNTAlIiwgd2FybmluZyA9IEYsIHJlc3VsdHM9RiwgbWVzc2FnZSA9IEZ9CiNkZWdyZWUgY2VudHJhbGl0eSB3MSAKZGVncmVlX3cxIDwtIGRlZ3JlZShuZXRfZ3JhcGhfdzEpCmRlZ3JlZV93MSA8LSBhcy5kYXRhLmZyYW1lKGRlZ3JlZV93MSkKdmlldyhkZWdyZWVfdzEpCmdncGxvdChkZWdyZWVfdzEsIGFlcyhhcy5udW1lcmljKGRlZ3JlZV93MSksIGNvbG91ciA9IGFzLm51bWVyaWMoZGVncmVlX3cxKSApKSArCiAgZ2VvbV9oaXN0b2dyYW0oYmlud2lkdGggPSAuNSkgKwogIGxhYnMoCiAgICB0aXRsZSA9ICJEaXN0cmlidXRpb24gRGVncmVlcyBXYXZlIDEiLAogICAgeCA9ICJEaXN0cmlidXRpb24gb2YgRGVncmVlcyIsCiAgICB5ID0gIkNvdW50IgogICkgKwogIHlsaW0oMCwgMTUwKSArCiAgdGhlbWVfYncoKQojZGVncmVlIGNlbnRyYWxpdHkgdzIgCmRlZ3JlZV93MiA8LSBkZWdyZWUobmV0X2dyYXBoX3cyKQpkZWdyZWVfdzIgPC0gYXMuZGF0YS5mcmFtZShkZWdyZWVfdzIpCmdncGxvdChkZWdyZWVfdzIsIGFlcyhhcy5udW1lcmljKGRlZ3JlZV93MiksIGNvbG91ciA9IGFzLm51bWVyaWMoZGVncmVlX3cyKSkpICsKICBnZW9tX2hpc3RvZ3JhbShiaW53aWR0aCA9IC41KSArCiAgbGFicygKICAgIHRpdGxlID0gIkRpc3RyaWJ1dGlvbiBEZWdyZWVzIFdhdmUgMiIsCiAgICB4ID0gIkRpc3RyaWJ1dGlvbiBvZiBEZWdyZWVzIiwKICAgIHkgPSAiQ291bnQiCiAgKSArCiAgeWxpbSgwLCAxNTApICsKICB0aGVtZV9idygpCgojY291bGQgYWxzbyBkbyAtLSBkZWdyZWUgY2VudHJhbGl0eSBvZiB3aGl0ZSB2LiBub24td2hpdGUgcGVvcGxlLCBvciBkZWdyZWUgY2VudHJhbGl0eSBvZiBkdXRjaCB2LiBub24tZHV0Y2ggcGVvcGxlIApgYGAKCkFzIGRlbW9uc3RyYXRlZCBieSB0aGVzZSBoaXN0b2dyYW1zLCB0aGVyZSBoYXMgYmVlbiBzb21lIHNoaWZ0IGluIHRoZSBkaXN0cmlidXRpb24gb2YgZGVncmVlcyBiZXR3ZWVuIHdhdmVzLiBHZW5lcmFsbHkgc3BlYWtpbmcsIHRoZXkgaGF2ZSBiZWNvbWUgbW9yZSBldmVubHkgZGlzdHJpYnV0ZWQgLS0gd2l0aCBtb3N0IGFjdG9ycyBpbiB0aGUgbmV0d29yayBub3cgaGF2aW5nIGNvbGxhYm9yYXRlZCBvbiBhdCBsZWFzdCBvbmUgcGFwZXIsIGluc3RlYWQgb2Ygbm9uZSAtIGFzIHdhcyB0aGUgY2FzZSBpbiB0aGUgZmlyc3Qgd2F2ZS4gRnVydGhlcm1vcmUsIHRoZSBtYXhpbXVtIG51bWJlciBvZiBkZWdyZWVzIGhhcyBhbHNvIGluY3JlYXNlZCwgZnJvbSAxMCB0byAxMi4KCiMjIEh5cG90aGVzaXMgMTogU2VncmVnYXRpb24gaW4gRGVncmVlcwoKVG8gZnVydGhlciBldmFsdWF0ZSBob3cgdGhlc2UgY2hhcmFjdGVyaXN0aWNzIGFyZSBzZWdyZWdhdGVkIGFjcm9zcyByYWNlIGFuZCBldGhuaWNpdHksIEkgd2lsbCBmaXJzdCBsb29rIGF0IHRoZSBkaWZmZXJlbmNlcyBpbiBtZWFuIGRlZ3JlZSBwZXIgZ3JvdXAsIHBlciB3YXZlLiBJbiBvdGhlciB3b3JkcywgSSB3aWxsIGFzc2VzcyB0aGUgbWVhbiBkZWdyZWUgZm9yIHdoaXRlIHBlb3BsZSwgcGVvcGxlIG9mIGNvbG91ciwgRHV0Y2ggcGVvcGxlLCBhbmQgbm9uLUR1dGNoIHBlb3BsZSwgZm9yIGJvdGggd2F2ZSAxIGFuZCAyLgoKYGBge3IsIG1lc3NhZ2UgPSBGLCB3YXJuaW5nID0gRiwgcmVzdWx0cyA9IEZ9CmRlZ3JlZV93MSA8LSBkZWdyZWUobmV0X2dyYXBoX3cxKQpkZWdyZWVfdzEgPC0gYXMuZGF0YS5mcmFtZShkZWdyZWVfdzEpCmRlZ3JlZV9kZW1fMSA8LSBjYmluZChkZWdyZWVfdzEsIGRlbW9ncmFwaGljc19oYW5uYWgpCgpkZWdyZWVfdzIgPC0gZGVncmVlKG5ldF9ncmFwaF93MikKZGVncmVlX3cyIDwtIGFzLmRhdGEuZnJhbWUoZGVncmVlX3cyKQpkZWdyZWVfZGVtXzIgPC0gY2JpbmQoZGVncmVlX3cyLCBkZW1vZ3JhcGhpY3NfaGFubmFoKQpgYGAKCmBgYHtyfQojc2V0dGluZyB1cCB0aGUgZGF0YSAtIHJhY2UgCndoaXRlX3Blb3BsZSA8LSBkZWdyZWVfZGVtXzEgJT4lCiAgZmlsdGVyKAogICAgd2hpdGVfb3Jfbm90ID09IDEKICApCnBvYyA8LSBkZWdyZWVfZGVtXzEgJT4lCiAgZmlsdGVyKAogICAgd2hpdGVfb3Jfbm90ID09IDAKICApCgptZWFuX2RlZ3JlZV93aGl0ZSA8LSBtZWFuKHdoaXRlX3Blb3BsZSRkZWdyZWVfdzEpCm1lYW5fZGVncmVlX3doaXRlIDwtIG1lYW5fZGVncmVlX3doaXRlICU+JQogIHJvdW5kKDIpCgptZWFuX2RlZ3JlZV9wb2MgPC0gbWVhbihwb2MkZGVncmVlX3cxKQptZWFuX2RlZ3JlZV9wb2MgPC0gbWVhbl9kZWdyZWVfcG9jICU+JQogIHJvdW5kKDIpCgpSYWNlIDwtIGMoIldoaXRlIFBlb3BsZSIsICJQT0MiKQpEZWdyZWUgPC0gYyhtZWFuX2RlZ3JlZV93aGl0ZSwgbWVhbl9kZWdyZWVfcG9jKQoKbWVhbl9kZWdyZWVzIDwtIGNiaW5kKFJhY2UsIERlZ3JlZSkKCiMgZXRobmljaXR5IAoKZHV0Y2hfcGVvcGxlIDwtIGRlZ3JlZV9kZW1fMSAlPiUKICBmaWx0ZXIoCiAgICBib3JuX2luX2JpbmFyeSA9PSAxCiAgKQpub25fZHV0Y2hfcGVvcGxlIDwtIGRlZ3JlZV9kZW1fMSAlPiUKICBmaWx0ZXIoCiAgICBib3JuX2luX2JpbmFyeSA9PSAwCiAgKQoKbWVhbl9kZWdyZWVfZHV0Y2ggPC0gbWVhbihkdXRjaF9wZW9wbGUkZGVncmVlX3cxKQptZWFuX2RlZ3JlZV9kdXRjaCA8LSBtZWFuX2RlZ3JlZV9kdXRjaCAlPiUKICByb3VuZCgyKQoKbWVhbl9kZWdyZWVfbm9uX2R1dGNoIDwtIG1lYW4obm9uX2R1dGNoX3Blb3BsZSRkZWdyZWVfdzEpCm1lYW5fZGVncmVlX25vbl9kdXRjaCA8LSBtZWFuX2RlZ3JlZV9ub25fZHV0Y2ggJT4lCiAgcm91bmQoMikKCkV0aG5pY2l0eSA8LSBjKCJEdXRjaCBQZW9wbGUiLCAiTm9uLUR1dGNoIFBlb3BsZSIpCkRlZ3JlZSA8LSBjKG1lYW5fZGVncmVlX2R1dGNoLCBtZWFuX2RlZ3JlZV9ub25fZHV0Y2gpCgptZWFuX2RlZ3JlZXNfMiA8LSBjYmluZChFdGhuaWNpdHksIERlZ3JlZSkKYGBgCgpgYGB7cixmaWcuc2hvdz0iaG9sZCIsIG91dC53aWR0aD0iNTAlIiwgd2FybmluZyA9IEYsLCBtZXNzYWdlID0gRn0KCmthYmxlRXh0cmE6OmthYmxlKG1lYW5fZGVncmVlcywgY2FwdGlvbiA9ICJNZWFuIERlZ3JlZXMgV2hpdGUgUGVvcGxlIGFuZCBQT0MiKQoKa2FibGVFeHRyYTo6a2FibGUobWVhbl9kZWdyZWVzXzIsIGNhcHRpb24gPSAiTWVhbiBEZWdyZWVzIER1dGNoIGFuZCBOb24tRHV0Y2giKQpgYGAKClRoZXNlIG51bWJlcnMgYXJlIGluIGxpbmUgd2l0aCB3aGF0IHdhcyBkZW1vbnN0cmF0ZWQgYnkgdGhlIHZpc3VhbGlzYXRpb25zIG9mIHRoZSBuZXR3b3JrIGVhcmxpZXI6IGJvdGggcG9jIGFuZCBub25fRHV0Y2ggcGVvcGxlIGhhdmUgbGVzcyBjb2xsYWJvcmF0aW9ucyB0aGFuIHdoaXRlIHBlb3BsZSwgYW5kIER1dGNoIHBlb3BsZSAtIHJlc3BlY3RpdmVseS4gRnVydGhlcm1vcmUsIGFzIGNvdWxkIGJlIG5vdGVkIGZyb20gdGhlIHNtYWxsZXIgYXZlcmFnZSBzaXplIG9mIHRoZSByYWNlIHZlY3RvcnMgY29tcGFyZWQgdG8gdGhlIGV0aG5pY2l0eSB2ZWN0b3JzLCB0aGUgYXZlcmFnZSBkZWdyZWUgZm9yIG5vbi1EdXRjaCBwZW9wbGUgaXMgc3RpbGwgaGlnaGVyIHRoYW4gdGhhdCBvZiBwZW9wbGUgb2YgY29sb3VyLlwKCmBgYHtyfQojc2V0dGluZyB1cCB0aGUgZGF0YSAtIHJhY2UgCndoaXRlX3Blb3BsZV8yIDwtIGRlZ3JlZV9kZW1fMiAlPiUKICBmaWx0ZXIoCiAgICB3aGl0ZV9vcl9ub3QgPT0gMQogICkKcG9jXzIgPC0gZGVncmVlX2RlbV8yICU+JQogIGZpbHRlcigKICAgIHdoaXRlX29yX25vdCA9PSAwCiAgKQoKbWVhbl9kZWdyZWVfd2hpdGVfMiA8LSBtZWFuKHdoaXRlX3Blb3BsZV8yJGRlZ3JlZV93MikKbWVhbl9kZWdyZWVfd2hpdGVfMiA8LSBtZWFuX2RlZ3JlZV93aGl0ZV8yICU+JQogIHJvdW5kKDIpCgptZWFuX2RlZ3JlZV9wb2NfMiA8LSBtZWFuKHBvY18yJGRlZ3JlZV93MikKbWVhbl9kZWdyZWVfcG9jXzIgPC0gbWVhbl9kZWdyZWVfcG9jXzIgJT4lCiAgcm91bmQoMikKClJhY2UgPC0gYygiV2hpdGUgUGVvcGxlIiwgIlBPQyIpCkRlZ3JlZSA8LSBjKG1lYW5fZGVncmVlX3doaXRlXzIsIG1lYW5fZGVncmVlX3BvY18yKQoKbWVhbl9kZWdyZWVzX2EgPC0gY2JpbmQoUmFjZSwgRGVncmVlKQoKIyBldGhuaWNpdHkgCgpkdXRjaF9wZW9wbGVfMiA8LSBkZWdyZWVfZGVtXzIgJT4lCiAgZmlsdGVyKAogICAgYm9ybl9pbl9iaW5hcnkgPT0gMQogICkKbm9uX2R1dGNoX3Blb3BsZV8yIDwtIGRlZ3JlZV9kZW1fMiAlPiUKICBmaWx0ZXIoCiAgICBib3JuX2luX2JpbmFyeSA9PSAwCiAgKQoKbWVhbl9kZWdyZWVfZHV0Y2hfMiA8LSBtZWFuKGR1dGNoX3Blb3BsZV8yJGRlZ3JlZV93MikKbWVhbl9kZWdyZWVfZHV0Y2hfMiA8LSBtZWFuX2RlZ3JlZV9kdXRjaF8yICU+JQogIHJvdW5kKDIpCgptZWFuX2RlZ3JlZV9ub25fZHV0Y2hfMiA8LSBtZWFuKG5vbl9kdXRjaF9wZW9wbGVfMiRkZWdyZWVfdzIpCm1lYW5fZGVncmVlX25vbl9kdXRjaF8yIDwtIG1lYW5fZGVncmVlX25vbl9kdXRjaF8yICU+JQogIHJvdW5kKDIpCgpFdGhuaWNpdHkgPC0gYygiRHV0Y2ggUGVvcGxlIiwgIk5vbi1EdXRjaCBQZW9wbGUiKQpEZWdyZWUgPC0gYyhtZWFuX2RlZ3JlZV9kdXRjaF8yLCBtZWFuX2RlZ3JlZV9ub25fZHV0Y2hfMikKCm1lYW5fZGVncmVlc19iIDwtIGNiaW5kKEV0aG5pY2l0eSwgRGVncmVlKQpgYGAKCmBgYHtyLGZpZy5zaG93PSJob2xkIiwgb3V0LndpZHRoPSI1MCUiLCB3YXJuaW5nID0gRiwsIG1lc3NhZ2UgPSBGfQoKa2FibGVFeHRyYTo6a2FibGUobWVhbl9kZWdyZWVzX2EsIGNhcHRpb24gPSAiTWVhbiBEZWdyZWVzIFdoaXRlIFBlb3BsZSBhbmQgUE9DIFdhdmUgMiIpCgprYWJsZUV4dHJhOjprYWJsZShtZWFuX2RlZ3JlZXNfYiwgY2FwdGlvbiA9ICJNZWFuIERlZ3JlZXMgRHV0Y2ggYW5kIE5vbi1EdXRjaCBXYXZlIDIiKQpgYGAKClRoaXMgcGF0dGVybiBwZXJzaXN0cyBpbnRvIHRoZSBzZWNvbmQgd2F2ZSwgdGhvdWdoIHRoZSBwcm9wb3J0aW9ucyBvZiBkZWdyZWUgaGF2ZSBiZWNvbWUgbW9yZSBmYXZvdXJhYmxlIGZvciBib3RoIHJhY2lhbCBhbmQgZXRobmljIG1pbm9yaXRpZXMuIEhvd2V2ZXIsIHRoZXJlIGlzIHN0aWxsIGEgc3Ryb25nIHNlZ3JlZ2F0aW9uIGZvciBib3RoIHRoZXNlIGdyb3VwcyBkZW1vbnN0cmF0ZWQgaW4gdGhlc2UgbnVtYmVycy7CoFwKClRoaXMgY2FuIGZ1cnRoZXJtb3JlIGJlIGlsbHVzdHJhdGVkIGJ5IHRoZSBmb2xsb3dpbmcgZ3JhcGg6CgpgYGB7ciwgZmlnLnNob3c9ImhvbGQiLCBvdXQud2lkdGg9IjUwJSIsIHdhcm5pbmcgPSBGLCByZXN1bHRzPUYsIG1lc3NhZ2UgPSBGfQpnZ3Bsb3QoZGVncmVlX2RlbV8xLCBhZXMoYXMubnVtZXJpYyhkZWdyZWVfdzEpKSkgKwogIGdlb21faGlzdG9ncmFtKGJpbndpZHRoID0gLjUpICsKICBsYWJzKAogICAgdGl0bGUgPSAiRGlzdHJpYnV0aW9uIERlZ3JlZXMgV2F2ZSAxIiwKICAgIHggPSAiRGlzdHJpYnV0aW9uIG9mIERlZ3JlZXMiLAogICAgeSA9ICJDb3VudCIKICApICsKICB5bGltKDAsIDE1MCkgKwogIHRoZW1lX2J3KCkgKwogIGZhY2V0X3dyYXAofndoaXRlX29yX25vdCkKCiNkZWdyZWUgY2VudHJhbGl0eSB3MiAKZGVncmVlX3cyIDwtIGRlZ3JlZShuZXRfZ3JhcGhfdzIpCmRlZ3JlZV93MiA8LSBhcy5kYXRhLmZyYW1lKGRlZ3JlZV93MikKZGVncmVlX2RlbV8yIDwtIGNiaW5kKGRlZ3JlZV93MiwgZGVtb2dyYXBoaWNzX2hhbm5haCkKCmdncGxvdChkZWdyZWVfZGVtXzIsIGFlcyhhcy5udW1lcmljKGRlZ3JlZV93MikpKSArCiAgZ2VvbV9oaXN0b2dyYW0oYmlud2lkdGggPSAuNSkgKwogIGxhYnMoCiAgICB0aXRsZSA9ICJEaXN0cmlidXRpb24gRGVncmVlcyBXYXZlIDIiLAogICAgeCA9ICJEaXN0cmlidXRpb24gb2YgRGVncmVlcyIsCiAgICB5ID0gIkNvdW50IgogICkgKwogIHlsaW0oMCwgMTUwKSArCiAgdGhlbWVfYncoKSArCiAgZmFjZXRfd3JhcCh+d2hpdGVfb3Jfbm90KQpgYGAKClRoaXMgZ3JhcGggaGlnaGxpZ2h0cyB0aGUgZGlmZmVyZW5jZSBpbiBkZWdyZWUtZGlzdHJpYnV0aW9ucyBiZXR3ZWVuIHdoaXRlIHBlb3BsZSAoMSkgYW5kIHBlb3BsZSBvZiBjb2xvdXIgKDApIC0gYWNyb3NzIHdhdmVzLiBJbiBsaW5lIHdpdGggbW9zdCBvYnNlcnZhdGlvbnMgb24gdGhlIGRpZmZlcmVuY2VzIGluIG51bWJlciBvZiBjb2xsYWJvcmF0aW9ucyBiZXR3ZWVuIHdhdmVzLCB0aGlzIGdyYXBoIGFsc28gZGVtb25zdHJhdGVzIHRoYXQgdGhlcmUgYXJlIG11Y2ggZmV3ZXIgcGVvcGxlIC0gcmVnYXJkbGVzcyBvZiByYWNlIC0gKndpdGhvdXQqIGNvbGxhYm9yYXRpb25zLiBIb3dldmVyLCBpdCBzaG91bGQgYWxzbyBiZSBub3RlZCB0aGF0IGluIGJvdGggd2F2ZXMsIG5vIHBlb3BsZSBvZiBjb2xvdXIgc2VlbSB0byBleGNlZWQgdGhyZWUgY29sbGFib3JhdGlvbnMsIHdoaWxlIG1hbnkgd2hpdGUgcGVvcGxlIGRvIHNlZW0gdG8gYWNoaWV2ZSB0aGlzLsKgCgpXaGV0aGVyIHRoZXNlIGRpZmZlcmVuY2VzIGluIGRlZ3JlZSBhcmUgcXVhbGl0YXRpdmVseSBkaWZmZXJlbnQgYmV0d2VlbiB3aGl0ZSBwZW9wbGUgYW5kIHBlb3BsZSBvZiBjb2xvdXIsIGNhbiBiZSBlc3RpbWF0ZWQgdXNpbmcgYW4gaW5kZXBlbmRlbnQgdHdvLXNhbXBsZSB0LXRlc3QsIHRlc3RpbmcgdGhlIG51bGwtaHlwb3RoZXNpcyB0aGF0IHRoZXJlIGlzIG5vIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgbWVhbiBkZWdyZWUgb2YgdGhlIG1pbm9yaXR5IGdyb3VwLCBhbmQgdGhlIG1ham9yaXR5IGdyb3VwIGluIHF1ZXN0aW9uLgoKYGBge3IsIGNvbW1lbnQgPSAiIiwgZmlnLndpZHRoID0gNSwgZmlnLmhlaWdodCA9IDZ9CnQucG9jX2RlZ18xIDwtIHQudGVzdChwb2MkZGVncmVlX3cxLCB3aGl0ZV9wZW9wbGUkZGVncmVlX3cxLCBhbHRlcm5hdGl2ZSA9ICJ0d28uc2lkZWQiLCB2YXIuZXF1YWwgPSBGKQp0LnBvY19kZWdfMiA8LSB0LnRlc3QocG9jXzIkZGVncmVlX3cyLCB3aGl0ZV9wZW9wbGVfMiRkZWdyZWVfdzIsIGFsdGVybmF0aXZlID0gInR3by5zaWRlZCIsIHZhci5lcXVhbCA9IEYpCnQuZXRoX2RlZ18xIDwtIHQudGVzdChub25fZHV0Y2hfcGVvcGxlJGRlZ3JlZV93MSwgZHV0Y2hfcGVvcGxlJGRlZ3JlZV93MSwgYWx0ZXJuYXRpdmUgPSAidHdvLnNpZGVkIiwgdmFyLmVxdWFsID0gRkFMU0UpCnQuZXRoX2RlZ18yIDwtIHQudGVzdChub25fZHV0Y2hfcGVvcGxlXzIkZGVncmVlX3cyLCBkdXRjaF9wZW9wbGVfMiRkZWdyZWVfdzIsIGFsdGVybmF0aXZlID0gInR3by5zaWRlZCIsIHZhci5lcXVhbCA9IEZBTFNFKQpgYGAKCmBgYHtyLCBpbmNsdWRlID0gRiwgcmVzdWx0cyA9IEYsIGVjaG8gPSBGLCBtZXNzYWdlID1GfQpEZWdyZWVfZiAgPC0gYyh0LmV0aF9kZWdfMSwgdC5ldGhfZGVnXzIpCnQudC5kZWcgPC0gY2JpbmQoRGVncmVlX2YpCmthYmxlRXh0cmE6OmthYmxlKHQudC5kZWcsIGNhcHRpb24gPSAiTWVhbiBEZWdyZWVzIFdoaXRlIFBlb3BsZSBhbmQgUE9DIFdhdmUgMiIpCmBgYAoKYGBge3IsIGF0dHIub3V0cHV0PSdzdHlsZT0ibWF4LWhlaWdodDogMTAwcHg7Iid9CnQucG9jX2RlZ18xCnQucG9jX2RlZ18yCnQuZXRoX2RlZ18xCnQuZXRoX2RlZ18yCmBgYAoKQXMsIGhvd2V2ZXIsIGluZGljYXRlZCBieSB0aGVzZSB0LXRlc3QsIHRoaXMgbnVsbC1oeXBvdGhlc2lzIGNhbiBiZSByZWplY3RlZCBpbiBlYWNoIGNhc2UuIFRodXMgZ2l2aW5nIGV2aWRlbmNlIGZvciBib3RoIEgxYSwgYW5kIEgxYiwgbmFtZWx5IHRoYXQgLSBvbiBhdmVyYWdlIC0gcmFjaWFsIGFuZCBldGhuaWMgbWlub3JpdHkgZ3JvdXBzIGNvbGxhYm9yYXRlIGxlc3MgdGhhbiByYWNpYWwgYW5kIGV0aG5pYyBtYWpvcml0eSBncm91cHMuCgojIyBIeXBvdGhlc2lzIDM6IFNlZ3JlZ2F0aW9uIGluIFByZXN0aWdlCgojIyMgaC1JbmRleAoKSW4gb3JkZXIgdG8gYXNzZXNzIHRoZSB0aGlyZCBoeXBvdGhlc2lzLCB3aGljaCBzdGF0ZWQgdGhhdCB0aGUgKmgqLWluZGV4IGlzIGJvdGggc2VncmVnYXRlZCBhY3Jvc3MgcmFjZSwgYW5kIGFsc28gYWNyb3NzIGV0aG5pY2l0eSwgYSBzaW1pbGFyIGFuYWx5c2lzIHRvIHRoZSBwcmV2aW91cyBoeXBvdGhlc2lzIHdpbGwgYmUgcGVyZm9ybWVkLgoKIyMjIyBDYWxjdWxhdGlvbnMKClRoZSBmb2xsb3dpbmcgZ3JhcGggcmVwcmVzZW50cyB0aGUgZGlzdHJpYnV0aW9uIG9mIHRoZSAqaCotaW5kZXggYWNyb3NzIHRoZSBlbnRpcmUgc2FtcGxlOgoKYGBge3IgaC1pbmRleH0KZGVtb2dyYXBoaWNzX2hhbm5haCAlPiUKICBnZ3Bsb3QobWFwcGluZyA9IGFlcyhoX2luZGV4XzIpKSArCiAgZ2VvbV9iYXIocG9zaXRpb24gPSAiZG9kZ2UiKSArCiAgICBsYWJzKAogICAgeCA9ICJoIEluZGV4IiwKICAgIHkgPSAiQ291bnQiCiAgKSArCiAgdGhlbWVfYncoKSAKYGBgCgpJbiBvcmRlciB0byBiZXR0ZXIgZXN0aW1hdGUgdGhlIGRpZmZlcmVuY2VzIGluIGF2ZXJhZ2UgKmgqLWluZGV4IGJldHdlZW4gbWlub3JpdHkgYW5kIG1ham9yaXR5IGdyb3VwcywgdGhlIGZvbGxvd2luZyBncmFwaCBkaXNwbGF5cyB0aGUgKmgqLWluZGV4IG9mIHBlb3BsZSBvZiBjb2xvdXIgYW5kIHdoaXRlIHBlb3BsZSwgb24gdGhlIGxlZnQsIGFuZCB0aGF0IG9mIGV0aG5pYyBtaW5vcml0aWVzIGFuZCBEdXRjaCBwZW9wbGUsIG9uIHRoZSByaWdodC4KCmBgYHtyLCBmaWcuc2hvdz0iaG9sZCIsIG91dC53aWR0aD0iNTAlIiwgd2FybmluZyA9IEYsIHJlc3VsdHM9RiwgbWVzc2FnZSA9IEZ9CmRlbW9ncmFwaGljc19oYW5uYWggJT4lCiAgZ2dwbG90KG1hcHBpbmcgPSBhZXMoaF9pbmRleF8yKSkgKwogIGdlb21fYmFyKHBvc2l0aW9uID0gImRvZGdlIikgKwogICAgbGFicygKICAgIHggPSAiaCBJbmRleCIsCiAgICB5ID0gIkNvdW50IgogICkgKwogIHRoZW1lX2J3KCkgKwogIGZhY2V0X3dyYXAofndoaXRlX29yX25vdCkKCmRlbW9ncmFwaGljc19oYW5uYWggJT4lCiAgZ2dwbG90KG1hcHBpbmcgPSBhZXMoaF9pbmRleF8yKSkgKwogIGdlb21fYmFyKHBvc2l0aW9uID0gImRvZGdlIikgKwogICAgbGFicygKICAgIHggPSAiaCBJbmRleCIsCiAgICB5ID0gIkNvdW50IgogICkgKwogIHRoZW1lX2J3KCkgKwogIGZhY2V0X3dyYXAofmJvcm5faW5fYmluYXJ5KQpgYGAKCkFzIGFscmVhZHkgaW5kaWNhdGVkIGJ5IHRoZSB2aXN1YWxpc2VkIG5ldHdvcmsgYXQgdGhlIGJlZ2lubmluZyBvZiB0aGlzIGNoYXB0ZXIsIHRoZSAqaCotaW5kaWNlcyBvZiBib3RoIHBlb3BsZSBvZiBjb2xvdXIsIGFuZCBldGhuaWMgbWlub3JpdGllcyBhcmUgbXVjaCBsb3dlciB0aGFuIHRob3NlIG9mIHdoaXRlIGFuZCBEdXRjaCBwZW9wbGUuIFdoaWxlIHRoZSBoaWdoZXN0ICpoKi1pbmRleCBmb3IgcGVvcGxlIG9mIGFuIGV0aG5pYyBtaW5vcml0eSBpcyBxdWl0ZSBoaWdoLCBpdCBpcyBhbHNvIGEgY2xlYXIgb3V0bGllciwgYXMgb3Bwb3NlZCB0byB0aGUgZGVuc2VyIGFuZCBoaWdoZXIgZGlzdHJpYnV0aW9uIG9mICpoKi1pbmRpY2VzIG9mIGJvdGggd2hpdGUgYW5kIER1dGNoIHBlb3BsZS4KClRvIGZ1cnRoZXIgaW52ZXN0aWdhdGUgdGhlc2UgZGlzdHJpYnV0aW9ucyBhbmQgZGlmZmVyZW5jZXMsIGEgdHdvLXNhbXBsZSB0LXRlc3Qgd2FzIHBlcmZvcm1lZCwgZmlyc3QgYXNzZXNzaW5nIHRoZSBkaWZmZXJlbmNlcyBpbiBtZWFuIGJldHdlZW4gcGVvcGxlIG9mIGNvbG91ciwgYW5kIHdoaXRlIHBlb3BsZSwgYW5kIHN1YnNlcXVlbnRseSBhc3Nlc3NpbmcgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBEdXRjaCBhbmQgbm9uLUR1dGNoIHBlb3BsZS4KCmBgYHtyLCByZXN1bHRzPSBGLCBtZXNzYWdlID0gRn0KIyBvdmVyYWwgbWVhbiBoLWluZGV4Cm1lYW4oZGVtb2dyYXBoaWNzX2hhbm5haCRoX2luZGV4KQoKIyBzZWdyZWdhdGlvbiBoLWluZWRleAptZWFuX2hfcmFjZSA8LSB0YXBwbHkoZGVtb2dyYXBoaWNzX2hhbm5haCRoX2luZGV4LCBkZW1vZ3JhcGhpY3NfaGFubmFoJHdoaXRlX29yX25vdCwgbWVhbikKbWVhbl9oX2V0aG4gPC0gdGFwcGx5KGRlbW9ncmFwaGljc19oYW5uYWgkaF9pbmRleCwgZGVtb2dyYXBoaWNzX2hhbm5haCRib3JuX2luX2JpbmFyeSwgbWVhbikKCiMgTWVhbiBoLWluZGV4IHBlciBVbmkuClJhY2UgPC0gYygiUE9DIiwgIldoaXRlIFBlb3BsZSIpCkV0aG5pY2l0eSA8LSBjKCJOb3QgRHV0Y2giLCAiRHV0Y2giKQpoX0luZGV4X1JhY2UgPC0gbWVhbl9oX3JhY2UgJT4lCiAgcm91bmQoMikKaF9JbmRleF9FdGhuaWNpdHkgPC0gbWVhbl9oX2V0aG4gJT4lCiAgcm91bmQoMikKaF9zZWdfbWVhbjwtIGNiaW5kKFJhY2UsIGhfSW5kZXhfUmFjZSwgRXRobmljaXR5LCBoX0luZGV4X0V0aG5pY2l0eSkKYGBgCgpgYGB7cn0Ka2FibGVFeHRyYTo6a2FibGUoaF9zZWdfbWVhbiwgY2FwdGlvbiA9ICJoLUluZGV4IHNlZ2dyZWdhdGlvbiIpCmBgYAoKRmlyc3RseSwgdGhlIGRpZmZlcmVuY2VzIGJldHdlZW4gdGhlIG1lYW4gKmgqLWluZGV4IG9mIHRoZSBtYWpvcml0eSBncm91cHMgYW5kIG5vbi1tYWpvcml0eSBncm91cHMgaXMgYWxyZWFkeSBxdWl0ZSBhcHBhcmVudCDigJMgd2l0aCB0aGUgKmgqLWluZGV4IG9mIHdoaXRlIHBlb3BsZSBiZWluZyBhbG1vc3QgdGhyZWUgdGltZXMgYXMgaGlnaCBhcyB0aGF0IG9mIHBlb3BsZSBvZiBjb2xvdXIuIFRoZSBkaWZmZXJlbmNlIGJldHdlZW4gRHV0Y2ggYW5kIG5vbi1EdXRjaCBwZW9wbGUgaXMgbm90IGFzIGxhcmdlLCBob3dldmVyLgoKYGBge3IsIGF0dHIub3V0cHV0PSdzdHlsZT0ibWF4LWhlaWdodDogMTAwcHg7Iid9CnQudGVzdChwb2MkaF9pbmRleF8yLCB3aGl0ZV9wZW9wbGUkaF9pbmRleF8yLCBhbHRlcm5hdGl2ZSA9ICJ0d28uc2lkZWQiLCB2YXIuZXF1YWwgPSBGKQp0LnRlc3Qobm9uX2R1dGNoX3Blb3BsZSRoX2luZGV4XzIsIGR1dGNoX3Blb3BsZSRoX2luZGV4XzIsIGFsdGVybmF0aXZlID0gInR3by5zaWRlZCIsIHZhci5lcXVhbCA9IEYpCmBgYAoKQSB0d28tc2FtcGxlIHQtdGVzdCBvbiB0aGVzZSBudW1iZXJzLCBob3dldmVyLCBkZW1vbnN0cmF0ZXMgdGhhdCBib3RoIHRoZXNlIGdyb3VwcyBhcmUgc2lnbmlmaWNhbnRseSBkaWZmZXJlbnQgZnJvbSBlYWNoIG90aGVyLiBJbmRpY2F0aW5nIGEgcmVqZWN0aW9uIG9mIHRoZSBudWxsLWh5cG90aGVzaXMgdGhhdCB0aGVyZSBpcyBubyBkaWZmZXJlbmNlIGJldHdlZW4gcmFjaWFsIGdyb3Vwcywgb3IgZXRobmljIGdyb3Vwcy4gVGh1cywgZ2l2aW5nIGV2aWRlbmNlIGZvciBib3RoIEgzYSwgYW5kIEgzYi4K</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("final.descriptives.for.paper.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

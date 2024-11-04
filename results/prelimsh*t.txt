@@ -6,7 +6,7 @@ Filename is ./results/prelimsh*t.txt.
 
 This file contains primary output for SIENA project <<./results/prelimsh*t>>.
 
-Date and time: 31/10/2024 13:35:41 
+Date and time: 03/11/2024 21:39:43 
 
 RSiena version 1.4.7 (20 02 2024)
 
@@ -21,7 +21,7 @@ Data input.
 0 dependent bipartite variables,
 0 dependent discrete behavior variables,
 0 dependent continuous behavior variables,
-1 constant actor covariates,
+5 constant actor covariates,
 0 exogenous changing actor covariates,
 0 constant dyadic covariates,
 0 exogenous changing dyadic covariates,
@@ -145,18 +145,30 @@ No missing data for observation 2.
 Reading constant actor covariates.
 ----------------------------------
 
-1 variable, named:
+5 variables, named:
 white_pass_covar 
+country_covar   
+gender_covar    
+functie_covar   
+h_index_covar   
 
-A total of 1 non-changing individual covariate.
+A total of 5 non-changing individual covariates.
 
 Number of missing cases:
 white_pass_covar 17 	( 7.9 %)
+country_covar   17 	( 7.9 %)
+gender_covar    17 	( 7.9 %)
+functie_covar   3 	( 1.4 %)
+h_index_covar   0 	( 0.0 %)
 
 Information about covariates:
               minimum  maximum	  mean  centered 
 white_pass_covar      0.0     1.0      0.888    Y 
-The mean value is subtracted from the centered covariate.
+country_covar      0.0     1.0      0.665    Y 
+gender_covar      0.0     1.0      0.512    Y 
+functie_covar      1.0    33.0     21.303    Y 
+h_index_covar      0.0   139.0     11.893    Y 
+The mean values are subtracted from the covariates.
 
 
 
@@ -167,6 +179,10 @@ For the similarity variable calculated from each actor covariate,
 the mean is subtracted.
 These means are:
 Similarity white_pass_covar         :       0.8006 
+Similarity country_covar            :       0.5522 
+Similarity gender_covar             :       0.4990 
+Similarity functie_covar            :       0.7010 
+Similarity h_index_covar            :       0.9063 
 
 
 

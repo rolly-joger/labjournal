@@ -68,44 +68,6 @@ for (i in 1:nrow(demographics_hannah)) {
 # View updated df_ego with h-index and i10-index
 View(demographics_hannah)
 ```
-
-# Career Age 
-
-#```{r career age Koen}
-df_career_age <- df_works %>%
-  unnest(author) %>% # unnesting the tibble from the tibble
-  filter(au_id %in% df_ego$au_id == TRUE) %>% # authors in df_works should match authors in df_ego
-  group_by(au_id) %>%
-  mutate(min_year_pub = min(publication_year, na.rm = TRUE), # initial calculation of minimum year
-         count_pub = n()) %>%  # count number of publications
-  mutate(first_year_pub = ifelse(count_pub == 1, min_year_pub, # if number of publications is 1, score is min_year_pub
-                                 {
-                                   filter_year = publication_year[publication_year != min_year_pub] # filter minimum year
-                                   mean_pubyear = mean(filter_year, na.rm = TRUE) # calculate mean without min score
-                                   valid_year = min(filter_year[filter_year >= (mean_pubyear - 25)], na.rm = TRUE) # minimum year -> range mean-25
-                                   valid_year # if number of publications is not 1, than score minimum year with first year removed within range mean-25
-                                 })) %>% 
-  
-  # this line corrects for the warning of returning infinites that for some reason were not filtered through the first ifelse command
-  mutate(first_year_pub = ifelse(is.infinite(first_year_pub), min_year_pub, first_year_pub)) %>% #adjusting infinite scores to minimum year
-  
-  select(au_id, first_year_pub) %>% # selecting variables
-  distinct(au_id, first_year_pub, .keep_all = TRUE) # making sure only distinct authors are in data frame
-
-
-
-## Add Interaction for h-Index
-
-```{r interaction}
-demographics_hannah <- demographics_hannah %>%
-  mutate(
-    int_h_race = h_index*white_or_not
-  ) %>%
-  mutate(
-    int_h_eth = h_index*born_in_binary
-  )
-```
-
 # Save the File 
 ```{r write}
 write_csv(demographics_hannah, "demographics_hannah_final.csv")

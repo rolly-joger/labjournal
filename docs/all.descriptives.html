@@ -363,11 +363,14 @@ div.tocify {
     <li>
       <a href="week6.html">Week 6</a>
     </li>
+    <li>
+      <a href="week7.html">Week 7</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dataprepping For the Apocalypse
+    Dataprep
      
     <span class="caret"></span>
   </a>
@@ -389,9 +392,6 @@ div.tocify {
     </li>
     <li>
       <a href="all.descriptives.html">Descriptives</a>
-    </li>
-    <li>
-      <a href="rsiena.analysis.html">Analysis</a>
     </li>
   </ul>
 </li>
@@ -681,8 +681,9 @@ White/Non-White People Per University – Visualised</h3>
     fill = &quot;University&quot;
   ) +
   theme_bw()</code></pre>
-<pre><code>## Warning: Removed 11 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 11 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/race%20per%20uni-1.png" width="672" />
 We can further investigate this by seeing how they are distributed per
 position. In other words, if these frequencies are equally distributed
@@ -708,8 +709,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 11 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 11 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/race%20and%20position-1.png" width="672" /></p>
 </div>
 <div id="per-university" class="section level4" number="2.3.3.2">
@@ -727,8 +729,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 1 row containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 1 row containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <pre class="r"><code>#Rotterdam (EUR)
 demographics_hannah %&gt;%
   filter(Universiteit.24 == &quot;EUR&quot;) %&gt;%
@@ -754,8 +757,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <pre class="r"><code># Nijmegen (RU)
 demographics_hannah %&gt;%
   filter(Universiteit.24 == &quot;RU&quot;) %&gt;%
@@ -768,8 +772,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-2-1.png" width="50%" /><img src="all.descriptives_files/figure-html/unnamed-chunk-2-2.png" width="50%" /><img src="all.descriptives_files/figure-html/unnamed-chunk-2-3.png" width="50%" /><img src="all.descriptives_files/figure-html/unnamed-chunk-2-4.png" width="50%" />
 and, as we see, the race/ethnicity based demographics at the UvA and UU
 are more representative when compared to those at the EUR and RU. When
@@ -888,8 +893,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;University&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 11 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 11 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/eth%20all%20uni-1.png" width="672" /></p>
 </div>
 <div id="ethnicity-and-position" class="section level3" number="2.4.3">
@@ -909,8 +915,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 11 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 11 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/eth%20and%20position-1.png" width="672" /></p>
 </div>
 <div id="per-university-1" class="section level4" number="2.4.3.2">
@@ -928,8 +935,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 1 row containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 1 row containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <pre class="r"><code>#Rotterdam (EUR)
 demographics_hannah %&gt;%
   filter(Universiteit.24 == &quot;EUR&quot;) %&gt;%
@@ -955,8 +963,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <pre class="r"><code># Nijmegen (RU)
 demographics_hannah %&gt;%
   filter(Universiteit.24 == &quot;RU&quot;) %&gt;%
@@ -969,8 +978,9 @@ geom_bar(position = &quot;dodge&quot;) +
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/ethn.%20per%20univ%20position-1.png" width="50%" /><img src="all.descriptives_files/figure-html/ethn.%20per%20univ%20position-2.png" width="50%" /><img src="all.descriptives_files/figure-html/ethn.%20per%20univ%20position-3.png" width="50%" /><img src="all.descriptives_files/figure-html/ethn.%20per%20univ%20position-4.png" width="50%" /></p>
 </div>
 </div>
@@ -1075,8 +1085,9 @@ Gender Distributions at the Universities (UvA, EUR, UU, RU)
 number="2.5.2">
 <h3><span class="header-section-number">2.5.2</span> Distribution of
 Gender per University</h3>
-<pre><code>## Warning: Removed 11 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 11 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>… apparently, there are more women at these universities than there
 are men – except for Utrecht University – and there are an especially
@@ -1101,8 +1112,9 @@ Universities</h4>
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 11 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 11 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/gender%20pos%20all%20uni-1.png" width="672" /></p>
 </div>
 <div id="per-university-2" class="section level4" number="2.5.2.2">
@@ -1121,8 +1133,9 @@ demographics_hannah %&gt;%
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 1 row containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 1 row containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <pre class="r"><code>#Rotterdam (EUR)
 demographics_hannah %&gt;%
    mutate(gender_binary = if_else(perc_female &gt;= .5, 1, 0)) %&gt;%
@@ -1150,8 +1163,9 @@ demographics_hannah %&gt;%
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <pre class="r"><code># Nijmegen (RU)
 demographics_hannah %&gt;%
    mutate(gender_binary = if_else(perc_female &gt;= .5, 1, 0)) %&gt;%
@@ -1165,8 +1179,9 @@ demographics_hannah %&gt;%
     fill = &quot;Position&quot;
   ) +
 theme_bw()</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
-## (`stat_count()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing
+## non-finite outside the scale
+## range (`stat_count()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="all.descriptives_files/figure-html/unnamed-chunk-6-2.png" width="50%" /><img src="all.descriptives_files/figure-html/unnamed-chunk-6-3.png" width="50%" /><img src="all.descriptives_files/figure-html/unnamed-chunk-6-4.png" width="50%" /></p>
 </div>
 </div>
@@ -1647,12 +1662,16 @@ ggplot(degree_w1, aes(as.numeric(degree_w1), colour = as.numeric(degree_w1) )) +
   ) +
   ylim(0, 150) +
   theme_bw()</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical
+<pre><code>## Warning: The following aesthetics were
+## dropped during statistical
 ## transformation: colour.
-## ℹ This can happen when ggplot fails to infer the correct
+## ℹ This can happen when ggplot
+##   fails to infer the correct
 ##   grouping structure in the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a
-##   numerical variable into a factor?</code></pre>
+## ℹ Did you forget to specify a
+##   `group` aesthetic or to convert
+##   a numerical variable into a
+##   factor?</code></pre>
 <p><img src="all.descriptives_files/figure-html/degree%20centrality%20w1%20and%202-1.png" width="672" /></p>
 </div>
 <div id="wave-2-1" class="section level4" number="3.2.2.2">
@@ -1669,12 +1688,16 @@ ggplot(degree_w2, aes(as.numeric(degree_w2), colour = as.numeric(degree_w2))) +
   ) +
   ylim(0, 150) +
   theme_bw()</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical
+<pre><code>## Warning: The following aesthetics were
+## dropped during statistical
 ## transformation: colour.
-## ℹ This can happen when ggplot fails to infer the correct
+## ℹ This can happen when ggplot
+##   fails to infer the correct
 ##   grouping structure in the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a
-##   numerical variable into a factor?</code></pre>
+## ℹ Did you forget to specify a
+##   `group` aesthetic or to convert
+##   a numerical variable into a
+##   factor?</code></pre>
 <p><img src="all.descriptives_files/figure-html/degree%20centrality%20w2-1.png" width="672" /></p>
 <pre class="r"><code>#could also do -- degree centrality of white v. non-white people, or degree centrality of dutch v. non-dutch people </code></pre>
 </div>
@@ -1743,14 +1766,19 @@ ggplot(clustering_w2, aes(as.numeric(clustering_w2), colour = as.numeric(cluster
     y = &quot;Count&quot;
   ) +
   theme_bw()</code></pre>
-<pre><code>## Warning: Removed 118 rows containing non-finite outside the scale range
-## (`stat_bin()`).</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical
+<pre><code>## Warning: Removed 118 rows containing
+## non-finite outside the scale
+## range (`stat_bin()`).</code></pre>
+<pre><code>## Warning: The following aesthetics were
+## dropped during statistical
 ## transformation: colour.
-## ℹ This can happen when ggplot fails to infer the correct
+## ℹ This can happen when ggplot
+##   fails to infer the correct
 ##   grouping structure in the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a
-##   numerical variable into a factor?</code></pre>
+## ℹ Did you forget to specify a
+##   `group` aesthetic or to convert
+##   a numerical variable into a
+##   factor?</code></pre>
 <p><img src="all.descriptives_files/figure-html/clustering%20w2-1.png" width="672" /></p>
 </div>
 </div>
@@ -1982,7 +2010,8 @@ ggraph(noisolates_w1,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
   theme_void()</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the
+<pre><code>## Warning: Removed 5 rows containing missing
+## values or values outside the
 ## scale range (`geom_point()`).</code></pre>
 <pre class="r"><code>indegr_w2 &lt;- degree(wave_2, mode = &quot;in&quot;)
 
@@ -2006,8 +2035,9 @@ ggraph(noisolates_w2,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void() </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the
-## scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing
+## missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/white-passing,%20figures-side-1.png" width="50%" /><img src="all.descriptives_files/figure-html/white-passing,%20figures-side-2.png" width="50%" /></p>
 </div>
 <div id="born-in" class="section level4" number="4.3.2.3">
@@ -2033,7 +2063,8 @@ ggraph(noisolates_w1,
   scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
   theme_void() +
   labs(title = &quot;Network wave 1: no isolates, node size based on indegrees &amp; colour based on H-index&quot;)</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the
+<pre><code>## Warning: Removed 5 rows containing missing
+## values or values outside the
 ## scale range (`geom_point()`).</code></pre>
 <pre class="r"><code>### wave 2
 
@@ -2058,8 +2089,9 @@ ggraph(noisolates_w2,
   scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
   theme_void() +
   guides(color = guide_legend(override.aes = list(size = 10))) </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the
-## scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing
+## missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/ggraph%20born%20in%20w1,%20figures-side-1.png" width="50%" /><img src="all.descriptives_files/figure-html/ggraph%20born%20in%20w1,%20figures-side-2.png" width="50%" /></p>
 </div>
 <div id="gender-1" class="section level4" number="4.3.2.4">
@@ -2086,7 +2118,8 @@ ggraph(noisolates_w1,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void()</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the
+<pre><code>## Warning: Removed 5 rows containing missing
+## values or values outside the
 ## scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>indegr_w2 &lt;- degree(wave_2, mode = &quot;in&quot;)
@@ -2112,8 +2145,9 @@ ggraph(noisolates_w2,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void() </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the
-## scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing
+## missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
 <pre class="r"><code>#facet-wrapped per university 
 ggraph(noisolates_w2,
@@ -2124,8 +2158,9 @@ ggraph(noisolates_w2,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void() </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the
-## scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing
+## missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
 </div>
 </div>

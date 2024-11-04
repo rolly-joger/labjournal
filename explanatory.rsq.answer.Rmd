@@ -1,10 +1,20 @@
 ---
-title: "Analysis -- Explanatory"
-output: html_document
+title: "Explanatory Analysis"
+output: 
+  html_document:
+    code_folding: hide
 date: "2024-10-24"
 ---
-## Get the Basics
-```{r packages, message = F, warning=F}
+
+# Get the Basics
+
+As previously explained, this analysis will consist of two parts – with the first part dedicated to the effect of race in collaboration networks, and the second doing the same, but for ethnicity. First two universal models will be estimated: an empty model and a model with only structural constraints. Subsequently, two more models will then be estimated: the first one with both parameters of interest, and all control variables, the second with an interaction between prestige and race or ethnicity, respectively. This will then be concluded by assessing the goodness of fit for each of the interaction models, and comparing the effects estimated by them.
+
+In Siena models, the significance of a parameter is estimated by dividing the estimate by the standard error. If the resulting number is equal to or higher than 2, the effect is significant – assuming a threshold of p \< 0.05 – if the number is lower, it is not significant.
+
+The following packages will be used:
+
+```{r packages, results = "hide", message = F, warning=F}
 require(tidyverse)
 require(igraph)
 require(shiny)
@@ -16,125 +26,12 @@ require(tint)
 require(tufte)
 require(psych)
 library(data.table)  
-library(xml2)
-library(rvest)
-library(xml2)
-library(XML)
-library(labelled)
 library(forcats)
 ```
 
-```{r dataset, include=F, warning=F, message=FALSE}
-wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds")
-wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds")
-demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE)
-net_soc_array <- read_rds("datasets_final/net_soc_array_first_auth.rds")
-```
+and the following user defined function ...
 
-```{r fcolnet, include = F, warning=F, message=F}
-fcolnet <- function(data = scholars, university = "RU", 
-                    discipline = "sociology", waves = list(c(2015,
-                                                             2018), c(2019, 2023)), type = c("first")) {
-  
-  # step 1
-  demographics <- do.call(rbind.data.frame, data$demographics)
-  demographics <- demographics %>%
-    mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
-                                                                                                                 is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
-                                                                                                                                                                          ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
-                                                                                                                                                                                                                                                                                  is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
-  
-  sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
-                     university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
-                     university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
-  
-  demographics_soc <- demographics[sample, ]
-  scholars_sel <- lapply(scholars, "[", sample)
-  
-  # step 2
-  ids <- demographics_soc$au_id
-  nwaves <- length(waves)
-  nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
-                                                                              ids))
-  dimnames(nets)
-  
-  # step 3
-  df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
-                                                                                                                  function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
-                                                                                                                                                                                 recursive = FALSE))
-  
-  df_works <- df_works[!duplicated(df_works), ]
-  
-  # step 4
-  if (type == "first") {
-    for (j in 1:nwaves) {
-      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
-      ]
-      for (i in 1:nrow(df_works_w)) {
-        ego <- df_works_w$works_author[i][[1]]$au_id[1]
-        alters <- df_works_w$works_author[i][[1]]$au_id[-1]
-        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
-          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
-        }
-      }
-    }
-  }
-  
-  if (type == "last") {
-    for (j in 1:nwaves) {
-      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
-      ]
-      for (i in 1:nrow(df_works_w)) {
-        ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
-        alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
-        if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
-          nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
-        }
-      }
-    }
-  }
-  
-  if (type == "all") {
-    for (j in 1:nwaves) {
-      df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
-      ]
-      for (i in 1:nrow(df_works_w)) {
-        egos <- df_works_w$works_author[i][[1]]$au_id
-        if (sum(ids %in% egos) > 0) {
-          nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
-        }
-      }
-    }
-  }
-  output <- list()
-  output$data <- scholars_sel
-  output$nets <- nets
-  return(output)
-}
-
-```
-
-```{r user defined functions, include = F, message=F, warning=F}
-GeodesicDistribution <- function(i, data, sims, period, groupName, varName, levls = c(1:5, Inf), cumulative = TRUE,
-    ...) {
-    x <- networkExtraction(i, data, sims, period, groupName, varName)
-    require(sna)
-    a <- sna::geodist(symmetrize(x))$gdist
-    if (cumulative) {
-        gdi <- sapply(levls, function(i) {
-            sum(a <= i)
-        })
-    } else {
-        gdi <- sapply(levls, function(i) {
-            sum(a == i)
-        })
-    }
-    names(gdi) <- as.character(levls)
-    gdi
-}
-
-# The following function is taken from the help page for sienaTest
-
+```{r user defined functions,results = "hide", message=F, warning=F}
 testall <- function(ans) {
     for (i in which(ans$test)) {
         sct <- score.Test(ans, i)
@@ -145,234 +42,296 @@ testall <- function(ans) {
 }
 ```
 
-## Variables 
+... and these data.
 
-```{r variables definition}
+```{r dataset, results = "hide", warning=F, message=FALSE}
+wave_1 <- read_rds("datasets_final/wave_1_first_authors.rds") #matrix for wave 1 (from ... to ...)
+wave_2 <- read_rds("datasets_final/wave_2_first_authors.rds") #matrix for wave 2 (from ... to ... )
+demographics_hannah <- read_csv("demographics_hannah_final.csv", show_col_types = FALSE) #demographic characteristics of actors in matrix
+net_soc_array <- read_rds("datasets_final/net_soc_array_first_auth.rds") #the array of it all
+```
+
+## Define the Variables
+
+```{r variables definition, results = "hide"}
 #dependent variable 
 net <- sienaDependent(net_soc_array)
 
 #independent variable 
-hoogleraar_covar <-  coCovar(demographics_hannah$hoogleraar)
-functie_covar <- coCovar(demographics_hannah$functie)
 gender_covar <- coCovar(demographics_hannah$perc_female)
 country_covar <- coCovar(demographics_hannah$born_in_binary)
 white_pass_covar <- coCovar(demographics_hannah$white_or_not)
 h_index_covar <- coCovar(demographics_hannah$h_index)
-interaction_race_covar <- coCovar(demographics_hannah$int_h_race)
-interaction_ethnicity_covar <- coCovar(demographics_hannah$int_h_eth)
 ```
 
-# Get Effect Structure 
+# Get Effect Structure
 
-```{r good data}
-the_data <- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, functie_covar, h_index_covar, interaction_race_covar, interaction_ethnicity_covar)
+With these variables, the RSiena-data object which will be used in the algorithms to create the models is then estimated, and subsequently used to estimate which effects can be introduced with these data.
+
+```{r good data, results = "hide"}
+the_data <- sienaDataCreate(net, white_pass_covar, country_covar, gender_covar, h_index_covar)
 myeff_1 <- getEffects(the_data)
 view(myeff_1)
-myeff_1 <- includeEffects(myeff_1, X, interaction1 = "white_pass_covar")
-myeff_1 <- includeInteraction(myeff_1, egoX, egoX, interaction1=c("h_index_covar", "white_pass_covar"))
-myeff_1 <- includeInteraction(myeff_1, simX, simX, interaction1=c("h_index_covar", "white_pass_covar"))
 ```
+
+# Basic Models {.tabset}
+
+## Model 0.1: Empty Model
+
+First, the empty model is estimated, to see what it estimates without any but the most basic restraints. This is done in order to have something to compare future models to when it comes to fit.
 
 ```{r where to put it, include=F, echo=F}
 ifelse(!dir.exists("results"), dir.create("results"), FALSE)
-print01Report(the_data, modelname = "./results/prelimsh*t")  
+print01Report(the_data, modelname = "./results/m1_race")
 ```
-# Models 1.0 {.tabset}
-## Empty Model
-### Effects
-```{r}
+
+```{r, results = "hide"}
 myeff_1 <- getEffects(the_data)
 ```
 
-### Results
-```{r results alogoritm, echo = F}
+```{r results alogoritm, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
 mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
+#write_rds(mod_1_effects, "models/m1_race_empty.rds")
+mod_1_effects <- read_rds("models/m1_race_empty.rds")
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE)
+#write_rds(ansM1, "models/m1_race_empty.rds")
 ```
 
-## Structural Effects
-### Effects
 ```{r}
+model <- read_rds("models/m1_race_empty.rds") # load previously estimated model 
+model # view the model 
+```
+
+This baseline model furthermore indicates a negative effect for density, and a positive effect for reciprocity. Besides this, the rate parameter, which can be interpreted as an intersect, is 2.5. Altogether, these parameters indicate that having more ties makes someone less likely to create new ties, compared to someone who has less ties already (density). Reciprocity, on the other hand, is positive – and also significant – and refers to the number of reciprocated ties per actor.
+
+## Model 0.2: Structural Effects
+
+In the second model, the two additional structural network effects are added: `transTrip` and `inPopSqrt`.
+
+```{r, results = "hide"}
 myeff_1 <- getEffects(the_data)
-myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, transTrip)
-myeff_1 <- includeEffects(myeff_1, Jin)
-## Race Effects
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 ```
 
-### Results
-```{r results alogoritm 2, echo = F}
+```{r results alogoritm 2, echo = F, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) #create the model 
+#write_rds(mod_1_effects, "models/m2_race_str.rds") # save the model 
+mod_1_effects <- read_rds("models/m2_race_str.rds")
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m2_race_str.rds") # save it 
 ```
-## Race Effects 
-### Effects
+
 ```{r}
+model <- read_rds("models/m2_race_str.rds") # load previously estimated model 
+model # view the model 
+```
+
+Both density and reciprocity retain their significance, and their respective positive and negative sign. For the new effects, both transTrip and inPopSqrt demonstrate the expected positive and significant effect. transTrip, however, fails to attain signficant status – with a standard error that is more than 1.5 times as high as the parameter estimate. The significant and positive of in-degree popularity means that the more in-degrees an actor has, the likelier they are to form new ties. Or, in other words, the more often an author collaborates on a paper – but is not first author – the more likely it is that they will do so again.
+
+# Race Segregation {.tabset}
+
+## Model 1: Race Segregation With Controls
+
+The first model including race parameters is estimated by including `sameX`, which assesses how many ties an actor has to others who have the same demographic characteristic – that is, *also* white, or *also* a person of colour. Furthermore, both `egoX` and `altX` are also included for the race variable, they respectively estimate how one's race affects the likelihood of collaborating in the future, and how the race of the alter to whom is ties affects it.
+
+It furthermore includes two parameters estimating the effect of prestige. Similarly to the previous variable, these are `egoX` and `altX`, and respectively estimate how one's *h*-index affects the likelihood of collaborating in the future, and how the *h*-index of one's alters does.
+
+```{r, results = "hide"}
 myeff_1 <- getEffects(the_data)
 myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
 myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
-myeff_1 <- includeEffects(myeff_1, inpopX, interaction1 ="white_pass_covar")
 ```
 
-### Results
-```{r results alogoritm 3, echo = F}
+```{r results alogoritm 3, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
 mod_1_effects 
+#write_rds(mod_1_effects, "models/m3_race_par.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m3_race_par.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m3_race_par.rds") # save it 
 ```
-## Race and Structural
-### Effects
+
 ```{r}
+model <- read_rds("models/m3_race_par.rds") # load previously estimated model 
+model # view the model 
+```
+
+```{r, results = "hide"}
 myeff_1 <- getEffects(the_data)
-myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, transTrip)
-myeff_1 <- includeEffects(myeff_1, Jin)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
 myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
-myeff_1 <- includeEffects(myeff_1, inpopX, interaction1 ="white_pass_covar")
 ```
 
-### Results
-```{r results alogoritm 4, echo = F}
+```{r results alogoritm 4, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
 mod_1_effects 
+#write_rds(mod_1_effects, "models/m4_race_strpar.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m4_race_strpar.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m4_race_strpar.rds") # save Model 3: Control Variables
 ```
 
-## Control Variables
-### Effects
-```{r}
+```{r, results = "hide"}
 myeff_1 <- getEffects(the_data)
-myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, transTrip)
-myeff_1 <- includeEffects(myeff_1, Jin)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
 myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
-myeff_1 <- includeEffects(myeff_1, inpopX, interaction1 ="white_pass_covar")
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "gender_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 = "gender_covar")
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "h_index_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 = "h_index_covar")
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "functie_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 = "functie_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
 ```
 
-### Results
-```{r results alogoritm 5, echo = F}
+```{r results alogoritm 5, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m5_race_cntrl.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m5_race_cntrl.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m5_race_cntrl.rds") # save it 
 ```
 
-# GOF
-### Create Effects
-```{r GOF functions Model 1, message = F, warning=F}
+```{r}
+model <- read_rds("models/m5_race_cntrl.rds") # load the re-estimated model 
+model # view the model 
+```
+
+This model converges with a maximum convergence ratio of 0.1375, and a rate parameter of 2.58. It furthermore includes a negative effect of density, and a positive effect of reciprocity and transitivity and popularity – all of which significant. Of the effects introduced to estimate the effect race on one's network, only the alter effect is significant. This effect does, however, indicate that more white people in one's network lead to a higher likelihood of co-authoring a paper in the future. The ego effect – which estimates whether being white increases one's likelihood of collaborating in the future - might is *almost* significant, however, and though no true conclusions can be drawn from its effect, its positive sign is of note – indicating a positive effect of whiteness.
+
+The `sameX` estimate failing to attain a significant result, means that no evidence has been found for the homophily effect proposed by H2a -- which stated that researchers display racial homophily in their collaboration preferences. Having not found any argument to reject the null-hypothesis, H2a is rejected. 
+
+Both the estimates of prestige are significant, with the alter effect being positive, and the ego effect being negative. This means that if one has more prestigious people in one's network, one is more likely to co-author a paper in the future. The negative ego effect, however, indicates that *being* more prestigious oneself, is not necessarily an indication for the continuation of one's co-publishing career. Instead, it suggests that the more prestigious one becomes, the less likely one is to collaborate in the future.
+
+## Model 2: Interaction
+
+This interaction model introduces a further interaction effect between prestige and race. Namely through an interaction between two `egoX` effects, which means it assesses the effect of both one's own race, and one's own *h*-index, on the likelihood of future collaboration.
+
+```{r, results = "hide"}
+myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, transTrip)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
+myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="white_pass_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+myeff_1 <- includeInteraction(myeff_1, egoX, egoX, interaction1 = c("white_pass_covar", "h_index_covar"))
+
+```
+
+```{r results alogoritm 1001, echo = F, results = "hide", eval = F}
+myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m6_race_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6_race_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m6_race_interact.rds") # save it 
+```
+
+```{r}
+model <- read_rds("models/m6_race_interact.rds") # load the re-estimated model 
+model # view the model 
+```
+
+This model has a maximum convergence ratio of .17 and a rate of 2.59. The structural effects display similar results compared to previous models, and so do most of the variable parameters. The interaction is significant, but negative. This means that being both white, and having a high *h*-index makes one less likely to collaborate again compared to either not being white, or not having a high *h*-index. These results are contrary to H4a, which stated that – given the same level of prestige – white people would experience more collaborations than people of colour – thus rejecting H4a.
+
+# GOF Race
+
+While the previous model converged, this convergence is not an indication of model fit. In order to estimate model fit – or Goodness of Fit (GOF) – for a `Siena` model, it is best to use a goodness of fit function, to assess the difference between the estimated model, and the actual model at t1. A p-value higher than 0.05 indicates an adequate goodness of fit, while one equal to or below 0.05 indicates that one ought to change some parameters.
+
+To assess the goodness of fit, one of the parameters that were not estimated in our model, is compared to the actual parameter value at t2, in this case `indegree distribution`.
+
+```{r GOF functions Model 1, message = F, warning=F, results = "hide"}
+mod_1_effects <- read_rds("models/m6_race_interact.rds")
 gofi0_1 <- sienaGOF(mod_1_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
 ```
 
-### Describe Effects
 ```{r GOF Graphs Model 1}
 plot(gofi0_1, main = "")
 ```
 
-# Models 2.0 {.tabset}
-## Empty Model
-### Effects
-```{r}
-myeff_1 <- getEffects(the_data)
-```
+The p-value of 0.9 indicates that the estimated model sufficiently corresponds to the actual network, and as such, gives no reason to indicate anything ought to be changed. Making it the final model.
 
-### Results
-```{r results alogoritm 6, echo = F}
-myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
-```
+# Segregation Ethnicity {.tabset}
 
-## Structural Effects
-### Effects
-```{r}
+## Model 3: Control Variables
+
+This model is structured similarly to the first model including the race variable, except that instead of race, this model measures the effect of one's ethnicity on one's collaboration network. Besides this, the specifications of the network are the same as model 1.
+
+```{r, results = "hide"}
 myeff_1 <- getEffects(the_data)
-myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, transTrip)
-myeff_1 <- includeEffects(myeff_1, Jin)
-## Race Effects
-```
-
-### Results
-```{r results alogoritm 7, echo = F}
-myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
-```
-## Ethnicity Effects 
-### Effects
-```{r}
-myeff_1 <- getEffects(the_data)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
 myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
 ```
 
-### Results
-```{r results alogoritm 8, echo = F}
+```{r results alogoritm 10, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m5_eth_cntrl.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m5_eth_cntrl.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m5_eth_cntrl.rds") # save it 
 ```
-## Ethnicity and Structural
-### Effects
+
 ```{r}
+model <- read_rds("models/m5_eth_cntrl.rds") # load the re-estimated model 
+model # view the model 
+```
+
+The estimation of this model, which convergence with a maximum convergence ratio of 0.148, and a rate parameter of 2.6, is largely similar to Model 1. The structural effects network effects are – largely – the same, and so are the *h*-index effects. The only difference is that instead of race, ethnicity is included. This does not, however, seem to make much of a difference. Neither the `egoX` nor the `sameX` effect are significant here, similarly to in the model estimating race. The latter means that no evidence has been found for the homophily effect proposed by H2b -- which stated that |Researchers display ethnic homophily in their collaboration preferences: Dutch people prefer to collaborate with Dutch people, and non-Dutch people prefer to collaborate with non-Dutch people.". As such, this hypothesis is rejected. 
+
+The biggest difference between this model, and model 1, however, is the `altX` parameter for ethnicity. While it is still significant, this effect was estimated at 1.34 for race, while the estimate here is only 0.48. This indicates indicates that one's race has a significantly larger impact on one's network than one's ethnicity. To further assess this, the interaction effect between ethnicity and prestige is estimated next.
+
+## Model 4: Interaction
+
+Similarly to Model 3, this model is largely the same as it's 'race' equivalent Model 2. The only difference is that instead of race, the effects are now estimated for ethnicity.
+
+```{r interaction ethnicity, results = "hide"}
 myeff_1 <- getEffects(the_data)
-myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, transTrip)
-myeff_1 <- includeEffects(myeff_1, Jin)
+myeff_1 <- includeEffects(myeff_1, inPopSqrt)
 myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
 myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
+myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="h_index_covar")
+myeff_1 <- includeInteraction(myeff_1, egoX, egoX, interaction1=c("country_covar", "h_index_covar"))
 ```
 
-### Results
-```{r results alogoritm 9, echo = F}
+```{r results alogoritm 10121, results = "hide", eval = F}
 myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
+mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE) # create the model 
+#write_rds(mod_1_effects, "models/m6_eth_interact.rds") # save the estimated model 
+mod_1_effects <- read_rds("models/m6_eth_interact.rds") # load the estimated model 
+ansM1 <- siena07(myAlgorithm, data = the_data, effects = myeff_1, prevAns = mod_1_effects, returnDeps=TRUE) # estimate the model again 
+#write_rds(ansM1, "models/m6_eth_interact.rds") # save it 
 ```
 
-## Control Variables
-### Effects
 ```{r}
-myeff_1 <- getEffects(the_data)
-myeff_1 <- includeEffects(myeff_1, inPopSqrt)
-myeff_1 <- includeEffects(myeff_1, transTrip)
-myeff_1 <- includeEffects(myeff_1, Jin)
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "country_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 ="country_covar")
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "gender_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 = "gender_covar")
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "h_index_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 = "h_index_covar")
-myeff_1 <- includeEffects(myeff_1, sameX, interaction1 = "functie_covar")
-myeff_1 <- includeEffects(myeff_1, egoX, altX, interaction1 = "functie_covar")
+model <- read_rds("models/m6_eth_interact.rds") # load the re-estimated model 
+model # view the model 
 ```
 
-### Results
-```{r results alogoritm 10, echo = F}
-myAlgorithm <- sienaAlgorithmCreate(projname = "preliminary")
-mod_1_effects <- siena07(myAlgorithm, data = the_data, effects = myeff_1, returnDeps = TRUE)
-mod_1_effects 
-```
+With a maximum convergence ratio of 0.1229, and a rate parameter estimate of 2.58, this model converges to a similar result as Model 2. Not many differences can be found between the structural network effects in this model and any of the previously established models. Neither can much difference be found in the variable parameter estimates. Furthermore, similarly to Model 2, the interaction is significant, but negative -- though barely so. This means that being both Dutch, and having a high *h*-index, makes one less likely to collaborate again compared to either not being Dutch, or not having a high *h*-index. Similarly to Model 2, these results are contrary to the hypothesised effect in H4b, which stated that – given the same level of prestige – Dutch people would experience more collaborations than non-Dutch people. Being that this effect contradicts this hypothesis, H4b is subsequently rejected. 
 
-# GOF
-### Create Effects
-```{r GOF functions Model 1-ish, message = F, warning=F}
+# GOF Ethnicity
+
+Similarly to Model 2, a GOF measure is estimated using `indegree` distribution. 
+
+```{r GOF functions Model 1-ish, message = F, warning=F, results = "hide"}
+model_1_effects <- read_rds("models/m6_eth_interact.rds")
 gofi0_1 <- sienaGOF(mod_1_effects, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "net")
-gof2 <- sienaGOF(mod_1_effects, auxiliaryFunction = TriadCensus, verbose = F, join = TRUE, varName = "net")
 ```
 
-### Describe Effects
 ```{r GOF Graphs Model 1-ish}
 plot(gofi0_1, main = "")
-plot(gof2, center = TRUE, scale = TRUE)   
 ```
+
+And, similarly to Model 2, the relatively high p-value indicates tht this model fits the data quite well, and that none of the parameters ought to be adjusted. Thus making Model 4 the final model. 
+
+
 

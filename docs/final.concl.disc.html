@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-10-23" />
+<meta name="date" content="2024-11-03" />
 
 <title>Conclusion and Discussion</title>
 
@@ -363,11 +363,14 @@ div.tocify {
     <li>
       <a href="week6.html">Week 6</a>
     </li>
+    <li>
+      <a href="week7.html">Week 7</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dataprepping For the Apocalypse
+    Dataprep
      
     <span class="caret"></span>
   </a>
@@ -389,9 +392,6 @@ div.tocify {
     </li>
     <li>
       <a href="all.descriptives.html">Descriptives</a>
-    </li>
-    <li>
-      <a href="rsiena.analysis.html">Analysis</a>
     </li>
   </ul>
 </li>
@@ -471,40 +471,148 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Conclusion and Discussion</h1>
-<h4 class="date">2024-10-23</h4>
+<h4 class="date">2024-11-03</h4>
 
 </div>
 
 
-<div id="r-markdown" class="section level2" number="0.1">
-<h2><span class="header-section-number">0.1</span> R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting
-syntax for authoring HTML, PDF, and MS Word documents. For more details
-on using R Markdown see <a href="http://rmarkdown.rstudio.com"
-class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be
-generated that includes both content as well as the output of any
-embedded R code chunks within the document. You can embed an R code
-chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="conclusion-and-discussion" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Conclusion and
+Discussion</h1>
+<p>In this paper, I endeavoured to disentangle the effects of one’s
+racial and ethnic identity on academic collaboration networks. While
+these factors have often been recognised as affecting and shaping
+relationships – and thus collaboration – in these networks, they have
+often been collapsed into one concept. While this is common practice in
+academic literature, this paper has aimed to disentangle the concepts,
+to assess the validity of the collapsing of these two concepts, and to
+separately asses their effects. This subjects has subsequently been
+analysed using a webscraped dataset covering four different Dutch
+sociology departments, containing two waves. The effects of race and
+ethnicity in collaboration networks were subsequently analysed using a
+two-pronged approach, employing both descriptive and explanatory
+methods. The latter of which was done through estimating network
+evolution with the Stochastic Actor Oriented Model (SOAM) as found in
+the <code>RSiena</code> package (Ripley et al., 2024; Snijders et al.,
+2024).</p>
+<p>Following the literature on network differences based on
+race/ethnicity, the first hypothesis involved assessing the differences
+in degree first between white people and people of colour, and then
+between Dutch people and non-Dutch people. The results demonstrated that
+a substantial difference in degree exists between the minority group and
+the majority group both on the level of race, as well as on the level of
+ethnicity. What stood out, however, was that the difference between the
+average degree of white people and people of colour was much bigger than
+the difference between Dutch people, and non-Dutch people. There are
+several reasons why this might occur, and it is not against expectations
+exactly. One possibility is simply that some ethnic minorities are not
+viewed and treated as too dissimilar from Dutch people, while most – if
+not all – people of colour are distinctly ‘other’ in this way. In the
+introduction, I noted how relationality is an incredibly important
+concept in understanding the experience of minorities in white – or
+Dutch – dominated fields. Expanding on that, it is important to remember
+that ethnic and relational identities are inherently relational, always
+formed, constructed, and maintained ‘in relation’ to others (Molina,
+2018). Applied to the academic context, which is still mostly white, it
+might be easier to understand how some identities have become more
+integrated and normalised than others – their relation to others being
+not as ‘the other’, but as someone more similar. This can be applied to
+the bigger difference in degrees for race, compared to ethnicity. It
+might simply be the case that ‘white foreigners’ are more easily
+accepted than people of colour. Though, to fully assess this, further
+research is needed.</p>
+<p>The second part of the descriptive analysis, which focussed on
+differences in <em>h</em>-index across racial and ethnic minority and
+majority groups, was performed in order to assess whether there was also
+a difference in prestige between these groups. Because while it is true
+that degree indicates one’s connections in a co-authorship network, it
+is also possible to rarely collaborate with others, or to only
+collaborate with people who happen to not be included in this network.
+As such, I performed a two-sample t-test on the <em>h</em>-indices for
+race, and ethnicity. Similarly to the results on differences in degree,
+the <em>h</em>-indices for both white people and Dutch people were
+higher than their respective counterparts – with the difference between
+Dutch people and non-Dutch people, again, being smaller than the
+difference between white people and people of colour. Similarly to the
+previous hypothesis, I again believe that this might have something to
+do with the larger number of different relationally closer ‘categories’
+within ethnicity, than in race. Though, again, more research ought to be
+done in order to assess this.</p>
+<p>Contrary to these descriptive hypotheses, neither of the explanatory
+hypotheses were supported by the data. No supportive evidence for the
+second hypothesis was observed, because the lack of observed racial and
+ethnic homophily observed in the data, due to the estimates not
+attaining a significant status. This is quite logical, however, due to
+the size of the sample, and especially the number of people of colour in
+this sample. This power problem furthermore lead to these problems for
+the estimation due to relatively low number of degrees for both people
+of colour, and non-Dutch people. This meant that there was little to no
+data to estimate the hypothesis sufficiently. As a result, there was
+simply not enough power to estimate a homophily parameter.</p>
+<p>The last models ran concerned the question at the core of this paper,
+namely whether the effect of one’s prestige differed between white
+people, and people of colour, and between Dutch and non-Dutch people.
+While the data did demonstrate a significant difference for both
+categories, this difference contradicted the hypothesised effects.
+Instead of white people benefiting more from their status, they appeared
+to benefit less. Both white people, and Dutch people, appear to become
+less likely to collaborate as their prestige grows. I suspect that this
+result, and its conflict with my initial expectations, is in most part
+caused by the unexpected effect of prestige in itself. While I had
+estimated one’s level of prestige to positively affect the likelihood of
+collaborating on more papers, the models estimated seem to indicate the
+opposite. As a result, the interaction is therefore also negative, and
+thus ‘positive’ for minority groups. A possible way to re-estimate this,
+would be to switch the meaning of the values of ‘race’ and ‘ethnicity’
+around, having 0 be white/Dutch, and 1 be person of colour/not
+Dutch.</p>
+<p>Beyond this, a further conclusion that can be drawn from these models
+is that there is indeed a difference between the effects of race, and
+ethnicity – at least, in this context. Because besides the
+aforementioned differences observed in the descriptive analysis, similar
+patterns emerged in the exploratory analysis. The ‘benefit’ of being
+white in a network was consistently larger than being Dutch. In other
+words, the degree to which a white academic will collaborate more than a
+person of colour, is larger than that of a Dutch person compared to a
+non-Dutch person. These findings are in line with the aforementioned
+relationality of identity, and might point towards the need for more
+research into differences between different ethnic groups, and
+intersections between race and ethnicity.</p>
+<p>Further research on the topic could benefit from taking a similar
+approach, to a larger sample, which might be beneficial for the
+investigation of homophily in the network. A larger sample could also be
+used to further disentangle the relationship between race and ethnicity.
+As discussed here, the differences between these two groups point
+towards something that could not be measured here, such as people
+relating differently to different ethnic identities. Having a larger
+sample allows one to further look into these differences between ethnic
+groups, though keeping in mind that an intersection between ethnicity
+and race might also be a possible effect. In line with this
+intersection, these data could also be used to investigate intersections
+between gender and race, or ethnicity – and see if there are any
+distinctions between the latter two groups to be found there.</p>
+<p>Altogether, this paper thus found that while networks are indeed
+segregated – both when it comes to race, as well as when it comes to
+ethnicity – and demonstrated the importance of relationships when it
+comes to investigating inequality. As such, concluding that to truly
+understand differences, what they are and how they are performed,
+relationships are of utmost importance.</p>
+<div id="references" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> References</h2>
+<p>Molina, N. (2018). Understanding race as a relational concept.
+<em>Modern American History</em>, <em>1</em>(1), 101-105.</p>
+<p>Ripley, R. M., Snijders, T. A., Boda, Z., Vörös, A., &amp; Preciado,
+P. (2011). Manual for RSIENA. <em>University of Oxford, Department of
+Statistics, Nuffield College</em>, <em>1</em>, 2011.</p>
+<p>Snijders TA, Ripley RM, Boitmanis K, Steglich C, Niezink NM, Amati V,
+Schoenenberger F (2024). “Siena - Simulation Investigation for Empirical
+Network Analysis.” R package version 1.4.7, <a
+href="https://www.stats.ox.ac.uk/~snijders/siena/"
+class="uri">https://www.stats.ox.ac.uk/~snijders/siena/</a>.</p>
 </div>
-<div id="including-plots" class="section level2" number="0.2">
-<h2><span class="header-section-number">0.2</span> Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="final.concl.disc_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the
-code chunk to prevent printing of the R code that generated the
-plot.</p>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQ29uY2x1c2lvbiBhbmQgRGlzY3Vzc2lvbiIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTEwLTIzIgotLS0KCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpCmBgYAoKIyMgUiBNYXJrZG93bgoKVGhpcyBpcyBhbiBSIE1hcmtkb3duIGRvY3VtZW50LiBNYXJrZG93biBpcyBhIHNpbXBsZSBmb3JtYXR0aW5nIHN5bnRheCBmb3IgYXV0aG9yaW5nIEhUTUwsIFBERiwgYW5kIE1TIFdvcmQgZG9jdW1lbnRzLiBGb3IgbW9yZSBkZXRhaWxzIG9uIHVzaW5nIFIgTWFya2Rvd24gc2VlIDxodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tPi4KCldoZW4geW91IGNsaWNrIHRoZSAqKktuaXQqKiBidXR0b24gYSBkb2N1bWVudCB3aWxsIGJlIGdlbmVyYXRlZCB0aGF0IGluY2x1ZGVzIGJvdGggY29udGVudCBhcyB3ZWxsIGFzIHRoZSBvdXRwdXQgb2YgYW55IGVtYmVkZGVkIFIgY29kZSBjaHVua3Mgd2l0aGluIHRoZSBkb2N1bWVudC4gWW91IGNhbiBlbWJlZCBhbiBSIGNvZGUgY2h1bmsgbGlrZSB0aGlzOgoKYGBge3IgY2Fyc30Kc3VtbWFyeShjYXJzKQpgYGAKCiMjIEluY2x1ZGluZyBQbG90cwoKWW91IGNhbiBhbHNvIGVtYmVkIHBsb3RzLCBmb3IgZXhhbXBsZToKCmBgYHtyIHByZXNzdXJlLCBlY2hvPUZBTFNFfQpwbG90KHByZXNzdXJlKQpgYGAKCk5vdGUgdGhhdCB0aGUgYGVjaG8gPSBGQUxTRWAgcGFyYW1ldGVyIHdhcyBhZGRlZCB0byB0aGUgY29kZSBjaHVuayB0byBwcmV2ZW50IHByaW50aW5nIG9mIHRoZSBSIGNvZGUgdGhhdCBnZW5lcmF0ZWQgdGhlIHBsb3QuCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQ29uY2x1c2lvbiBhbmQgRGlzY3Vzc2lvbiIKb3V0cHV0OiBodG1sX2RvY3VtZW50CmRhdGU6ICIyMDI0LTExLTAzIgotLS0KCiMgQ29uY2x1c2lvbiBhbmQgRGlzY3Vzc2lvbgoKSW4gdGhpcyBwYXBlciwgSSBlbmRlYXZvdXJlZCB0byBkaXNlbnRhbmdsZSB0aGUgZWZmZWN0cyBvZiBvbmUncyByYWNpYWwgYW5kIGV0aG5pYyBpZGVudGl0eSBvbiBhY2FkZW1pYyBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzLiBXaGlsZSB0aGVzZSBmYWN0b3JzIGhhdmUgb2Z0ZW4gYmVlbiByZWNvZ25pc2VkIGFzIGFmZmVjdGluZyBhbmQgc2hhcGluZyByZWxhdGlvbnNoaXBzIC0tIGFuZCB0aHVzIGNvbGxhYm9yYXRpb24g4oCTIGluIHRoZXNlIG5ldHdvcmtzLCB0aGV5IGhhdmUgb2Z0ZW4gYmVlbiBjb2xsYXBzZWQgaW50byBvbmUgY29uY2VwdC4gV2hpbGUgdGhpcyBpcyBjb21tb24gcHJhY3RpY2UgaW4gYWNhZGVtaWMgbGl0ZXJhdHVyZSwgdGhpcyBwYXBlciBoYXMgYWltZWQgdG8gZGlzZW50YW5nbGUgdGhlIGNvbmNlcHRzLCB0byBhc3Nlc3MgdGhlIHZhbGlkaXR5IG9mIHRoZSBjb2xsYXBzaW5nIG9mIHRoZXNlIHR3byBjb25jZXB0cywgYW5kIHRvIHNlcGFyYXRlbHkgYXNzZXMgdGhlaXIgZWZmZWN0cy4gVGhpcyBzdWJqZWN0cyBoYXMgc3Vic2VxdWVudGx5IGJlZW4gYW5hbHlzZWQgdXNpbmcgYSB3ZWJzY3JhcGVkIGRhdGFzZXQgY292ZXJpbmcgZm91ciBkaWZmZXJlbnQgRHV0Y2ggc29jaW9sb2d5IGRlcGFydG1lbnRzLCBjb250YWluaW5nIHR3byB3YXZlcy4gVGhlIGVmZmVjdHMgb2YgcmFjZSBhbmQgZXRobmljaXR5IGluIGNvbGxhYm9yYXRpb24gbmV0d29ya3Mgd2VyZSBzdWJzZXF1ZW50bHkgYW5hbHlzZWQgdXNpbmcgYSB0d28tcHJvbmdlZCBhcHByb2FjaCwgZW1wbG95aW5nIGJvdGggZGVzY3JpcHRpdmUgYW5kIGV4cGxhbmF0b3J5IG1ldGhvZHMuIFRoZSBsYXR0ZXIgb2Ygd2hpY2ggd2FzIGRvbmUgdGhyb3VnaCBlc3RpbWF0aW5nIG5ldHdvcmsgZXZvbHV0aW9uIHdpdGggdGhlIFN0b2NoYXN0aWMgQWN0b3IgT3JpZW50ZWQgTW9kZWwgKFNPQU0pIGFzIGZvdW5kIGluIHRoZSBgUlNpZW5hYCBwYWNrYWdlIChSaXBsZXkgZXQgYWwuLCAyMDI0OyBTbmlqZGVycyBldCBhbC4sIDIwMjQpLgoKRm9sbG93aW5nIHRoZSBsaXRlcmF0dXJlIG9uIG5ldHdvcmsgZGlmZmVyZW5jZXMgYmFzZWQgb24gcmFjZS9ldGhuaWNpdHksIHRoZSBmaXJzdCBoeXBvdGhlc2lzIGludm9sdmVkIGFzc2Vzc2luZyB0aGUgZGlmZmVyZW5jZXMgaW4gZGVncmVlIGZpcnN0IGJldHdlZW4gd2hpdGUgcGVvcGxlIGFuZCBwZW9wbGUgb2YgY29sb3VyLCBhbmQgdGhlbiBiZXR3ZWVuIER1dGNoIHBlb3BsZSBhbmQgbm9uLUR1dGNoIHBlb3BsZS4gVGhlIHJlc3VsdHMgZGVtb25zdHJhdGVkIHRoYXQgYSBzdWJzdGFudGlhbCBkaWZmZXJlbmNlIGluIGRlZ3JlZSBleGlzdHMgYmV0d2VlbiB0aGUgbWlub3JpdHkgZ3JvdXAgYW5kIHRoZSBtYWpvcml0eSBncm91cCBib3RoIG9uIHRoZSBsZXZlbCBvZiByYWNlLCBhcyB3ZWxsIGFzIG9uIHRoZSBsZXZlbCBvZiBldGhuaWNpdHkuIFdoYXQgc3Rvb2Qgb3V0LCBob3dldmVyLCB3YXMgdGhhdCB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSBhdmVyYWdlIGRlZ3JlZSBvZiB3aGl0ZSBwZW9wbGUgYW5kIHBlb3BsZSBvZiBjb2xvdXIgd2FzIG11Y2ggYmlnZ2VyIHRoYW4gdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBEdXRjaCBwZW9wbGUsIGFuZCBub24tRHV0Y2ggcGVvcGxlLiBUaGVyZSBhcmUgc2V2ZXJhbCByZWFzb25zIHdoeSB0aGlzIG1pZ2h0IG9jY3VyLCBhbmQgaXQgaXMgbm90IGFnYWluc3QgZXhwZWN0YXRpb25zIGV4YWN0bHkuIE9uZSBwb3NzaWJpbGl0eSBpcyBzaW1wbHkgdGhhdCBzb21lIGV0aG5pYyBtaW5vcml0aWVzIGFyZSBub3Qgdmlld2VkIGFuZCB0cmVhdGVkIGFzIHRvbyBkaXNzaW1pbGFyIGZyb20gRHV0Y2ggcGVvcGxlLCB3aGlsZSBtb3N0IOKAkyBpZiBub3QgYWxsIOKAkyBwZW9wbGUgb2YgY29sb3VyIGFyZSBkaXN0aW5jdGx5ICdvdGhlcicgaW4gdGhpcyB3YXkuIEluIHRoZSBpbnRyb2R1Y3Rpb24sIEkgbm90ZWQgaG93IHJlbGF0aW9uYWxpdHkgaXMgYW4gaW5jcmVkaWJseSBpbXBvcnRhbnQgY29uY2VwdCBpbiB1bmRlcnN0YW5kaW5nIHRoZSBleHBlcmllbmNlIG9mIG1pbm9yaXRpZXMgaW4gd2hpdGUg4oCTIG9yIER1dGNoIOKAkyBkb21pbmF0ZWQgZmllbGRzLiBFeHBhbmRpbmcgb24gdGhhdCwgaXQgaXMgaW1wb3J0YW50IHRvIHJlbWVtYmVyIHRoYXQgZXRobmljIGFuZCByZWxhdGlvbmFsIGlkZW50aXRpZXMgYXJlIGluaGVyZW50bHkgcmVsYXRpb25hbCwgYWx3YXlzIGZvcm1lZCwgY29uc3RydWN0ZWQsIGFuZCBtYWludGFpbmVkICdpbiByZWxhdGlvbicgdG8gb3RoZXJzIChNb2xpbmEsIDIwMTgpLiBBcHBsaWVkIHRvIHRoZSBhY2FkZW1pYyBjb250ZXh0LCB3aGljaCBpcyBzdGlsbCBtb3N0bHkgd2hpdGUsIGl0IG1pZ2h0IGJlIGVhc2llciB0byB1bmRlcnN0YW5kIGhvdyBzb21lIGlkZW50aXRpZXMgaGF2ZSBiZWNvbWUgbW9yZSBpbnRlZ3JhdGVkIGFuZCBub3JtYWxpc2VkIHRoYW4gb3RoZXJzIOKAkyB0aGVpciByZWxhdGlvbiB0byBvdGhlcnMgYmVpbmcgbm90IGFzICd0aGUgb3RoZXInLCBidXQgYXMgc29tZW9uZSBtb3JlIHNpbWlsYXIuIFRoaXMgY2FuIGJlIGFwcGxpZWQgdG8gdGhlIGJpZ2dlciBkaWZmZXJlbmNlIGluIGRlZ3JlZXMgZm9yIHJhY2UsIGNvbXBhcmVkIHRvIGV0aG5pY2l0eS4gSXQgbWlnaHQgc2ltcGx5IGJlIHRoZSBjYXNlIHRoYXQgJ3doaXRlIGZvcmVpZ25lcnMnIGFyZSBtb3JlIGVhc2lseSBhY2NlcHRlZCB0aGFuIHBlb3BsZSBvZiBjb2xvdXIuIFRob3VnaCwgdG8gZnVsbHkgYXNzZXNzIHRoaXMsIGZ1cnRoZXIgcmVzZWFyY2ggaXMgbmVlZGVkLgoKVGhlIHNlY29uZCBwYXJ0IG9mIHRoZSBkZXNjcmlwdGl2ZSBhbmFseXNpcywgd2hpY2ggZm9jdXNzZWQgb24gZGlmZmVyZW5jZXMgaW4gKmgqLWluZGV4IGFjcm9zcyByYWNpYWwgYW5kIGV0aG5pYyBtaW5vcml0eSBhbmQgbWFqb3JpdHkgZ3JvdXBzLCB3YXMgcGVyZm9ybWVkIGluIG9yZGVyIHRvIGFzc2VzcyB3aGV0aGVyIHRoZXJlIHdhcyBhbHNvIGEgZGlmZmVyZW5jZSBpbiBwcmVzdGlnZSBiZXR3ZWVuIHRoZXNlIGdyb3Vwcy4gQmVjYXVzZSB3aGlsZSBpdCBpcyB0cnVlIHRoYXQgZGVncmVlIGluZGljYXRlcyBvbmUncyBjb25uZWN0aW9ucyBpbiBhIGNvLWF1dGhvcnNoaXAgbmV0d29yaywgaXQgaXMgYWxzbyBwb3NzaWJsZSB0byByYXJlbHkgY29sbGFib3JhdGUgd2l0aCBvdGhlcnMsIG9yIHRvIG9ubHkgY29sbGFib3JhdGUgd2l0aCBwZW9wbGUgd2hvIGhhcHBlbiB0byBub3QgYmUgaW5jbHVkZWQgaW4gdGhpcyBuZXR3b3JrLiBBcyBzdWNoLCBJIHBlcmZvcm1lZCBhIHR3by1zYW1wbGUgdC10ZXN0IG9uIHRoZSAqaCotaW5kaWNlcyBmb3IgcmFjZSwgYW5kIGV0aG5pY2l0eS4gU2ltaWxhcmx5IHRvIHRoZSByZXN1bHRzIG9uIGRpZmZlcmVuY2VzIGluIGRlZ3JlZSwgdGhlICpoKi1pbmRpY2VzIGZvciBib3RoIHdoaXRlIHBlb3BsZSBhbmQgRHV0Y2ggcGVvcGxlIHdlcmUgaGlnaGVyIHRoYW4gdGhlaXIgcmVzcGVjdGl2ZSBjb3VudGVycGFydHMg4oCTIHdpdGggdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBEdXRjaCBwZW9wbGUgYW5kIG5vbi1EdXRjaCBwZW9wbGUsIGFnYWluLCBiZWluZyBzbWFsbGVyIHRoYW4gdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB3aGl0ZSBwZW9wbGUgYW5kIHBlb3BsZSBvZiBjb2xvdXIuIFNpbWlsYXJseSB0byB0aGUgcHJldmlvdXMgaHlwb3RoZXNpcywgSSBhZ2FpbiBiZWxpZXZlIHRoYXQgdGhpcyBtaWdodCBoYXZlIHNvbWV0aGluZyB0byBkbyB3aXRoIHRoZSBsYXJnZXIgbnVtYmVyIG9mIGRpZmZlcmVudCByZWxhdGlvbmFsbHkgY2xvc2VyICdjYXRlZ29yaWVzJyB3aXRoaW4gZXRobmljaXR5LCB0aGFuIGluIHJhY2UuIFRob3VnaCwgYWdhaW4sIG1vcmUgcmVzZWFyY2ggb3VnaHQgdG8gYmUgZG9uZSBpbiBvcmRlciB0byBhc3Nlc3MgdGhpcy4KCkNvbnRyYXJ5IHRvIHRoZXNlIGRlc2NyaXB0aXZlIGh5cG90aGVzZXMsIG5laXRoZXIgb2YgdGhlIGV4cGxhbmF0b3J5IGh5cG90aGVzZXMgd2VyZSBzdXBwb3J0ZWQgYnkgdGhlIGRhdGEuIE5vIHN1cHBvcnRpdmUgZXZpZGVuY2UgZm9yIHRoZSBzZWNvbmQgaHlwb3RoZXNpcyB3YXMgb2JzZXJ2ZWQsIGJlY2F1c2UgdGhlIGxhY2sgb2Ygb2JzZXJ2ZWQgcmFjaWFsIGFuZCBldGhuaWMgaG9tb3BoaWx5IG9ic2VydmVkIGluIHRoZSBkYXRhLCBkdWUgdG8gdGhlIGVzdGltYXRlcyBub3QgYXR0YWluaW5nIGEgc2lnbmlmaWNhbnQgc3RhdHVzLiBUaGlzIGlzIHF1aXRlIGxvZ2ljYWwsIGhvd2V2ZXIsIGR1ZSB0byB0aGUgc2l6ZSBvZiB0aGUgc2FtcGxlLCBhbmQgZXNwZWNpYWxseSB0aGUgbnVtYmVyIG9mIHBlb3BsZSBvZiBjb2xvdXIgaW4gdGhpcyBzYW1wbGUuIFRoaXMgcG93ZXIgcHJvYmxlbSBmdXJ0aGVybW9yZSBsZWFkIHRvIHRoZXNlIHByb2JsZW1zIGZvciB0aGUgZXN0aW1hdGlvbiBkdWUgdG8gcmVsYXRpdmVseSBsb3cgbnVtYmVyIG9mIGRlZ3JlZXMgZm9yIGJvdGggcGVvcGxlIG9mIGNvbG91ciwgYW5kIG5vbi1EdXRjaCBwZW9wbGUuIFRoaXMgbWVhbnQgdGhhdCB0aGVyZSB3YXMgbGl0dGxlIHRvIG5vIGRhdGEgdG8gZXN0aW1hdGUgdGhlIGh5cG90aGVzaXMgc3VmZmljaWVudGx5LiBBcyBhIHJlc3VsdCwgdGhlcmUgd2FzIHNpbXBseSBub3QgZW5vdWdoIHBvd2VyIHRvIGVzdGltYXRlIGEgaG9tb3BoaWx5IHBhcmFtZXRlci4KClRoZSBsYXN0IG1vZGVscyByYW4gY29uY2VybmVkIHRoZSBxdWVzdGlvbiBhdCB0aGUgY29yZSBvZiB0aGlzIHBhcGVyLCBuYW1lbHkgd2hldGhlciB0aGUgZWZmZWN0IG9mIG9uZSdzIHByZXN0aWdlIGRpZmZlcmVkIGJldHdlZW4gd2hpdGUgcGVvcGxlLCBhbmQgcGVvcGxlIG9mIGNvbG91ciwgYW5kIGJldHdlZW4gRHV0Y2ggYW5kIG5vbi1EdXRjaCBwZW9wbGUuIFdoaWxlIHRoZSBkYXRhIGRpZCBkZW1vbnN0cmF0ZSBhIHNpZ25pZmljYW50IGRpZmZlcmVuY2UgZm9yIGJvdGggY2F0ZWdvcmllcywgdGhpcyBkaWZmZXJlbmNlIGNvbnRyYWRpY3RlZCB0aGUgaHlwb3RoZXNpc2VkIGVmZmVjdHMuIEluc3RlYWQgb2Ygd2hpdGUgcGVvcGxlIGJlbmVmaXRpbmcgbW9yZSBmcm9tIHRoZWlyIHN0YXR1cywgdGhleSBhcHBlYXJlZCB0byBiZW5lZml0IGxlc3MuIEJvdGggd2hpdGUgcGVvcGxlLCBhbmQgRHV0Y2ggcGVvcGxlLCBhcHBlYXIgdG8gYmVjb21lIGxlc3MgbGlrZWx5IHRvIGNvbGxhYm9yYXRlIGFzIHRoZWlyIHByZXN0aWdlIGdyb3dzLiBJIHN1c3BlY3QgdGhhdCB0aGlzIHJlc3VsdCwgYW5kIGl0cyBjb25mbGljdCB3aXRoIG15IGluaXRpYWwgZXhwZWN0YXRpb25zLCBpcyBpbiBtb3N0IHBhcnQgY2F1c2VkIGJ5IHRoZSB1bmV4cGVjdGVkIGVmZmVjdCBvZiBwcmVzdGlnZSBpbiBpdHNlbGYuIFdoaWxlIEkgaGFkIGVzdGltYXRlZCBvbmUncyBsZXZlbCBvZiBwcmVzdGlnZSB0byBwb3NpdGl2ZWx5IGFmZmVjdCB0aGUgbGlrZWxpaG9vZCBvZiBjb2xsYWJvcmF0aW5nIG9uIG1vcmUgcGFwZXJzLCB0aGUgbW9kZWxzIGVzdGltYXRlZCBzZWVtIHRvIGluZGljYXRlIHRoZSBvcHBvc2l0ZS4gQXMgYSByZXN1bHQsIHRoZSBpbnRlcmFjdGlvbiBpcyB0aGVyZWZvcmUgYWxzbyBuZWdhdGl2ZSwgYW5kIHRodXMgJ3Bvc2l0aXZlJyBmb3IgbWlub3JpdHkgZ3JvdXBzLiBBIHBvc3NpYmxlIHdheSB0byByZS1lc3RpbWF0ZSB0aGlzLCB3b3VsZCBiZSB0byBzd2l0Y2ggdGhlIG1lYW5pbmcgb2YgdGhlIHZhbHVlcyBvZiAncmFjZScgYW5kICdldGhuaWNpdHknIGFyb3VuZCwgaGF2aW5nIDAgYmUgd2hpdGUvRHV0Y2gsIGFuZCAxIGJlIHBlcnNvbiBvZiBjb2xvdXIvbm90IER1dGNoLgoKQmV5b25kIHRoaXMsIGEgZnVydGhlciBjb25jbHVzaW9uIHRoYXQgY2FuIGJlIGRyYXduIGZyb20gdGhlc2UgbW9kZWxzIGlzIHRoYXQgdGhlcmUgaXMgaW5kZWVkIGEgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSBlZmZlY3RzIG9mIHJhY2UsIGFuZCBldGhuaWNpdHkg4oCTIGF0IGxlYXN0LCBpbiB0aGlzIGNvbnRleHQuIEJlY2F1c2UgYmVzaWRlcyB0aGUgYWZvcmVtZW50aW9uZWQgZGlmZmVyZW5jZXMgb2JzZXJ2ZWQgaW4gdGhlIGRlc2NyaXB0aXZlIGFuYWx5c2lzLCBzaW1pbGFyIHBhdHRlcm5zIGVtZXJnZWQgaW4gdGhlIGV4cGxvcmF0b3J5IGFuYWx5c2lzLiBUaGUgJ2JlbmVmaXQnIG9mIGJlaW5nIHdoaXRlIGluIGEgbmV0d29yayB3YXMgY29uc2lzdGVudGx5IGxhcmdlciB0aGFuIGJlaW5nIER1dGNoLiBJbiBvdGhlciB3b3JkcywgdGhlIGRlZ3JlZSB0byB3aGljaCBhIHdoaXRlIGFjYWRlbWljIHdpbGwgY29sbGFib3JhdGUgbW9yZSB0aGFuIGEgcGVyc29uIG9mIGNvbG91ciwgaXMgbGFyZ2VyIHRoYW4gdGhhdCBvZiBhIER1dGNoIHBlcnNvbiBjb21wYXJlZCB0byBhIG5vbi1EdXRjaCBwZXJzb24uIFRoZXNlIGZpbmRpbmdzIGFyZSBpbiBsaW5lIHdpdGggdGhlIGFmb3JlbWVudGlvbmVkIHJlbGF0aW9uYWxpdHkgb2YgaWRlbnRpdHksIGFuZCBtaWdodCBwb2ludCB0b3dhcmRzIHRoZSBuZWVkIGZvciBtb3JlIHJlc2VhcmNoIGludG8gZGlmZmVyZW5jZXMgYmV0d2VlbiBkaWZmZXJlbnQgZXRobmljIGdyb3VwcywgYW5kIGludGVyc2VjdGlvbnMgYmV0d2VlbiByYWNlIGFuZCBldGhuaWNpdHkuCgpGdXJ0aGVyIHJlc2VhcmNoIG9uIHRoZSB0b3BpYyBjb3VsZCBiZW5lZml0IGZyb20gdGFraW5nIGEgc2ltaWxhciBhcHByb2FjaCwgdG8gYSBsYXJnZXIgc2FtcGxlLCB3aGljaCBtaWdodCBiZSBiZW5lZmljaWFsIGZvciB0aGUgaW52ZXN0aWdhdGlvbiBvZiBob21vcGhpbHkgaW4gdGhlIG5ldHdvcmsuIEEgbGFyZ2VyIHNhbXBsZSBjb3VsZCBhbHNvIGJlIHVzZWQgdG8gZnVydGhlciBkaXNlbnRhbmdsZSB0aGUgcmVsYXRpb25zaGlwIGJldHdlZW4gcmFjZSBhbmQgZXRobmljaXR5LiBBcyBkaXNjdXNzZWQgaGVyZSwgdGhlIGRpZmZlcmVuY2VzIGJldHdlZW4gdGhlc2UgdHdvIGdyb3VwcyBwb2ludCB0b3dhcmRzIHNvbWV0aGluZyB0aGF0IGNvdWxkIG5vdCBiZSBtZWFzdXJlZCBoZXJlLCBzdWNoIGFzIHBlb3BsZSByZWxhdGluZyBkaWZmZXJlbnRseSB0byBkaWZmZXJlbnQgZXRobmljIGlkZW50aXRpZXMuIEhhdmluZyBhIGxhcmdlciBzYW1wbGUgYWxsb3dzIG9uZSB0byBmdXJ0aGVyIGxvb2sgaW50byB0aGVzZSBkaWZmZXJlbmNlcyBiZXR3ZWVuIGV0aG5pYyBncm91cHMsIHRob3VnaCBrZWVwaW5nIGluIG1pbmQgdGhhdCBhbiBpbnRlcnNlY3Rpb24gYmV0d2VlbiBldGhuaWNpdHkgYW5kIHJhY2UgbWlnaHQgYWxzbyBiZSBhIHBvc3NpYmxlIGVmZmVjdC4gSW4gbGluZSB3aXRoIHRoaXMgaW50ZXJzZWN0aW9uLCB0aGVzZSBkYXRhIGNvdWxkIGFsc28gYmUgdXNlZCB0byBpbnZlc3RpZ2F0ZSBpbnRlcnNlY3Rpb25zIGJldHdlZW4gZ2VuZGVyIGFuZCByYWNlLCBvciBldGhuaWNpdHkg4oCTIGFuZCBzZWUgaWYgdGhlcmUgYXJlIGFueSBkaXN0aW5jdGlvbnMgYmV0d2VlbiB0aGUgbGF0dGVyIHR3byBncm91cHMgdG8gYmUgZm91bmQgdGhlcmUuCgpBbHRvZ2V0aGVyLCB0aGlzIHBhcGVyIHRodXMgZm91bmQgdGhhdCB3aGlsZSBuZXR3b3JrcyBhcmUgaW5kZWVkIHNlZ3JlZ2F0ZWQg4oCTIGJvdGggd2hlbiBpdCBjb21lcyB0byByYWNlLCBhcyB3ZWxsIGFzIHdoZW4gaXQgY29tZXMgdG8gZXRobmljaXR5IOKAkyBhbmQgZGVtb25zdHJhdGVkIHRoZSBpbXBvcnRhbmNlIG9mIHJlbGF0aW9uc2hpcHMgd2hlbiBpdCBjb21lcyB0byBpbnZlc3RpZ2F0aW5nIGluZXF1YWxpdHkuIEFzIHN1Y2gsIGNvbmNsdWRpbmcgdGhhdCB0byB0cnVseSB1bmRlcnN0YW5kIGRpZmZlcmVuY2VzLCB3aGF0IHRoZXkgYXJlIGFuZCBob3cgdGhleSBhcmUgcGVyZm9ybWVkLCByZWxhdGlvbnNoaXBzIGFyZSBvZiB1dG1vc3QgaW1wb3J0YW5jZS4KCiMjIFJlZmVyZW5jZXMKCk1vbGluYSwgTi4gKDIwMTgpLiBVbmRlcnN0YW5kaW5nIHJhY2UgYXMgYSByZWxhdGlvbmFsIGNvbmNlcHQuICpNb2Rlcm4gQW1lcmljYW4gSGlzdG9yeSosICoxKigxKSwgMTAxLTEwNS4KClJpcGxleSwgUi4gTS4sIFNuaWpkZXJzLCBULiBBLiwgQm9kYSwgWi4sIFbDtnLDtnMsIEEuLCAmIFByZWNpYWRvLCBQLiAoMjAxMSkuIE1hbnVhbCBmb3IgUlNJRU5BLiAqVW5pdmVyc2l0eSBvZiBPeGZvcmQsIERlcGFydG1lbnQgb2YgU3RhdGlzdGljcywgTnVmZmllbGQgQ29sbGVnZSosICoxKiwgMjAxMS4KClNuaWpkZXJzIFRBLCBSaXBsZXkgUk0sIEJvaXRtYW5pcyBLLCBTdGVnbGljaCBDLCBOaWV6aW5rIE5NLCBBbWF0aSBWLCBTY2hvZW5lbmJlcmdlciBGICgyMDI0KS4g4oCcU2llbmEgLSBTaW11bGF0aW9uIEludmVzdGlnYXRpb24gZm9yIEVtcGlyaWNhbCBOZXR3b3JrIEFuYWx5c2lzLuKAnSBSIHBhY2thZ2UgdmVyc2lvbiAxLjQuNywgPGh0dHBzOi8vd3d3LnN0YXRzLm94LmFjLnVrL35zbmlqZGVycy9zaWVuYS8+Lgo=</div>
 
 
 </div>
