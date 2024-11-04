@@ -1644,12 +1644,12 @@ ggplot(degree_w1, aes(as.numeric(degree_w1), colour = as.numeric(degree_w1) )) +
   ) +
   ylim(0, 150) +
   theme_bw()</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical transformation:
-## colour.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure
-##   in the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?</code></pre>
+<pre><code>## Warning: The following aesthetics were dropped during statistical
+## transformation: colour.
+## ℹ This can happen when ggplot fails to infer the correct
+##   grouping structure in the data.
+## ℹ Did you forget to specify a `group` aesthetic or to convert
+##   a numerical variable into a factor?</code></pre>
 <p><img src="all.descriptives_files/figure-html/degree%20centrality%20w1%20and%202-1.png" width="672" /></p>
 </div>
 <div id="wave-2-1" class="section level4" number="3.2.2.2">
@@ -1666,12 +1666,12 @@ ggplot(degree_w2, aes(as.numeric(degree_w2), colour = as.numeric(degree_w2))) +
   ) +
   ylim(0, 150) +
   theme_bw()</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical transformation:
-## colour.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure
-##   in the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?</code></pre>
+<pre><code>## Warning: The following aesthetics were dropped during statistical
+## transformation: colour.
+## ℹ This can happen when ggplot fails to infer the correct
+##   grouping structure in the data.
+## ℹ Did you forget to specify a `group` aesthetic or to convert
+##   a numerical variable into a factor?</code></pre>
 <p><img src="all.descriptives_files/figure-html/degree%20centrality%20w2-1.png" width="672" /></p>
 <pre class="r"><code>#could also do -- degree centrality of white v. non-white people, or degree centrality of dutch v. non-dutch people </code></pre>
 </div>
@@ -1740,14 +1740,14 @@ ggplot(clustering_w2, aes(as.numeric(clustering_w2), colour = as.numeric(cluster
     y = &quot;Count&quot;
   ) +
   theme_bw()</code></pre>
-<pre><code>## Warning: Removed 118 rows containing non-finite outside the scale range
-## (`stat_bin()`).</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical transformation:
-## colour.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure
-##   in the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?</code></pre>
+<pre><code>## Warning: Removed 118 rows containing non-finite outside the scale
+## range (`stat_bin()`).</code></pre>
+<pre><code>## Warning: The following aesthetics were dropped during statistical
+## transformation: colour.
+## ℹ This can happen when ggplot fails to infer the correct
+##   grouping structure in the data.
+## ℹ Did you forget to specify a `group` aesthetic or to convert
+##   a numerical variable into a factor?</code></pre>
 <p><img src="all.descriptives_files/figure-html/clustering%20w2-1.png" width="672" /></p>
 </div>
 </div>
@@ -1979,8 +1979,8 @@ ggraph(noisolates_w1,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
   theme_void()</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 5 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <pre class="r"><code>indegr_w2 &lt;- degree(wave_2, mode = &quot;in&quot;)
 
 # assign h-index to scholar
@@ -2003,8 +2003,8 @@ ggraph(noisolates_w2,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void() </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/white-passing,%20figures-side-1.png" width="50%" /><img src="all.descriptives_files/figure-html/white-passing,%20figures-side-2.png" width="50%" /></p>
 </div>
 <div id="born-in" class="section level4" number="4.3.2.3">
@@ -2030,8 +2030,8 @@ ggraph(noisolates_w1,
   scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
   theme_void() +
   labs(title = &quot;Network wave 1: no isolates, node size based on indegrees &amp; colour based on H-index&quot;)</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 5 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <pre class="r"><code>### wave 2
 
 indegr_w2 &lt;- degree(wave_2, mode = &quot;in&quot;)
@@ -2055,8 +2055,8 @@ ggraph(noisolates_w2,
   scale_color_gradient(low = &quot;red&quot;, high = &quot;blue&quot;) + 
   theme_void() +
   guides(color = guide_legend(override.aes = list(size = 10))) </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/ggraph%20born%20in%20w1,%20figures-side-1.png" width="50%" /><img src="all.descriptives_files/figure-html/ggraph%20born%20in%20w1,%20figures-side-2.png" width="50%" /></p>
 </div>
 <div id="gender-1" class="section level4" number="4.3.2.4">
@@ -2083,8 +2083,8 @@ ggraph(noisolates_w1,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void()</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 5 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>indegr_w2 &lt;- degree(wave_2, mode = &quot;in&quot;)
 
@@ -2109,8 +2109,8 @@ ggraph(noisolates_w2,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void() </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
 <pre class="r"><code>#facet-wrapped per university 
 ggraph(noisolates_w2,
@@ -2121,8 +2121,8 @@ ggraph(noisolates_w2,
   scale_size(range = c(3, 10)) + 
   scale_color_gradient(low = &quot;lightblue&quot;, high = &quot;blue&quot;) + 
   theme_void() </code></pre>
-<pre><code>## Warning: Removed 14 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 14 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="all.descriptives_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
 </div>
 </div>

@@ -6,7 +6,7 @@ Filename is ./results/m1_race.txt.
 
 This file contains primary output for SIENA project <<./results/m1_race>>.
 
-Date and time: 04/11/2024 01:11:38 
+Date and time: 04/11/2024 01:30:36 
 
 RSiena version 1.4.7 (20 02 2024)
 
